@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace _3ASystem.Infrastructure.Data.Configurations
 {
-	internal class AppConfiguration : IEntityTypeConfiguration<App>
+	public class AppConfiguration : IEntityTypeConfiguration<App>
 	{
 		public void Configure(EntityTypeBuilder<App> builder)
 		{
@@ -26,6 +26,10 @@ namespace _3ASystem.Infrastructure.Data.Configurations
 
 			builder.Property(a => a.IsActive);
 			builder.HasIndex(a => a.IsActive);
+
+
+			builder.Ignore(p => p.Roles);
+			builder.Ignore(p => p.Functionalities);
 
 			builder.ToTable("Applications");
 		}

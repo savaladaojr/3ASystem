@@ -17,8 +17,9 @@ namespace _3ASystem.Domain.Entities
 
 
 		//EF Relations
-		public ICollection<Functionality> Functionalities { get; init; } = [];
-		public ICollection<Role> Roles { get; init; } = [];
+		public ICollection<Functionality>? Functionalities { get; init; }
+
+		public ICollection<Role>? Roles { get; init; }
 		
 
 		private App()
@@ -30,8 +31,10 @@ namespace _3ASystem.Domain.Entities
 			Name = name;
 			Abbreviation = abbreviation;
 			Hash = hash;
-
 			IsActive = isActive;
+
+			Functionalities = new List<Functionality>();
+			Roles = new List<Role>();
 		}
 
 		public static App Create(string name, string abbreviation)

@@ -10,11 +10,11 @@ namespace _3ASystem.Domain.Entities
 		public FunctionalityId FunctionalityId { get; private set; } = default!;
 
 		public string Name { get; private set; } = default!;
-		public string Code { get; set; } = default!;
-		public bool IsActive { get; set; } = true;
+		public string Code { get; private set; } = default!;
+		public bool IsActive { get; private set; } = true;
 
 		//EF Relations
-		public Functionality Functionality { get; init; }
+		public Functionality? Functionality { get; init; }
 
 		private Operation()
 		{

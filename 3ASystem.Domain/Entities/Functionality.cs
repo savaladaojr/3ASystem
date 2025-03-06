@@ -19,7 +19,7 @@ namespace _3ASystem.Domain.Entities
 		//EF Relations	
 		public App? Application { get; init; }
 
-		public ICollection<Operation> Operations { get; init; } = [];
+		public ICollection<Operation>? Operations { get; init; }
 
 
 

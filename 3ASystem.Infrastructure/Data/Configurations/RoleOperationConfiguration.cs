@@ -5,12 +5,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace _3ASystem.Infrastructure.Data.Configurations
 {
-	internal class RoleOperationConfiguration : IEntityTypeConfiguration<RoleOperation>
+	public class RoleOperationConfiguration : IEntityTypeConfiguration<RoleOperation>
 	{
 		public void Configure(EntityTypeBuilder<RoleOperation> builder)
 		{
-			builder.HasKey(ro => ro.RoleId);
-			builder.HasKey(ro => ro.OperationId);
+			builder.HasKey(k => new { k.RoleId, k.OperationId });
 
 			builder.Property(x => x.RoleId)
 				.HasConversion(Id => Id.Value, value => new RoleId(value));
@@ -22,12 +21,17 @@ namespace _3ASystem.Infrastructure.Data.Configurations
 
 
 			builder.HasOne<Role>()
-			    .WithMany(m => m.Operations)
-			    .HasForeignKey(ro => ro.RoleId);
+			    .WithMany()
+			    .HasForeignKey(ro => ro.RoleId)
+				.HasPrincipalKey(p => p.Id);
 
 			builder.HasOne<Operation>()
 				.WithMany()
-				.HasForeignKey(ro => ro.OperationId);
+				.HasForeignKey(ro => ro.OperationId)
+				.HasPrincipalKey(p => p.Id);
+
+			builder.Ignore(p => p.Role);
+			builder.Ignore(p => p.Operation);
 
 
 			builder.ToTable("RoleOperations");

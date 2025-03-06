@@ -5,14 +5,14 @@ namespace _3ASystem.Domain.Entities
 {
 	public sealed class RoleOperation : Entity
 	{
-		public RoleId RoleId { get; init; }
-		public OperationId OperationId { get; init; }
+		public RoleId RoleId { get; private set; }
+		public OperationId OperationId { get; private set; }
 		public bool IsAllowed { get; private set; }
 
 
 		//EF Relation
-		public Role Role { get; init; }
-		public Operation Operation { get; init; }
+		public Role? Role { get; init; }
+		public Operation? Operation { get; init; }
 
 
 		private RoleOperation()

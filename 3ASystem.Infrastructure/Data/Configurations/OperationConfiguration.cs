@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace _3ASystem.Infrastructure.Data.Configurations
 {
-	internal class OperationConfiguration : IEntityTypeConfiguration<Operation>
+	public class OperationConfiguration : IEntityTypeConfiguration<Operation>
 	{
 		public void Configure(EntityTypeBuilder<Operation> builder)
 		{
@@ -30,7 +30,11 @@ namespace _3ASystem.Infrastructure.Data.Configurations
 			builder.HasOne<Functionality>()
 				.WithMany(m => m.Operations)
 				.HasForeignKey(f => f.FunctionalityId)
+				.HasPrincipalKey(p => p.Id)
 				.IsRequired();
+
+
+			builder.Ignore(p => p.Functionality);
 
 
 			builder.ToTable("Operations");

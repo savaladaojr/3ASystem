@@ -7,15 +7,15 @@ namespace _3ASystem.Domain.Entities
 	{
 
 		public AppId ApplicationId { get; private set; }
-		public string Name { get; private set; }
-		public string Code { get; private set; }
-		public bool IsActive { get; private set; }
+		public string Name { get; private set; } = string.Empty;
+		public string Code { get; private set; } = string.Empty;
+		public bool IsActive { get; private set; } = true;
 
 
 		//EF Relational
-		public App Application { get; init; }
+		public App? Application { get; init; }
 
-		public ICollection<RoleOperation> Operations { get; private set; }
+		//public ICollection<RoleOperation> Operations { get; private set; }
 
 
 		private Role()

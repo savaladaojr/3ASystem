@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace _3ASystem.Infrastructure.Data.Configurations
 {
-	internal class RoleConfiguration : IEntityTypeConfiguration<Role>
+	public class RoleConfiguration : IEntityTypeConfiguration<Role>
 	{
 		public void Configure(EntityTypeBuilder<Role> builder)
 		{
@@ -32,7 +32,11 @@ namespace _3ASystem.Infrastructure.Data.Configurations
 			builder.HasOne<App>()
 				.WithMany(m => m.Roles)
 				.HasForeignKey(f => f.ApplicationId)
-				.IsRequired();
+				.HasPrincipalKey(p => p.Id);
+
+
+			builder.Ignore(p => p.Application);
+			//builder.Ignore(p => p.Operations);
 
 
 			builder.ToTable("Roles");
