@@ -28,7 +28,7 @@ namespace _3ASystem.Infrastructure.Data.Repositories
 
 		public void Delete(params object[] keyValues)
 		{
-			var entity = GetById(keyValues).Result;
+			var entity = GetByIdAsync(keyValues).Result;
 			if (entity is null) return;
 
 			Delete(entity);
@@ -39,12 +39,12 @@ namespace _3ASystem.Infrastructure.Data.Repositories
 			_dbContext.Set<TEntity>().Remove(entity);
 		}
 
-		public virtual async Task<IEnumerable<TEntity>> GetAll()
+		public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
 		{
 			return await _dbContext.Set<TEntity>().AsNoTracking().ToListAsync();
 		}
 
-		public virtual async Task<IEnumerable<TEntity>> GetAll(params Expression<Func<TEntity, object>>[] includePaths)
+		public virtual async Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includePaths)
 		{
 			var dbSet = _dbContext.Set<TEntity>().AsQueryable();
 			var query = includePaths.Aggregate(dbSet, (current, item) => EvaluateInclude(current, item));
@@ -52,14 +52,14 @@ namespace _3ASystem.Infrastructure.Data.Repositories
 			return await query.ToListAsync();
 		}
 
-		public virtual async Task<TEntity?> GetById(params object[] keyValues)
+		public virtual async Task<TEntity?> GetByIdAsync(params object[] keyValues)
 		{
 			return await _dbContext.Set<TEntity>().FindAsync(keyValues);
 		}
 
-		public virtual async Task<TEntity?> GetById(object[] keyValues, params Expression<Func<TEntity, object>>[] includePaths)
+		public virtual async Task<TEntity?> GetByIdAsync(object[] keyValues, params Expression<Func<TEntity, object>>[] includePaths)
 		{
-			var entity = await GetById(keyValues);
+			var entity = await GetByIdAsync(keyValues);
 
 			var dbSet = _dbContext.Set<TEntity>().AsQueryable();
 			var query = includePaths.Aggregate(dbSet, (current, item) => EvaluateInclude(current, item));
@@ -119,12 +119,12 @@ namespace _3ASystem.Infrastructure.Data.Repositories
 			_dbContext = dbContext;
 		}
 
-		public virtual async Task<IEnumerable<TEntity>> GetAll()
+		public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
 		{
 			return await _dbContext.Set<TEntity>().AsNoTracking().ToListAsync();
 		}
 
-		public virtual async Task<IEnumerable<TEntity>> GetAll(params Expression<Func<TEntity, object>>[] includePaths)
+		public virtual async Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includePaths)
 		{
 			var dbSet = _dbContext.Set<TEntity>().AsNoTracking().AsQueryable();
 			var query = includePaths.Aggregate(dbSet, (current, item) => EvaluateInclude(current, item));
@@ -132,12 +132,12 @@ namespace _3ASystem.Infrastructure.Data.Repositories
 			return await query.ToListAsync();
 		}
 
-		public virtual async Task<TEntity?> GetById(TEntityId id)
+		public virtual async Task<TEntity?> GetByIdAsync(TEntityId id)
 		{
 			return await _dbContext.Set<TEntity>().FirstOrDefaultAsync(w => w.Id == id);
 		}
 
-		public virtual async Task<TEntity?> GetById(TEntityId id, params Expression<Func<TEntity, object>>[] includePaths)
+		public virtual async Task<TEntity?> GetByIdAsync(TEntityId id, params Expression<Func<TEntity, object>>[] includePaths)
 		{
 			var dbSet = _dbContext.Set<TEntity>().AsQueryable();
 			var query = includePaths.Aggregate(dbSet, (current, item) => EvaluateInclude(current, item));
