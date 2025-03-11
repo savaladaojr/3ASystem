@@ -22,7 +22,8 @@ namespace _3ASystem.Infrastructure.Data.Configurations
 
 			builder.Property(r => r.Code)
 				.HasMaxLength(25);
-			builder.HasIndex(r => r.Code).IsUnique();
+			builder.HasIndex(r => r.Code).IsUnique()
+				.IsClustered(true);
 
 			builder.Property(r => r.IsActive);
 			builder.HasIndex(r => r.IsActive);

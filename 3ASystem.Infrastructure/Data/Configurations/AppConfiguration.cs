@@ -22,11 +22,14 @@ namespace _3ASystem.Infrastructure.Data.Configurations
 
 			builder.Property(a => a.Abbreviation)
 				.HasMaxLength(25);
-			builder.HasIndex(a => a.Abbreviation).IsUnique();
+			builder.HasIndex(a => a.Abbreviation).IsUnique()
+				.IsClustered(true);
 
 			builder.Property(a => a.IsActive);
 			builder.HasIndex(a => a.IsActive);
 
+			builder.Property(a => a.Hash);
+			builder.HasIndex(a => a.Hash);
 
 			builder.Ignore(p => p.Roles);
 			builder.Ignore(p => p.Functionalities);

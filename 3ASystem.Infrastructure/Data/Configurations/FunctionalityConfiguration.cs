@@ -6,7 +6,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace _3ASystem.Infrastructure.Data.Configurations
 {
-	public class FunctionsConfiguration : IEntityTypeConfiguration<Functionality>
+	public class FunctionalityConfiguration : IEntityTypeConfiguration<Functionality>
 	{
 		public void Configure(EntityTypeBuilder<Functionality> builder)
 		{
@@ -25,7 +25,8 @@ namespace _3ASystem.Infrastructure.Data.Configurations
 
 			builder.Property(f => f.Abbreviation)
 				.HasMaxLength(25);
-			builder.HasIndex(f => f.Abbreviation).IsUnique();
+			builder.HasIndex(f => f.Abbreviation).IsUnique()
+				.IsClustered(true);
 
 			builder.Property(f => f.IsActive);
 			builder.HasIndex(f => f.IsActive);
