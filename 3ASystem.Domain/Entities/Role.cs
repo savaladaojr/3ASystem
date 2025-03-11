@@ -6,7 +6,7 @@ namespace _3ASystem.Domain.Entities
 	public sealed class Role : Entity<RoleId>
 	{
 
-		public AppId ApplicationId { get; private set; }
+		public AppId ApplicationId { get; private set; } = default!;
 		public string Name { get; private set; } = string.Empty;
 		public string Code { get; private set; } = string.Empty;
 		public bool IsActive { get; private set; } = true;

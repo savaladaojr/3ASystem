@@ -5,8 +5,8 @@ namespace _3ASystem.Domain.Entities
 {
 	public sealed class RoleOperation : Entity
 	{
-		public RoleId RoleId { get; private set; }
-		public OperationId OperationId { get; private set; }
+		public RoleId RoleId { get; private set; } = default!;
+		public OperationId OperationId { get; private set; } = default!;
 		public bool IsAllowed { get; private set; }
 
 
