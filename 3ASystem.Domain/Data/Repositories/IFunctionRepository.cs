@@ -1,5 +1,4 @@
-﻿using _3ASystem.Domain.Entities;
-using _3ASystem.Domain.Entities.Identifiers;
+﻿using _3ASystem.Domain.Entities.Functionalities;
 
 namespace _3ASystem.Domain.Data.Repositories
 {

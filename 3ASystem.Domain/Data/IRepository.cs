@@ -1,4 +1,4 @@
-﻿using _3ASystem.Domain.Abstractions;
+﻿using _3ASystem.Domain.Shared;
 using System.Linq.Expressions;
 
 namespace _3ASystem.Domain.Data
