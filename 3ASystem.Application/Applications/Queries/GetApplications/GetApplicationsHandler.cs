@@ -4,7 +4,7 @@ using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.Applications.Queries.GetApplications;
 
-public class GetApplicationsHandler : IQueryHandler<GetApplicationsQuery, List<ApplicationResponse>>
+internal class GetApplicationsHandler : IQueryHandler<GetApplicationsQuery, List<ApplicationResponse>>
 {
 	private readonly IAppRepository _appRepository;
 

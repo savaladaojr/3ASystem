@@ -21,8 +21,7 @@ public class AppConfiguration : IEntityTypeConfiguration<App>
 
 		builder.Property(a => a.Abbreviation)
 			.HasMaxLength(25);
-		builder.HasIndex(a => a.Abbreviation).IsUnique()
-			.IsClustered(true);
+		builder.HasIndex(a => a.Abbreviation).IsUnique();
 
 		builder.Property(a => a.IsActive);
 		builder.HasIndex(a => a.IsActive);

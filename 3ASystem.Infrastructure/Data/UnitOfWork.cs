@@ -1,17 +1,18 @@
 ﻿using _3ASystem.Application.Abstractions.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace _3ASystem.Infrastructure.Data;
 
-public sealed class UnitOfWork : IUnitOfWork
+public sealed class UnitOfWork : DbContext, IUnitOfWork
 {
-	private readonly ApplicationDbContext _dbContext;
+	private ApplicationDbContext _dbContext;
 
 	public UnitOfWork(ApplicationDbContext dbContext)
 	{
 		_dbContext = dbContext;
 	}
 
-	public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+	public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 	{
 		return await _dbContext.SaveChangesAsync(cancellationToken);
 	}

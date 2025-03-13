@@ -13,13 +13,12 @@ namespace _3ASystem.Application
 				config.RegisterServicesFromAssemblies(typeof(DependenciesResolver).Assembly);
 
 
-				//config.AddOpenBehavior(typeof(RequestLoggingPipelineBehavior<,>));
+				config.AddOpenBehavior(typeof(RequestLoggingPipelineBehavior<,>));
 				config.AddOpenBehavior(typeof(ValidationPipelineBehavior<,>));
 			});
 
 			//adding fluent validation
 			services.AddValidatorsFromAssembly(typeof(DependenciesResolver).Assembly, includeInternalTypes: true);
-
 
 			return services;
 		}

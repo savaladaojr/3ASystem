@@ -1,0 +1,47 @@
+﻿@page "/Applications/Edit/{id:guid}"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<h3>Update Application</h3>
+<br/>
+
+
+@if (updateApplication == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm EditContext="@_editContext">
+@*         <DataAnnotationsValidator />
+        <ValidationSummary /> *@
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <InputText id="name" class="form-control" @bind-Value="updateApplication.Name" @oninput="() => ClearValidationMessage(nameof(updateApplication.Name))" />
+            <ValidationMessage For="@(() => updateApplication.Name)" />
+        </div>
+        <div class="mb-3">
+            <label for="abbreviation" class="form-label">Abbreviation</label>
+            <InputText id="abbreviation" class="form-control" @bind-Value="updateApplication.Abbreviation" @oninput="() => ClearValidationMessage(nameof(updateApplication.Abbreviation))" />
+            <ValidationMessage For="@(() => updateApplication.Abbreviation)" />
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <InputTextArea id="description" class="form-control" @bind-Value="updateApplication.Description" @oninput="() => ClearValidationMessage(nameof(updateApplication.Description))" />
+            <ValidationMessage For="@(() => updateApplication.Description)" />
+        </div>
+        <div class="mb-3">
+            <label for="iconUrl" class="form-label">Icon URL</label>
+            <InputText id="iconUrl" class="form-control" @bind-Value="updateApplication.IconUrl" @oninput="() => ClearValidationMessage(nameof(updateApplication.IconUrl))" />
+            <ValidationMessage For="@(() => updateApplication.IconUrl)" />
+        </div>
+        <div class="mb-3">
+            <label for="isActive" class="form-label">Is Active</label>
+            <InputCheckbox id="isActive" class="form-check-input" @bind-Value="updateApplication.IsActive" @onchange="() => ClearValidationMessage(nameof(updateApplication.IsActive))" />
+        </div>
+
+        <button type="button" class="btn btn-primary" @onclick="() => HandleSubmit()">Save</button>
+        <button type="button" class="btn btn-secondary" @onclick="() => CancelUpdate()">Cancel</button>
+    </EditForm>
+
+}

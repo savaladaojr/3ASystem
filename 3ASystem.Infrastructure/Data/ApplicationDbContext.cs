@@ -50,6 +50,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWor
 		// 1. BEFORE calling SaveChangesAsync
 		//     - domain events are part of the same transaction
 		//     - immediate consistency
+		//
 		// 2. AFTER calling SaveChangesAsync
 		//     - domain events are a separate transaction
 		//     - eventual consistency

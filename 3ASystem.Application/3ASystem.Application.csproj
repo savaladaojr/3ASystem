@@ -20,9 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Applications\Commands\CreateApplication\" />
-    <Folder Include="Applications\Commands\UpdateApplication\" />
-    <Folder Include="Applications\Dtos\" />
     <Folder Include="Applications\Queries\GetApplicationByHash\" />
     <Folder Include="Applications\Queries\GetApplicationByAbbreviation\" />
   </ItemGroup>

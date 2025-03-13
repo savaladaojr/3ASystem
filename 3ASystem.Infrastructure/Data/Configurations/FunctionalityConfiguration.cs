@@ -24,8 +24,7 @@ public class FunctionalityConfiguration : IEntityTypeConfiguration<Functionality
 
 		builder.Property(f => f.Abbreviation)
 			.HasMaxLength(25);
-		builder.HasIndex(f => f.Abbreviation).IsUnique()
-			.IsClustered(true);
+		builder.HasIndex(f => f.Abbreviation).IsUnique();
 
 		builder.Property(f => f.IsActive);
 		builder.HasIndex(f => f.IsActive);

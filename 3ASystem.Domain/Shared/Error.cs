@@ -9,11 +9,12 @@ public record Error
 		"Null value was provided",
 		ErrorType.Failure);
 
-	public Error(string code, string description, ErrorType type)
+	public Error(string code, string description, ErrorType type, object? obj = null)
 	{
 		Code = code;
 		Description = description;
 		Type = type;
+		ErrorObject = obj;
 	}
 
 	public string Code { get; }
@@ -21,6 +22,9 @@ public record Error
 	public string Description { get; }
 
 	public ErrorType Type { get; }
+
+	public object? ErrorObject { get; }
+
 
 	public static Error Failure(string code, string description) =>
 		new(code, description, ErrorType.Failure);
@@ -33,4 +37,7 @@ public record Error
 
 	public static Error Conflict(string code, string description) =>
 		new(code, description, ErrorType.Conflict);
+
+	public static Error Validation(string code, string description, object obj) =>
+		new(code, description, ErrorType.Validation, obj);
 }

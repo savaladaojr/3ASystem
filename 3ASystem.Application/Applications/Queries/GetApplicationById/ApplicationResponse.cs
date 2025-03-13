@@ -16,6 +16,4 @@ public sealed class ApplicationResponse
 	public Guid Hash { get; init; }
 	public bool IsActive { get; init; } = true;
 
-	//public ICollection<FunctionalityDTO>? Functionalities { get; init; }
-	//public ICollection<RoleDTO>? Roles { get; init; }
 }

@@ -68,5 +68,5 @@ internal sealed class ValidationPipelineBehavior<TRequest, TResponse>(
     }
 
     private static ValidationError CreateValidationError(ValidationFailure[] validationFailures) =>
-        new(validationFailures.Select(f => Error.Problem(f.ErrorCode, f.ErrorMessage)).ToArray());
+        new(validationFailures.Select(f => Error.Validation(f.ErrorCode, f.ErrorMessage, f)).ToArray());
 }

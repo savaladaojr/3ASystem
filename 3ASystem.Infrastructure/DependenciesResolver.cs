@@ -1,4 +1,7 @@
-﻿using _3ASystem.Infrastructure.Data;
+﻿using _3ASystem.Application.Abstractions.Data;
+using _3ASystem.Domain.Data.Repositories;
+using _3ASystem.Infrastructure.Data;
+using _3ASystem.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +18,11 @@ public static class DependenciesResolver
 		services.AddDbContext<ApplicationDbContext>(options =>
 			options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
 		);
+
+		services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+		services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+		services.AddScoped<IAppRepository, AppRepository>();
 
 		return services;
 	}

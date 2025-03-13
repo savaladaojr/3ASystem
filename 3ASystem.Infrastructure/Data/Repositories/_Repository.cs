@@ -8,22 +8,24 @@ namespace _3ASystem.Infrastructure.Data.Repositories;
 public abstract class _Repository<TEntity> : IRepository<TEntity>
 	where TEntity : Entity
 {
-	protected readonly ApplicationDbContext _dbContext;
+	protected ApplicationDbContext _dbContext;
+	protected DbSet<TEntity> Entity { get; init; }
 
-	protected _Repository(ApplicationDbContext dbContext)
+	public _Repository(ApplicationDbContext dbContext)
 	{
 		_dbContext = dbContext;
+		Entity = _dbContext.Set<TEntity>();
 	}
 
 	public virtual TEntity Create(TEntity entity)
 	{
-		var createdEntity = _dbContext.Set<TEntity>().Add(entity).Entity;
+		var createdEntity = Entity.Add(entity).Entity;
 		return createdEntity;
 	}
 
 	public void Update(TEntity entity)
 	{
-		_dbContext.Set<TEntity>().Update(entity);
+		Entity.Update(entity);
 	}
 
 	public void Delete(params object[] keyValues)
@@ -36,17 +38,17 @@ public abstract class _Repository<TEntity> : IRepository<TEntity>
 
 	private void Delete(TEntity entity)
 	{
-		_dbContext.Set<TEntity>().Remove(entity);
+		Entity.Remove(entity);
 	}
 
 	public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
 	{
-		return await _dbContext.Set<TEntity>().AsNoTracking().ToListAsync();
+		return await Entity.AsNoTracking().ToListAsync();
 	}
 
 	public virtual async Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includePaths)
 	{
-		var dbSet = _dbContext.Set<TEntity>().AsQueryable();
+		var dbSet = Entity.AsQueryable();
 		var query = includePaths.Aggregate(dbSet, (current, item) => EvaluateInclude(current, item));
 
 		return await query.ToListAsync();
@@ -54,14 +56,14 @@ public abstract class _Repository<TEntity> : IRepository<TEntity>
 
 	public virtual async Task<TEntity?> GetByIdAsync(params object[] keyValues)
 	{
-		return await _dbContext.Set<TEntity>().FindAsync(keyValues);
+		return await Entity.FindAsync(keyValues);
 	}
 
 	public virtual async Task<TEntity?> GetByIdAsync(object[] keyValues, params Expression<Func<TEntity, object>>[] includePaths)
 	{
 		var entity = await GetByIdAsync(keyValues);
 
-		var dbSet = _dbContext.Set<TEntity>().AsQueryable();
+		var dbSet = Entity.AsQueryable();
 		var query = includePaths.Aggregate(dbSet, (current, item) => EvaluateInclude(current, item));
 
 		return query.Where(item => item == entity).FirstOrDefault();
@@ -69,12 +71,12 @@ public abstract class _Repository<TEntity> : IRepository<TEntity>
 
 	//public virtual async Task<List<TEntity>> Serach(Expression<Func<TEntity, bool>> predicate)
 	//{
-	//    return await _dbSet.AsNoTracking().Where(predicate).ToListAsync();
+	//    return await Entity.AsNoTracking().Where(predicate).ToListAsync();
 	//}
 
 	//public virtual async Task<PaginatedList<TEntity>> PagedSearch(Expression<Func<TEntity, bool>> predicate, int page, int pageSize)
 	//{
-	//    return await _dbSet.AsNoTracking().Where(predicate).ToPaginatedListAsync(page, pageSize);
+	//    return await Entity.AsNoTracking().Where(predicate).ToPaginatedListAsync(page, pageSize);
 	//}
 
 	public void NoTrack(TEntity entity)
@@ -113,20 +115,22 @@ public abstract class _Repository<TEntity, TEntityId> : IRepository<TEntity, TEn
 	where TEntityId : class
 {
 	protected readonly ApplicationDbContext _dbContext;
+	protected DbSet<TEntity> Entity { get; init; }
 
-	protected _Repository(ApplicationDbContext dbContext)
+	public _Repository(ApplicationDbContext dbContext)
 	{
 		_dbContext = dbContext;
+		Entity = _dbContext.Set<TEntity>();
 	}
 
 	public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
 	{
-		return await _dbContext.Set<TEntity>().AsNoTracking().ToListAsync();
+		return await Entity.AsNoTracking().ToListAsync();
 	}
 
 	public virtual async Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includePaths)
 	{
-		var dbSet = _dbContext.Set<TEntity>().AsNoTracking().AsQueryable();
+		var dbSet = Entity.AsNoTracking().AsQueryable();
 		var query = includePaths.Aggregate(dbSet, (current, item) => EvaluateInclude(current, item));
 
 		return await query.ToListAsync();
@@ -134,12 +138,12 @@ public abstract class _Repository<TEntity, TEntityId> : IRepository<TEntity, TEn
 
 	public virtual async Task<TEntity?> GetByIdAsync(TEntityId id)
 	{
-		return await _dbContext.Set<TEntity>().FirstOrDefaultAsync(w => w.Id == id);
+		return await Entity.FirstOrDefaultAsync(w => w.Id == id);
 	}
 
 	public virtual async Task<TEntity?> GetByIdAsync(TEntityId id, params Expression<Func<TEntity, object>>[] includePaths)
 	{
-		var dbSet = _dbContext.Set<TEntity>().AsQueryable();
+		var dbSet = Entity.AsQueryable();
 		var query = includePaths.Aggregate(dbSet, (current, item) => EvaluateInclude(current, item));
 		query.Where(w => w.Id == id);
 
@@ -148,13 +152,13 @@ public abstract class _Repository<TEntity, TEntityId> : IRepository<TEntity, TEn
 
 	public TEntity Create(TEntity entity)
 	{
-		var entityCreated = _dbContext.Set<TEntity>().Add(entity);
+		var entityCreated = Entity.Add(entity);
 		return entityCreated.Entity;
 	}
 
 	public void Update(TEntity entity)
 	{
-		_dbContext.Set<TEntity>().Update(entity);
+		Entity.Update(entity);
 	}
 
 	public void Delete(TEntityId id)
@@ -162,7 +166,7 @@ public abstract class _Repository<TEntity, TEntityId> : IRepository<TEntity, TEn
 		var entity = _dbContext.Set<TEntity>().FirstOrDefault(w => w.Id == id);
 		if (entity != null)
 		{
-			_dbContext.Set<TEntity>().Remove(entity);
+			Entity.Remove(entity);
 		}
 	}
 

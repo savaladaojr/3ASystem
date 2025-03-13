@@ -22,8 +22,7 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
 
 		builder.Property(r => r.Code)
 			.HasMaxLength(25);
-		builder.HasIndex(r => r.Code).IsUnique()
-			.IsClustered(true);
+		builder.HasIndex(r => r.Code).IsUnique();
 
 		builder.Property(r => r.IsActive);
 		builder.HasIndex(r => r.IsActive);

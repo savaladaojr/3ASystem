@@ -27,10 +27,12 @@ public sealed class App : Entity<AppId>
 	{
 	}
 
-	private App(AppId id, string name, string abbreviation, Guid hash, bool isActive) : base(id)
+	private App(AppId id, string name, string abbreviation, string description, string iconUrl, Guid hash, bool isActive) : base(id)
 	{
 		Name = name;
 		Abbreviation = abbreviation;
+		Description = description;
+		IconUrl = iconUrl;
 		Hash = hash;
 		IsActive = isActive;
 
@@ -38,13 +40,15 @@ public sealed class App : Entity<AppId>
 		Roles = new List<Role>();
 	}
 
-	public static App Create(string name, string abbreviation)
+	public static App Create(string name, string abbreviation, string description, string iconUrl)
 	{
 		var app = new App
 		(
 			new AppId(Guid.NewGuid()),
 			name,
 			abbreviation,
+			description,
+			iconUrl,
 			Guid.NewGuid(),
 			true
 		);
@@ -52,10 +56,21 @@ public sealed class App : Entity<AppId>
 		return app;
 	}
 
-	public void Update(string name, string abbreviation)
+	public void Update(string name, string abbreviation, string description, string iconUrl)
 	{
 		Name = name;
 		Abbreviation = abbreviation;
+		Description = description;
+		IconUrl = iconUrl;
+		LastUpdatedAt = DateTime.Now;
+	}
+	public void Update(string name, string abbreviation, string description, string iconUrl, bool isActive)
+	{
+		Name = name;
+		Abbreviation = abbreviation;
+		Description = description;
+		IconUrl = iconUrl;
+		IsActive = isActive;
 		LastUpdatedAt = DateTime.Now;
 	}
 
