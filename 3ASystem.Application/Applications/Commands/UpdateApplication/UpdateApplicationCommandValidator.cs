@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace _3ASystem.Application.Applications.Commands.UpdateApplication;
 
-public class UpdateApplicationCommandValidator : AbstractValidator<UpdateApplicationCommand>
+public sealed class UpdateApplicationCommandValidator : AbstractValidator<UpdateApplicationCommand>
 {
 	public UpdateApplicationCommandValidator()
 	{

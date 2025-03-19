@@ -2,7 +2,7 @@
 
 namespace _3ASystem.Application.Applications.Queries.GetApplications;
 
-public class GetApplicationsQuery : IQuery<List<ApplicationResponse>>
+public sealed class GetApplicationsQuery : IQuery<List<ApplicationResponse>>
 { 
 
 }

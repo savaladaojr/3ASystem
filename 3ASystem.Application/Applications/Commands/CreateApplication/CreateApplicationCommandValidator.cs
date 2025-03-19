@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace _3ASystem.Application.Applications.Commands.CreateApplication;
 
-public class CreateApplicationCommandValidator : AbstractValidator<CreateApplicationCommand>
+public sealed class CreateApplicationCommandValidator : AbstractValidator<CreateApplicationCommand>
 {
 	public CreateApplicationCommandValidator()
 	{

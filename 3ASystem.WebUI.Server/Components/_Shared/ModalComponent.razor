@@ -1,44 +1,65 @@
-﻿@inject IJSRuntime JSRuntime
+﻿@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
 
-<div class="modal fade" id="@ModalId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    @* <div class="modal-dialog modal-top-centered"> *@
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">@Title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="myModalLabel">@Title</h5>
+
+                @if (ShowdismissButton)
+                {
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                }
             </div>
             <div class="modal-body">
                 @Body
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" @onclick="OnConfirm">Save changes</button>
+
+            @if (ShowActionButtons)
+            {
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" @onclick="OnConfirm">Save changes</button>
             </div>
+            }
         </div>
     </div>
 </div>
+
+
 
 @code {
     [Parameter]
     public string ModalId { get; set; }
 
     [Parameter]
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
 
     [Parameter]
-    public RenderFragment Body { get; set; }
+    public RenderFragment Body { get; set; } = default!;
 
     [Parameter]
     public EventCallback OnConfirm { get; set; }
 
-    public void Show()
+    [Parameter]
+    public bool ShowdismissButton { get; set; } = true;
+
+    [Parameter]
+    public bool ShowActionButtons { get; set; } = true;
+
+    public async Task ShowModal()
     {
-        JSRuntime.InvokeVoidAsync("bootstrap.Modal.getOrCreateInstance", $"#{ModalId}").AsTask().Wait();
-        JSRuntime.InvokeVoidAsync("bootstrap.Modal.show", $"#{ModalId}");
+        // Using the Bootstrap 5 Modal API with options to disable closing when clicking outside or pressing ESC
+        await JSRuntime.InvokeVoidAsync("eval", "new bootstrap.Modal(document.getElementById('myModal'), { backdrop: 'static', keyboard: true }).show();");
     }
 
-    public void Hide()
+    public async Task HideModal()
     {
-        JSRuntime.InvokeVoidAsync("bootstrap.Modal.hide", $"#{ModalId}");
+        // Using the Bootstrap 5 Modal API to hide the modal
+        //await JSRuntime.InvokeVoidAsync("eval", "new bootstrap.Modal(document.getElementById('myModal')).hide();");
+        await JSRuntime.InvokeVoidAsync("eval", "bootstrap.Modal.getOrCreateInstance(document.getElementById('myModal')).hide()");
     }
+
 }

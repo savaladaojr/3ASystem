@@ -1,4 +1,7 @@
-﻿using _3ASystem.Application.Applications.Queries.GetApplications;
+﻿using _3ASystem.Application.Applications.Commands.DeleteApplication;
+using _3ASystem.Application.Applications.Commands.EnableDisableApplication;
+using _3ASystem.Application.Applications.Queries.GetApplications;
+using _3ASystem.Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -26,6 +29,12 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 
 		protected override async Task OnInitializedAsync()
 		{
+			await FetchData();
+
+		}
+
+		private async Task FetchData()
+		{
 			// Send an event to MediatR
 			var result = await Mediator.Send(new GetApplicationsQuery());
 			if (result.IsSuccess)
@@ -34,9 +43,10 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 			}
 			else
 			{
+				_error = result.Error.Description;
 			}
-
 		}
+
 		private void CreateApplication()
 		{
 			Navigation.NavigateTo("/applications/create");
@@ -47,37 +57,68 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 			Navigation.NavigateTo("/applications/edit/" + id);
 		}
 
-		private void ShowCreateModal()
+		private async Task ShowCreateModal()
 		{
-			JSRuntime.InvokeVoidAsync("bootstrap.Modal.getOrCreateInstance", "#createApplicationModal").AsTask().Wait();
-			JSRuntime.InvokeVoidAsync("bootstrap.Modal.show", "#createApplicationModal").AsTask().Wait();
+			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.getOrCreateInstance", "#createApplicationModal").AsTask().Wait();
+			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.show", "#createApplicationModal").AsTask().Wait();
+
+			// Using the Bootstrap 5 Modal API with options to disable closing when clicking outside or pressing ESC
+			await JSRuntime.InvokeVoidAsync("eval", "new bootstrap.Modal(document.getElementById('createApplicationModal'), { backdrop: 'static', keyboard: true }).show();");
 		}
 
-		private void ShowDeleteModal()
-		{
-			JSRuntime.InvokeVoidAsync("bootstrap.Modal.getOrCreateInstance", "#deleteConfirmationModal").AsTask().Wait();
-			JSRuntime.InvokeVoidAsync("bootstrap.Modal.show", "#deleteConfirmationModal");
-		}
-
-		private void HideDeleteModal()
-		{
-			JSRuntime.InvokeVoidAsync("bootstrap.Modal.hide", "#deleteConfirmationModal");
-		}
-
-		private void ConfirmDelete(Guid id)
+		private void AskConfirmDelete(Guid id)
 		{
 			deleteId = id;
-			ShowDeleteModal();
+			ShowModalAskConfirm();
 		}
 
+		private async Task ShowModalAskConfirm()
+		{
+			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.getOrCreateInstance", "#deleteConfirmationModal").AsTask().Wait();
+			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.show", "#deleteConfirmationModal");
+			await JSRuntime.InvokeVoidAsync("eval", "new bootstrap.Modal(document.getElementById('deleteConfirmationModal'), { backdrop: 'static', keyboard: true }).show();");
+		}
 
-		private void DeleteConfirmed()
+		private async Task ConfirmDelete()
 		{
 			if (deleteId == Guid.Empty) return;
 
-			// Implement delete functionality here
+			// Send an event to MediatR
+			var result = await Mediator.Send(new DeleteApplicationsCommand(deleteId));
+			if (result.IsSuccess)
+			{
+				await FetchData();
+				StateHasChanged();
+			}
+			else
+			{
+				_error = result.Error.Description;
+			}
+
 			deleteId = Guid.Empty;
-			HideDeleteModal();
+			await HideModalAskConfirmDelete();
+		}
+
+		private async Task HideModalAskConfirmDelete()
+		{
+			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.hide", "#deleteConfirmationModal");
+			await JSRuntime.InvokeVoidAsync("eval", "bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteConfirmationModal')).hide()");
+		}
+
+
+		private async void EnableDisable(Guid id)
+		{
+			var result = await Mediator.Send(new EnableDisableApplicationCommand() { Id = id});
+			if (result.IsSuccess)
+			{
+				await FetchData();
+				StateHasChanged();
+			}
+			else
+			{
+				_error = result.Error.Description;
+			}
+
 		}
 
 	}

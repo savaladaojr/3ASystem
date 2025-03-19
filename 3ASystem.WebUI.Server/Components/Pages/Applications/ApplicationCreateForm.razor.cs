@@ -13,6 +13,11 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 
 	public partial class ApplicationCreateForm : ComponentBase
 	{
+		// Define an EventCallback to notify the parent component
+		[Parameter] public EventCallback OnSaveClickSuccess { get; set; }
+		[Parameter] public EventCallback OnCancelClick { get; set; }
+
+
 		[Inject]
 		public IMediator Mediator { get; set; } = default!;
 		[Inject]
@@ -38,6 +43,11 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 			return Task.CompletedTask;
 		}
 
+		private async Task HandleCancel()
+		{
+			// Call the parent method via the EventCallback
+			await OnCancelClick.InvokeAsync(null);
+		}
 
 		private async Task HandleSubmit()
 		{
@@ -47,8 +57,11 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 
 			if (result.IsSuccess)
 			{
-				// Close the modal
-				Navigation.NavigateTo("/applications");
+				// Call the parent method via the EventCallback
+				await OnSaveClickSuccess.InvokeAsync(null);
+
+				
+				//Navigation.NavigateTo("/applications");
 			}
 			else
 			{
