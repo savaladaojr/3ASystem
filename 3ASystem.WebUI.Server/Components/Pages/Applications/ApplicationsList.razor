@@ -31,7 +31,12 @@ else
                 var rowClass = index % 2 == 0 ? "table-light" : "table-white";
 
                 <tr>
-                    <td><img src="@record.IconUrl" alt="@record.Name" width="32" height="32" /></td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(record.IconUrl))
+                        {
+                            <img src="@record.IconUrl" alt="@record.Name" width="32" height="32" />    
+                        }
+                    </td>
                     <td>@record.Name</td>
                     <td>@record.Abbreviation</td>                    
                     <td>@record.IsActive</td>
