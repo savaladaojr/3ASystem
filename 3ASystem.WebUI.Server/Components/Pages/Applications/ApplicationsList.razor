@@ -77,12 +77,26 @@ else
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<ApplicationCreateForm />
+				<ApplicationCreateForm @ref="applicationCreateForm" OnCancelClick="ApplicationCreateForm_CancelClick" OnSaveClickSuccess="ApplicationCreateForm_SaveClickSuccess" />
 			</div>
 		</div>
 	</div>
 </div>
 
+<!-- Bootstrap Modal for Create New Application -->
+<div class="modal fade" id="updateApplicationModal" tabindex="-1" aria-labelledby="updateApplicationModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="updateApplicationModalLabel">Update an Application</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<ApplicationUpdateForm @ref="applicationUpdateForm" OnCancelClick="ApplicationUpdateForm_CancelClick" OnSaveClickSuccess="ApplicationUpdateForm_SaveClickSuccess" />
+			</div>
+		</div>
+	</div>
+</div>
 
 <!-- Bootstrap Modal for Delete Confirmation -->
 <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">

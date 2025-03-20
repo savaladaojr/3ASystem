@@ -1,6 +1,4 @@
 ﻿using _3ASystem.Application.Applications.Commands.CreateApplication;
-using _3ASystem.Application.Applications.Commands.UpdateApplication;
-using _3ASystem.Application.Applications.Queries.GetApplicationById;
 using _3ASystem.Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Components;
@@ -27,7 +25,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 		public NavigationManager Navigation { get; set; } = default!;
 
 
-		private CreateApplicationCommand createApplication = new CreateApplicationCommand();
+		private CreateApplicationCommand createApplication = default!;
 
 		private string _error = string.Empty;
 		private bool _isSubmitting = false;
@@ -35,12 +33,19 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 		private EditContext? _editContext = default!;
 		private ValidationMessageStore? _messageStore = default!;
 
-		protected override Task OnInitializedAsync()
+		protected override async Task OnInitializedAsync()
 		{
+			await Start();
+		}
+
+		public async Task<bool> Start()
+		{
+			createApplication = new CreateApplicationCommand();
 			_editContext = new EditContext(createApplication);
 			_messageStore = new ValidationMessageStore(_editContext);
 
-			return Task.CompletedTask;
+			var task = await Task.FromResult(true);
+			return task;
 		}
 
 		private async Task HandleCancel()
@@ -49,19 +54,18 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 			await OnCancelClick.InvokeAsync(null);
 		}
 
-		private async Task HandleSubmit()
+		private async Task HandleSave()
 		{
 			_isSubmitting = true;
 			_error = string.Empty;
+
+			//Call the create command
 			var result = await Mediator.Send(createApplication);
 
 			if (result.IsSuccess)
 			{
 				// Call the parent method via the EventCallback
 				await OnSaveClickSuccess.InvokeAsync(null);
-
-				
-				//Navigation.NavigateTo("/applications");
 			}
 			else
 			{
@@ -78,7 +82,10 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 
 					_editContext!.NotifyValidationStateChanged();
 				}
-				_error = result.Error.Description;
+				else
+				{
+					_error = result.Error.Description;
+				}
 
 			}
 			_isSubmitting = false;

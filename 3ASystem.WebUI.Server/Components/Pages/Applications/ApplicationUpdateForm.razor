@@ -1,9 +1,5 @@
-﻿@page "/Applications/Edit/{id:guid}"
+﻿@* @page "/Applications/Edit/{id:guid}" *@
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
-
-<h3>Update Application</h3>
-<br/>
-
 
 @if (updateApplication == null)
 {
@@ -41,7 +37,7 @@ else
         </div>
 
         <button type="button" class="btn btn-primary" @onclick="() => HandleSubmit()">Save</button>
-        <button type="button" class="btn btn-secondary" @onclick="() => CancelUpdate()">Cancel</button>
+        <button type="button" class="btn btn-secondary" @onclick="() => CancelUpdateAsync()">Cancel</button>
     </EditForm>
 
 }

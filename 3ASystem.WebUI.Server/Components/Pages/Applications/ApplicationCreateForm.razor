@@ -1,11 +1,9 @@
-﻿@page "/Applications/Create"
+﻿@* @page "/Applications/Create" *@
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
-
-<h3>New Application</h3>
 
 <EditForm EditContext="@_editContext">
     @* Model="createApplication" *@
-@*     <DataAnnotationsValidator />
+    @*     <DataAnnotationsValidator />
     <ValidationSummary /> *@
 
     <div class="mb-3">
@@ -26,10 +24,19 @@
 
     <div class="mb-3">
         <label for="iconUrl" class="form-label">Icon Url</label>
-        <InputTextArea id="iconUrl" class="form-control" @bind-Value="createApplication.IconUrl" @oninput="() => ClearValidationMessage(nameof(createApplication.IconUrl))" />
+        <InputText id="iconUrl" class="form-control" @bind-Value="createApplication.IconUrl" @oninput="() => ClearValidationMessage(nameof(createApplication.IconUrl))" />
         <ValidationMessage For="@(() => createApplication.IconUrl)" />
     </div>
 
-    <button type="button" class="btn btn-primary" @onclick="() => HandleSubmit()" >Save</button>
+    <button type="button" class="btn btn-primary" @onclick="() => HandleSave()" >Save</button>
     <button type="button" class="btn btn-secondary" @onclick="() => HandleCancel()">Cancel</button>
+
+    @if (!string.IsNullOrEmpty(_error))
+    {
+        <div class="alert alert-danger alert-dismissible fade show mt-2 mb-0" role="alert">
+            <strong>Hey, an error happened!</strong> 
+            @_error
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 </EditForm>

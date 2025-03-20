@@ -14,7 +14,11 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 
 
 	public partial class ApplicationUpdateForm : ComponentBase
-	{
+	{       // Define an EventCallback to notify the parent component
+		[Parameter] public EventCallback OnSaveClickSuccess { get; set; }
+		[Parameter] public EventCallback OnCancelClick { get; set; }
+
+
 		[Inject]
 		public IMediator Mediator { get; set; } = default!;
 
@@ -36,6 +40,18 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 		private ValidationMessageStore? _messageStore = default!;
 
 		protected override async Task OnInitializedAsync()
+		{
+			await Start();
+
+		}
+
+		public async Task Start(Guid id)
+		{
+			Id = id;
+			await Start();
+		}
+
+		private async Task Start()
 		{
 			// Send an event to MediatR
 			if (Id != Guid.Empty)
@@ -61,9 +77,6 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 					_error = result.Error.Description;
 				}
 			}
-			else
-			{
-			}
 
 		}
 
@@ -77,8 +90,10 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 
 			if (result.IsSuccess)
 			{
-				// Close the modal
-				Navigation.NavigateTo("/applications");
+				//Navigation.NavigateTo("/applications");
+
+				// Call the parent method via the EventCallback
+				await OnSaveClickSuccess.InvokeAsync(null);
 			}
 			else
 			{
@@ -101,9 +116,12 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 			_isSubmitting = false;
 		}
 
-		private void CancelUpdate()
+		private async Task CancelUpdateAsync()
 		{
-			Navigation.NavigateTo("/applications");
+			//Navigation.NavigateTo("/applications");
+
+			// Call the parent method via the EventCallback
+			await OnCancelClick.InvokeAsync(null);
 		}
 
 		private void ClearValidationMessage(string fieldName)
