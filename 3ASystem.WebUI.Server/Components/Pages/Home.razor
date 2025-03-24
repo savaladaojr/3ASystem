@@ -1,7 +1,40 @@
 ﻿@page "/"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
 
 <PageTitle>HomePage</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+<br><br>
+
+
+<button class="btn btn-primary" @onclick="() => ShowModal()">Open Modal</button>
+
+<ModalComponent @ref="modal" ModalId="exampleModal" Title="Example Modal" ShowdismissButton="false" ShowActionButtons="false">
+    <Body>
+        <_3ASystem.WebUI.Server.Components.Pages.Applications.ApplicationCreateForm 
+            OnCancelClick="HandleConfirm" 
+            OnSaveClickSuccess="HandleConfirm">
+
+        </_3ASystem.WebUI.Server.Components.Pages.Applications.ApplicationCreateForm>
+    </Body>
+</ModalComponent>
+
+@code {
+    private ModalComponent modal = default!;
+
+
+    private async Task ShowModal()
+    {
+        await modal.ShowModal();
+    }
+
+    private async Task HandleConfirm()
+    {
+        // Handle the confirm action
+        await modal.HideModal();
+    }
+}

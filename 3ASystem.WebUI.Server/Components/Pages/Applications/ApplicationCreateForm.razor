@@ -1,0 +1,42 @@
+﻿@* @page "/Applications/Create" *@
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<EditForm EditContext="@_editContext">
+    @* Model="createApplication" *@
+    @*     <DataAnnotationsValidator />
+    <ValidationSummary /> *@
+
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <InputText id="name" class="form-control" @bind-Value="createApplication.Name" @oninput="() => ClearValidationMessage(nameof(createApplication.Name))" />
+        <ValidationMessage For="@(() => createApplication.Name)" />
+    </div>
+    <div class="mb-3">
+        <label for="abbreviation" class="form-label">Abbreviation</label>
+        <InputText id="abbreviation" class="form-control" @bind-Value="createApplication.Abbreviation" @oninput="() => ClearValidationMessage(nameof(createApplication.Abbreviation))" />
+        <ValidationMessage For="@(() => createApplication.Abbreviation)" />
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <InputTextArea id="description" class="form-control" @bind-Value="createApplication.Description" @oninput="() => ClearValidationMessage(nameof(createApplication.Description))" />
+        <ValidationMessage For="@(() => createApplication.Description)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="iconUrl" class="form-label">Icon Url</label>
+        <InputText id="iconUrl" class="form-control" @bind-Value="createApplication.IconUrl" @oninput="() => ClearValidationMessage(nameof(createApplication.IconUrl))" />
+        <ValidationMessage For="@(() => createApplication.IconUrl)" />
+    </div>
+
+    <button type="button" class="btn btn-primary" @onclick="() => HandleSave()" >Save</button>
+    <button type="button" class="btn btn-secondary" @onclick="() => HandleCancel()">Cancel</button>
+
+    @if (!string.IsNullOrEmpty(_error))
+    {
+        <div class="alert alert-danger alert-dismissible fade show mt-2 mb-0" role="alert">
+            <strong>Hey, an error happened!</strong> 
+            @_error
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</EditForm>

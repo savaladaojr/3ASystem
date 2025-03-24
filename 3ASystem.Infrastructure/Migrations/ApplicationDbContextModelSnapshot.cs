@@ -17,12 +17,12 @@ namespace _3ASystem.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("_3ASystem.Domain.Entities.App", b =>
+            modelBuilder.Entity("_3ASystem.Domain.Entities.Applications.App", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -62,12 +62,14 @@ namespace _3ASystem.Infrastructure.Migrations
                     b.HasIndex("Abbreviation")
                         .IsUnique();
 
+                    b.HasIndex("Hash");
+
                     b.HasIndex("IsActive");
 
                     b.ToTable("Applications", (string)null);
                 });
 
-            modelBuilder.Entity("_3ASystem.Domain.Entities.Functionality", b =>
+            modelBuilder.Entity("_3ASystem.Domain.Entities.Functionalities.Functionality", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -111,7 +113,7 @@ namespace _3ASystem.Infrastructure.Migrations
                     b.ToTable("Functionalities", (string)null);
                 });
 
-            modelBuilder.Entity("_3ASystem.Domain.Entities.Operation", b =>
+            modelBuilder.Entity("_3ASystem.Domain.Entities.Operations.Operation", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -150,7 +152,31 @@ namespace _3ASystem.Infrastructure.Migrations
                     b.ToTable("Operations", (string)null);
                 });
 
-            modelBuilder.Entity("_3ASystem.Domain.Entities.Role", b =>
+            modelBuilder.Entity("_3ASystem.Domain.Entities.RoleOperations.RoleOperation", b =>
+                {
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OperationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsAllowed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("RoleId", "OperationId");
+
+                    b.HasIndex("OperationId");
+
+                    b.ToTable("RoleOperations", (string)null);
+                });
+
+            modelBuilder.Entity("_3ASystem.Domain.Entities.Roles.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -189,80 +215,56 @@ namespace _3ASystem.Infrastructure.Migrations
                     b.ToTable("Roles", (string)null);
                 });
 
-            modelBuilder.Entity("_3ASystem.Domain.Entities.RoleOperation", b =>
+            modelBuilder.Entity("_3ASystem.Domain.Entities.Functionalities.Functionality", b =>
                 {
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("OperationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsAllowed")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("RoleId", "OperationId");
-
-                    b.HasIndex("OperationId");
-
-                    b.ToTable("RoleOperations", (string)null);
-                });
-
-            modelBuilder.Entity("_3ASystem.Domain.Entities.Functionality", b =>
-                {
-                    b.HasOne("_3ASystem.Domain.Entities.App", null)
+                    b.HasOne("_3ASystem.Domain.Entities.Applications.App", null)
                         .WithMany("Functionalities")
                         .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("_3ASystem.Domain.Entities.Operation", b =>
+            modelBuilder.Entity("_3ASystem.Domain.Entities.Operations.Operation", b =>
                 {
-                    b.HasOne("_3ASystem.Domain.Entities.Functionality", null)
+                    b.HasOne("_3ASystem.Domain.Entities.Functionalities.Functionality", null)
                         .WithMany("Operations")
                         .HasForeignKey("FunctionalityId")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("_3ASystem.Domain.Entities.Role", b =>
+            modelBuilder.Entity("_3ASystem.Domain.Entities.RoleOperations.RoleOperation", b =>
                 {
-                    b.HasOne("_3ASystem.Domain.Entities.App", null)
-                        .WithMany("Roles")
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("_3ASystem.Domain.Entities.RoleOperation", b =>
-                {
-                    b.HasOne("_3ASystem.Domain.Entities.Operation", null)
+                    b.HasOne("_3ASystem.Domain.Entities.Operations.Operation", null)
                         .WithMany()
                         .HasForeignKey("OperationId")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
-                    b.HasOne("_3ASystem.Domain.Entities.Role", null)
+                    b.HasOne("_3ASystem.Domain.Entities.Roles.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("_3ASystem.Domain.Entities.App", b =>
+            modelBuilder.Entity("_3ASystem.Domain.Entities.Roles.Role", b =>
+                {
+                    b.HasOne("_3ASystem.Domain.Entities.Applications.App", null)
+                        .WithMany("Roles")
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("_3ASystem.Domain.Entities.Applications.App", b =>
                 {
                     b.Navigation("Functionalities");
 
                     b.Navigation("Roles");
                 });
 
-            modelBuilder.Entity("_3ASystem.Domain.Entities.Functionality", b =>
+            modelBuilder.Entity("_3ASystem.Domain.Entities.Functionalities.Functionality", b =>
                 {
                     b.Navigation("Operations");
                 });

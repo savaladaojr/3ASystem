@@ -1,6 +1,5 @@
 ﻿using _3ASystem.Domain.Data;
-using _3ASystem.Domain.Entities;
-using _3ASystem.Domain.Entities.Identifiers;
+using _3ASystem.Domain.Entities.Applications;
 
 namespace _3ASystem.Domain.Data.Repositories
 {

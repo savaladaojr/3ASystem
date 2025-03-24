@@ -1,11 +1,14 @@
 using _3ASystem.Application;
 using _3ASystem.Infrastructure;
 using _3ASystem.WebUI.Server.Components;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorComponents();
+builder.Services.AddRazorComponents()
+	.AddInteractiveServerComponents();
+
 builder.Services.AddApplicationDependencies();
 builder.Services.AddInfrastructureDependencies(builder.Configuration);
 
@@ -19,12 +22,13 @@ if (!app.Environment.IsDevelopment())
 	app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 
+app.UseHttpsRedirection();
 
 app.UseAntiforgery();
 
 app.MapStaticAssets();
-app.MapRazorComponents<App>();
+app.MapRazorComponents<App>()
+	.AddInteractiveServerRenderMode();
 
 app.Run();
