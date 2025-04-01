@@ -39,12 +39,12 @@ public class CreateApplicationCommandHandlerTests
 			IconUrl = "https://test.com/icon.png"
 		};
 
-		var app = App.Create(
-			command.Name,
-			command.Abbreviation,
-			command.Description,
-			command.IconUrl
-		);
+		//var app = App.Create(
+		//	command.Name,
+		//	command.Abbreviation,
+		//	command.Description,
+		//	command.IconUrl
+		//);
 
 
 		//_appRepositoryMock.Setup(
@@ -116,6 +116,12 @@ public class CreateApplicationCommandHandlerTests
 	public async Task CreateApplicationCommandHandler_Should_CallCreateOnRepository_WhenAbbreviationNotExist()
 	{
 		// Arrange
+		App? appNull = null;
+		_appRepositoryMock.Setup(
+			repo => repo.GetByAbbreviationAsync(It.IsAny<string>())
+		).ReturnsAsync(appNull);
+
+
 		var command = new CreateApplicationCommand
 		{
 			Name = "Test Application",
@@ -130,11 +136,6 @@ public class CreateApplicationCommandHandlerTests
 			command.Description,
 			command.IconUrl
 		);
-
-		App? appNull = null;
-		_appRepositoryMock.Setup(
-			repo => repo.GetByAbbreviationAsync(It.IsAny<string>())
-		).ReturnsAsync(appNull);
 
 		_appRepositoryMock.Setup(
 			repo => repo.Create(
@@ -206,7 +207,7 @@ public class CreateApplicationCommandHandlerTests
 
 		// Assert
 
-		//check for repository create method
+		//check for repository create method & unit of work save changes async method
 		_appRepositoryMock.Verify(
 			repo => repo.Create(
 				It.Is<App>(app => app.Id.Value == result.Value.Id)
@@ -214,18 +215,17 @@ public class CreateApplicationCommandHandlerTests
 			Times.Once
 		);
 
+		_unitOfWorkMock.Verify(
+			repo => repo.SaveChangesAsync(
+				It.IsAny<CancellationToken>()
+			),
+			Times.Once
+		);
 
-		/* //Without Fluent Assertion
-		Assert.False(result.IsFailure);
-		Assert.True(result.IsSuccess);
-		Assert.NotNull(result.Value);
-		Assert.Equal(command.Name, result.Value.Name);
-		*/
-
-		result.IsFailure.Should().BeFalse();
-		result.IsSuccess.Should().BeTrue();
-		result.Value.Should().NotBeNull();
-		result.Value.Name.Should().BeSameAs(result.Value.Name);
+		result.IsFailure.Should().BeFalse(); //Assert.False(result.IsFailure);
+		result.IsSuccess.Should().BeTrue(); //Assert.True(result.IsSuccess);
+		result.Value.Should().NotBeNull(); //Assert.NotNull(result.Value);
+		result.Value.Name.Should().BeSameAs(result.Value.Name); //Assert.Equal(command.Name, result.Value.Name);
 	}
 
 
