@@ -1,15 +1,5 @@
-﻿using _3ASystem.Application.Abstractions.Data;
-using _3ASystem.Application.Applications.Commands.CreateApplication;
-using _3ASystem.Domain.Data.Repositories;
-using _3ASystem.Domain.Entities.Applications;
-using _3ASystem.Domain.Shared;
+﻿using _3ASystem.Application.Applications.Commands.CreateApplication;
 using FluentAssertions;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace _3ASystem.Tests.Application.Application.Commands;
 

@@ -71,6 +71,8 @@ The following libraries and frameworks are used in the 3ASystem project:
 - **AutoMapper**: For object-to-object mapping.
 - **Serilog**: For logging and diagnostics.
 - **FluentAssertions**: For writing unit tests with clear and readable assertions.
+- **xUnit**: For writing unit tests.
+- **NSubstitute**: For mocking dependencies in unit tests.
 <br><br>
 
 ## Automated Unit Tests

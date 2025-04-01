@@ -1,23 +1,22 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B54E3428-2F1D-4C8C-A0F1-CABB60B4E1C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3ASystem.Domain", "3ASystem.Domain\3ASystem.Domain.csproj", "{F27DCECF-9CC9-43A2-9A3B-00AADABFEBD0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3ASystem.Domain", "src\3ASystem.Domain\3ASystem.Domain.csproj", "{F27DCECF-9CC9-43A2-9A3B-00AADABFEBD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3ASystem.Application", "3ASystem.Application\3ASystem.Application.csproj", "{13CFB5E5-526A-47A7-B15E-7AADD243AEC7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3ASystem.Application", "src\3ASystem.Application\3ASystem.Application.csproj", "{13CFB5E5-526A-47A7-B15E-7AADD243AEC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3ASystem.Infrastructure", "3ASystem.Infrastructure\3ASystem.Infrastructure.csproj", "{571FC109-56E1-400D-9432-5DBCED4D6FD6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3ASystem.Infrastructure", "src\3ASystem.Infrastructure\3ASystem.Infrastructure.csproj", "{571FC109-56E1-400D-9432-5DBCED4D6FD6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7BA014B4-3C0F-4699-9ED3-EA0A2F476EC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3ASystem.WebUI.Server", "3ASystem.WebUI.Server\3ASystem.WebUI.Server.csproj", "{D83878EF-1B32-4244-AEA3-09115A215B97}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3ASystem.WebUI.Server", "src\3ASystem.WebUI.Server\3ASystem.WebUI.Server.csproj", "{D83878EF-1B32-4244-AEA3-09115A215B97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3ASystem.Tests.Domain", "3ASystem.Tests.Domain\3ASystem.Tests.Domain.csproj", "{6931B1BA-F5E4-4BE0-A124-B8BA142462C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3ASystem.Tests.Domain", "tests\3ASystem.Tests.Domain\3ASystem.Tests.Domain.csproj", "{6931B1BA-F5E4-4BE0-A124-B8BA142462C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3ASystem.Tests.Application", "3ASystem.Tests.Application\3ASystem.Tests.Application.csproj", "{C4AE99F8-986A-46DC-81E6-A7C32F17FCEE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3ASystem.Tests.Application", "tests\3ASystem.Tests.Application\3ASystem.Tests.Application.csproj", "{C4AE99F8-986A-46DC-81E6-A7C32F17FCEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
