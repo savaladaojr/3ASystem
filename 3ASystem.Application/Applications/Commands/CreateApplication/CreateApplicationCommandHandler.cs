@@ -8,7 +8,8 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace _3ASystem.Application.Applications.Commands.CreateApplication;
 
-internal sealed class CreateApplicationCommandHandler : ICommandHandler<CreateApplicationCommand, CreateApplicationResponse>
+
+public sealed class CreateApplicationCommandHandler : ICommandHandler<CreateApplicationCommand, CreateApplicationResponse>
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IAppRepository _appRepository;
@@ -21,6 +22,13 @@ internal sealed class CreateApplicationCommandHandler : ICommandHandler<CreateAp
 
 	public async Task<Result<CreateApplicationResponse>> Handle(CreateApplicationCommand request, CancellationToken cancellationToken)
 	{
+
+		var abbrev = await _appRepository.GetByAbbreviationAsync(request.Abbreviation);
+		if (abbrev != null)
+		{
+			return Result.Failure<CreateApplicationResponse>(AppErrors.AbbreviationNotUnique);
+		}
+
 		var app = App.Create(request.Name, request.Abbreviation, request.Description, request.IconUrl);
 
 		app.Raise(new AppCreatedDomainEvent(app.Id));

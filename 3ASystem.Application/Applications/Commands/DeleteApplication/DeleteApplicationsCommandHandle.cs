@@ -4,37 +4,36 @@ using _3ASystem.Domain.Data.Repositories;
 using _3ASystem.Domain.Entities.Applications;
 using _3ASystem.Domain.Shared;
 
-namespace _3ASystem.Application.Applications.Commands.DeleteApplication
+namespace _3ASystem.Application.Applications.Commands.DeleteApplication;
+
+public class DeleteApplicationsCommandHandle : ICommandHandler<DeleteApplicationsCommand>
 {
-	internal class DeleteApplicationsCommandHandle : ICommandHandler<DeleteApplicationsCommand>
+	private readonly IAppRepository _appRepository;
+	private readonly IUnitOfWork _unitOfWork;
+
+	public DeleteApplicationsCommandHandle(IAppRepository appRepository, IUnitOfWork unitOfWork)
 	{
-		private readonly IAppRepository _appRepository;
-		private readonly IUnitOfWork _unitOfWork;
+		_appRepository = appRepository;
+		_unitOfWork = unitOfWork;
+	}
 
-		public DeleteApplicationsCommandHandle(IAppRepository appRepository, IUnitOfWork unitOfWork)
+	public async Task<Result> Handle(DeleteApplicationsCommand request, CancellationToken cancellationToken)
+	{
+		var appId = new AppId(request.Id);
+		var app = await _appRepository.GetByIdAsync(appId);
+
+		if (app is null)
 		{
-			_appRepository = appRepository;
-			_unitOfWork = unitOfWork;
+			return Result.Failure(AppErrors.NotFound(appId));
 		}
 
-		public async Task<Result> Handle(DeleteApplicationsCommand request, CancellationToken cancellationToken)
-		{
-			var appId = new AppId(request.Id);
-			var app = await _appRepository.GetByIdAsync(appId);
+		_appRepository.NoTrack(app);
+		_appRepository.Delete(appId);
 
-			if (app is null)
-			{
-				return Result.Failure(AppErrors.NotFound(appId));
-			}
+		app.Raise(new AppDeleteDomainEvent(app.Id));
 
-			_appRepository.NoTrack(app);
-			_appRepository.Delete(appId);
+		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-			app.Raise(new AppDeleteDomainEvent(app.Id));
-
-			await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-			return Result.Success();
-		}
+		return Result.Success();
 	}
 }

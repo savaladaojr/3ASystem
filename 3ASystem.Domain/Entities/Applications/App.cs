@@ -64,15 +64,6 @@ public sealed class App : Entity<AppId>
 		IconUrl = iconUrl;
 		LastUpdatedAt = DateTime.Now;
 	}
-	public void Update(string name, string abbreviation, string description, string iconUrl, bool isActive)
-	{
-		Name = name;
-		Abbreviation = abbreviation;
-		Description = description;
-		IconUrl = iconUrl;
-		IsActive = isActive;
-		LastUpdatedAt = DateTime.Now;
-	}
 
 	public void Enable()
 	{
