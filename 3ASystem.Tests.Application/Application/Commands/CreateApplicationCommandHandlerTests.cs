@@ -4,32 +4,20 @@ using _3ASystem.Domain.Data.Repositories;
 using _3ASystem.Domain.Entities.Applications;
 using _3ASystem.Domain.Shared;
 using FluentAssertions;
-using Moq;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using NSubstitute;
 
 namespace _3ASystem.Tests.Application.Application.Commands;
 
 public class CreateApplicationCommandHandlerTests
 {
-	Mock<IUnitOfWork> _unitOfWorkMock = new Mock<IUnitOfWork>();
-	Mock<IAppRepository> _appRepositoryMock = new Mock<IAppRepository>();
-
+	private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
+	private readonly IAppRepository _appRepository = Substitute.For<IAppRepository>();
 
 	[Fact(DisplayName = "CreateApplicationCommandHandler Should Return Fail Result When Abbreviation Is Not Unique (Exists)")]
 	public async Task CreateApplicationCommandHandler_Should_ReturnFailResult_WhenAbbreviationIsNotUnique()
 	{
 		// Arrange
-		var appExistent = App.Create(
-			"Test Application Existent",
-			"TA",
-			"Test Application Existent Description",
-			"https://test.com/icon.png"
-		);
-
-		_appRepositoryMock.Setup(
-			repo => repo.GetByAbbreviationAsync(It.IsAny<string>())
-		).ReturnsAsync(appExistent);
-
+		var handler = new CreateApplicationCommandHandler(_unitOfWork, _appRepository);
 
 		var command = new CreateApplicationCommand
 		{
@@ -39,27 +27,15 @@ public class CreateApplicationCommandHandlerTests
 			IconUrl = "https://test.com/icon.png"
 		};
 
-		//var app = App.Create(
-		//	command.Name,
-		//	command.Abbreviation,
-		//	command.Description,
-		//	command.IconUrl
-		//);
 
+		var existentApp= App.Create(
+			command.Name,
+			command.Abbreviation,
+			command.Description,
+			command.IconUrl
+		);
 
-		//_appRepositoryMock.Setup(
-		//	repo => repo.Create(
-		//		It.IsAny<App>()
-		//	)
-		//).Returns(app);
-
-		//_unitOfWorkMock.Setup(
-		//	uow => uow.SaveChangesAsync(
-		//		It.IsAny<CancellationToken>()
-		//		)
-		//).ReturnsAsync(1);
-
-		var handler = new CreateApplicationCommandHandler(_unitOfWorkMock.Object, _appRepositoryMock.Object);
+		_appRepository.GetByAbbreviationAsync(command.Abbreviation).Returns(existentApp);	
 
 		// Act
 		Result<CreateApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
@@ -76,17 +52,14 @@ public class CreateApplicationCommandHandlerTests
 	public async Task CreateApplicationCommandHandler_Should_NotCallUnitOfWork_WhenAbbreviationIsNotUnique()
 	{
 		// Arrange
+		var handler = new CreateApplicationCommandHandler(_unitOfWork, _appRepository);
+
 		var appExistent = App.Create(
 			"Test Application Existent",
 			"TA",
 			"Test Application Existent Description",
 			"https://test.com/icon.png"
 		);
-
-		_appRepositoryMock.Setup(
-			repo => repo.GetByAbbreviationAsync(It.IsAny<string>())
-		).ReturnsAsync(appExistent);
-
 
 		var command = new CreateApplicationCommand
 		{
@@ -96,18 +69,13 @@ public class CreateApplicationCommandHandlerTests
 			IconUrl = "https://test.com/icon.png"
 		};
 
-		var handler = new CreateApplicationCommandHandler(_unitOfWorkMock.Object, _appRepositoryMock.Object);
-
+		_appRepository.GetByAbbreviationAsync(command.Abbreviation).Returns(appExistent);
 
 		// Act
 		Result<CreateApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
 
-
 		// Assert
-		_unitOfWorkMock.Verify(
-			uof => uof.SaveChangesAsync(It.IsAny<CancellationToken>()),
-			Times.Never
-		);	
+		await _unitOfWork.Received(0).SaveChangesAsync(Arg.Any<CancellationToken>());
 
 	}
 
@@ -116,11 +84,7 @@ public class CreateApplicationCommandHandlerTests
 	public async Task CreateApplicationCommandHandler_Should_CallCreateOnRepository_WhenAbbreviationNotExist()
 	{
 		// Arrange
-		App? appNull = null;
-		_appRepositoryMock.Setup(
-			repo => repo.GetByAbbreviationAsync(It.IsAny<string>())
-		).ReturnsAsync(appNull);
-
+		var handler = new CreateApplicationCommandHandler(_unitOfWork, _appRepository);
 
 		var command = new CreateApplicationCommand
 		{
@@ -137,32 +101,20 @@ public class CreateApplicationCommandHandlerTests
 			command.IconUrl
 		);
 
-		_appRepositoryMock.Setup(
-			repo => repo.Create(
-				It.IsAny<App>()
-			)
-		).Returns(app);
 
-		_unitOfWorkMock.Setup(
-			uow => uow.SaveChangesAsync(
-				It.IsAny<CancellationToken>()
-				)
-		).ReturnsAsync(1);
+		App? appNull = null;
+		_appRepository.GetByAbbreviationAsync(Arg.Any<string>()).Returns(appNull);
 
-		var handler = new CreateApplicationCommandHandler(_unitOfWorkMock.Object, _appRepositoryMock.Object);
+		_appRepository.Create(app).Returns(app);
 
+		_unitOfWork.SaveChangesAsync(Arg.Any<CancellationToken>()).Returns(1);
 
 		// Act
 		Result<CreateApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
 
 
 		// Assert
-		_appRepositoryMock.Verify(
-			repo => repo.Create(
-				It.Is<App>(app => app.Id.Value == result.Value.Id)
-			),
-			Times.Once
-		);
+		_appRepository.Received(1).Create(Arg.Any<App>());
 
 	}
 
@@ -171,6 +123,8 @@ public class CreateApplicationCommandHandlerTests
 	public async Task CreateApplicationCommandHandler_Should_ReturnCreateApplicationResponse()
 	{
 		// Arrange
+		var handler = new CreateApplicationCommandHandler(_unitOfWork, _appRepository);
+
 		var command = new CreateApplicationCommand
 		{
 			Name = "Test Application",
@@ -186,46 +140,27 @@ public class CreateApplicationCommandHandlerTests
 			command.IconUrl
 		);
 
-		_appRepositoryMock.Setup(
-			repo => repo.Create(
-				It.IsAny<App>()
-			)
-		).Returns(app);
+		App? appNull = null;
+		_appRepository.GetByAbbreviationAsync(Arg.Any<string>()).Returns(appNull);
 
-		_unitOfWorkMock.Setup(
-			uow => uow.SaveChangesAsync(
-				It.IsAny<CancellationToken>()
-				)
-		).ReturnsAsync(1);
+		_appRepository.Create(app).Returns(app);
 
-		var handler = new CreateApplicationCommandHandler(_unitOfWorkMock.Object, _appRepositoryMock.Object);
-
+		_unitOfWork.SaveChangesAsync(Arg.Any<CancellationToken>()).Returns(1);
 
 		// Act
 		Result<CreateApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
 
 
 		// Assert
-
-		//check for repository create method & unit of work save changes async method
-		_appRepositoryMock.Verify(
-			repo => repo.Create(
-				It.Is<App>(app => app.Id.Value == result.Value.Id)
-			),
-			Times.Once
-		);
-
-		_unitOfWorkMock.Verify(
-			repo => repo.SaveChangesAsync(
-				It.IsAny<CancellationToken>()
-			),
-			Times.Once
-		);
-
 		result.IsFailure.Should().BeFalse(); //Assert.False(result.IsFailure);
 		result.IsSuccess.Should().BeTrue(); //Assert.True(result.IsSuccess);
 		result.Value.Should().NotBeNull(); //Assert.NotNull(result.Value);
 		result.Value.Name.Should().BeSameAs(result.Value.Name); //Assert.Equal(command.Name, result.Value.Name);
+
+		//check for repository create method & unit of work save changes async method
+		_appRepository.Received(1).Create(Arg.Is<App>(app => app.Id.Value == result.Value.Id));
+		await _unitOfWork.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
+
 	}
 
 
