@@ -11,7 +11,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace _3ASystem.Application.Applications.Commands.EnableDisableApplication;
 
-internal sealed class EnableDisableApplicationCommandHandler : ICommandHandler<EnableDisableApplicationCommand, EnableDisableApplicationCommandResponse>
+public sealed class EnableDisableApplicationCommandHandler : ICommandHandler<EnableDisableApplicationCommand, EnableDisableApplicationCommandResponse>
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IAppRepository _appRepository;

@@ -7,7 +7,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace _3ASystem.Application.Applications.Commands.UpdateApplication;
 
-internal sealed class UpdateApplicationCommandHandler : ICommandHandler<UpdateApplicationCommand, UpdateApplicationResponse>
+public sealed class UpdateApplicationCommandHandler : ICommandHandler<UpdateApplicationCommand, UpdateApplicationResponse>
 {
 	private readonly IAppRepository _appRepository;
 	private readonly IUnitOfWork _unitOfWork;
@@ -26,7 +26,7 @@ internal sealed class UpdateApplicationCommandHandler : ICommandHandler<UpdateAp
 		if (app is null)
 			return Result.Failure<UpdateApplicationResponse>(AppErrors.NotFound(appId));
 
-		app.Update(request.Name, request.Abbreviation, request.Description, request.IconUrl, request.IsActive);
+		app.Update(request.Name, request.Abbreviation, request.Description, request.IconUrl);
 
 		app.Raise(new AppUpdatedDomainEvent(app.Id));
 
