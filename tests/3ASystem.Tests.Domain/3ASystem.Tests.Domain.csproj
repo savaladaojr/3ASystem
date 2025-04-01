@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\3ASystem.Domain\3ASystem.Domain.csproj" />
+    <ProjectReference Include="..\..\src\3ASystem.Domain\3ASystem.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
