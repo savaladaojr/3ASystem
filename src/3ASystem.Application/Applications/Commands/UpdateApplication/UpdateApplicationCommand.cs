@@ -15,6 +15,7 @@ namespace _3ASystem.Application.Applications.Commands.UpdateApplication
 		public string Description { get; set; } = string.Empty;
 		public string IconUrl { get; set; } = string.Empty;
 		public bool IsActive { get; set; } = default!;
+		public string FriendlyId { get; set; } = string.Empty;
 
 	}
 }

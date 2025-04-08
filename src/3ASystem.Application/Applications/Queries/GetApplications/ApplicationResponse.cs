@@ -13,5 +13,6 @@ public sealed record ApplicationResponse
 	public string Abbreviation { get; init; } = string.Empty;
 	public string IconUrl { get; init; } = string.Empty;
 	public bool IsActive { get; init; } = true;
+	public string FriendlyId { get; init; } = string.Empty;
 
 }

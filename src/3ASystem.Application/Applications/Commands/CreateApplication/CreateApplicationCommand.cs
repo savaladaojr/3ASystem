@@ -13,5 +13,6 @@ public sealed class CreateApplicationCommand : ICommand<CreateApplicationRespons
 	public string Abbreviation { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;
 	public string IconUrl { get; set; } = string.Empty;
+	public string FriendlyId { get; set; } = string.Empty;
 
 }

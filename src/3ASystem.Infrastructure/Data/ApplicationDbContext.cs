@@ -2,6 +2,7 @@
 using _3ASystem.Domain.Abstractions;
 using _3ASystem.Domain.Entities.Applications;
 using _3ASystem.Domain.Entities.Functionalities;
+using _3ASystem.Domain.Entities.Modules;
 using _3ASystem.Domain.Entities.Operations;
 using _3ASystem.Domain.Entities.RoleOperations;
 using _3ASystem.Domain.Entities.Roles;
@@ -16,6 +17,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWor
 	private readonly IPublisher _publisher;
 
 	public DbSet<App> Applications { get; set; }
+	public DbSet<Module> Modules { get; set; }
 	public DbSet<Functionality> Functionalities { get; set; }
 	public DbSet<Functionality> Functions { get; set; }
 	public DbSet<Operation> Operations { get; set; }

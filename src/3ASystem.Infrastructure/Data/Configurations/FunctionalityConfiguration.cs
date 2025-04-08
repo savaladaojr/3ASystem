@@ -1,5 +1,5 @@
-﻿using _3ASystem.Domain.Entities.Applications;
-using _3ASystem.Domain.Entities.Functionalities;
+﻿using _3ASystem.Domain.Entities.Functionalities;
+using _3ASystem.Domain.Entities.Modules;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,8 +13,8 @@ public class FunctionalityConfiguration : IEntityTypeConfiguration<Functionality
 		builder.Property(f => f.Id)
 			.HasConversion(Id => Id.Value, value => new FunctionalityId(value));
 
-		builder.Property(f => f.ApplicationId)
-			.HasConversion(AppId => AppId.Value, value => new AppId(value));
+		builder.Property(f => f.ModuleId)
+			.HasConversion(ModuleId => ModuleId.Value, value => new ModuleId(value));
 
 		builder.Property(f => f.Name)
 			.HasMaxLength(100);
@@ -29,16 +29,21 @@ public class FunctionalityConfiguration : IEntityTypeConfiguration<Functionality
 		builder.Property(f => f.IsActive);
 		builder.HasIndex(f => f.IsActive);
 
+		builder.Property(f => f.IsPartOfMenu);
+		builder.HasIndex(f => f.IsPartOfMenu);
+
+		builder.Property(f => f.FriendlyId)
+			.HasMaxLength(25);
+		builder.HasIndex(f => f.FriendlyId).IsUnique();
+
 		//EF Relations
-		builder.HasOne<App>()
+		builder.HasOne<Module>()
 			.WithMany(m => m.Functionalities)
-			.HasForeignKey(f => f.ApplicationId)
+			.HasForeignKey(f => f.ModuleId)
 			.HasPrincipalKey(a => a.Id)
 			.IsRequired();
 
-
-		builder.Ignore(p => p.Application);
-		builder.Ignore(p => p.Operations);
+		builder.Ignore(p => p.Module);
 
 		builder.ToTable("Functionalities");
 	}

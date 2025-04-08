@@ -26,6 +26,9 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
 		builder.Property(a => a.IsActive);
 		builder.HasIndex(a => a.IsActive);
 
+		builder.Property(f => f.FriendlyId)
+			.HasMaxLength(25);
+		builder.HasIndex(f => f.FriendlyId).IsUnique();
 
 		builder.HasOne<Functionality>()
 			.WithMany(m => m.Operations)

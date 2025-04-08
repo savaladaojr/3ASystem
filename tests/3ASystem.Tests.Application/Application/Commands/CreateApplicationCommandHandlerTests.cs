@@ -24,7 +24,8 @@ public class CreateApplicationCommandHandlerTests
 			Name = "Test Application",
 			Abbreviation = "TA",
 			Description = "Test Application Description",
-			IconUrl = "https://test.com/icon.png"
+			IconUrl = "https://test.com/icon.png",
+			FriendlyId = "APL1"
 		};
 
 
@@ -32,7 +33,8 @@ public class CreateApplicationCommandHandlerTests
 			command.Name,
 			command.Abbreviation,
 			command.Description,
-			command.IconUrl
+			command.IconUrl,
+			command.FriendlyId
 		);
 
 		_appRepository.GetByAbbreviationAsync(command.Abbreviation).Returns(existentApp);	
@@ -58,7 +60,8 @@ public class CreateApplicationCommandHandlerTests
 			"Test Application Existent",
 			"TA",
 			"Test Application Existent Description",
-			"https://test.com/icon.png"
+			"https://test.com/icon.png",
+			"APL1"
 		);
 
 		var command = new CreateApplicationCommand
@@ -66,7 +69,8 @@ public class CreateApplicationCommandHandlerTests
 			Name = "Test Application",
 			Abbreviation = "TA",
 			Description = "Test Application Description",
-			IconUrl = "https://test.com/icon.png"
+			IconUrl = "https://test.com/icon.png",
+			FriendlyId = "APL1"
 		};
 
 		_appRepository.GetByAbbreviationAsync(command.Abbreviation).Returns(appExistent);
@@ -91,14 +95,16 @@ public class CreateApplicationCommandHandlerTests
 			Name = "Test Application",
 			Abbreviation = "TA",
 			Description = "Test Application Description",
-			IconUrl = "https://test.com/icon.png"
+			IconUrl = "https://test.com/icon.png",
+			FriendlyId = "APL1"
 		};
 
 		var app = App.Create(
 			command.Name,
 			command.Abbreviation,
 			command.Description,
-			command.IconUrl
+			command.IconUrl,
+			command.FriendlyId
 		);
 
 
@@ -130,14 +136,16 @@ public class CreateApplicationCommandHandlerTests
 			Name = "Test Application",
 			Abbreviation = "TA",
 			Description = "Test Application Description",
-			IconUrl = "https://test.com/icon.png"
+			IconUrl = "https://test.com/icon.png",
+			FriendlyId = "APL1"
 		};
 
 		var app = App.Create(
 			command.Name,
 			command.Abbreviation,
 			command.Description,
-			command.IconUrl
+			command.IconUrl,
+			command.FriendlyId
 		);
 
 		App? appNull = null;

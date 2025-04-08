@@ -10,7 +10,7 @@ public sealed class Role : Entity<RoleId>
 	public string Name { get; private set; } = string.Empty;
 	public string Code { get; private set; } = string.Empty;
 	public bool IsActive { get; private set; } = true;
-
+	public string FriendlyId { get; private set; } = default!;
 
 	//EF Relational
 	public App? Application { get; init; }
@@ -23,15 +23,16 @@ public sealed class Role : Entity<RoleId>
 
 	}
 
-	private Role(RoleId id, AppId applicationId, string name, string code, bool isActive) : base(id)
+	private Role(RoleId id, AppId applicationId, string name, string code, bool isActive, string friendlyId) : base(id)
 	{
 		ApplicationId = applicationId;
 		Name = name;
 		Code = code;
 		IsActive = isActive;
+		FriendlyId = friendlyId;
 	}
 
-	public static Role Create(AppId applicationId, string name, string code)
+	public static Role Create(AppId applicationId, string name, string code, string friendlyId)
 	{
 		var role = new Role
 		(
@@ -39,16 +40,18 @@ public sealed class Role : Entity<RoleId>
 			applicationId,
 			name,
 			code,
-			true
+			true,
+			friendlyId
 		);
 
 		return role;
 	}
 
-	public void Update(string name, string code)
+	public void Update(string name, string code, string friendlyId)
 	{
 		Name = name;
 		Code = code;
+		FriendlyId = friendlyId;
 		LastUpdatedAt = DateTime.Now;
 	}
 

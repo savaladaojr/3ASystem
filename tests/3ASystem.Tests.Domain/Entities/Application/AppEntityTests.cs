@@ -14,9 +14,10 @@ public class AppEntityTests
 		var sAbbreviation = "APL1";
 		var sDescription = "Application 1 Description";
 		var sIcon = "icon.png";
+		var sFriendlyId = "APL1_FRIENDLYID";
 
 		//Act
-		var app = App.Create(sName, sAbbreviation, sDescription, sIcon);
+		var app = App.Create(sName, sAbbreviation, sDescription, sIcon, sFriendlyId);
 
 		//Assert
 		app.Should().NotBeNull();
@@ -32,13 +33,14 @@ public class AppEntityTests
 		var sAbbreviation = "APL1";
 		var sDescription = "Application 1 Description";
 		var sIcon = "icon.png";
+		var sFriendlyId = "APL1_FRIENDLYID";
 
-		var app = App.Create(sName, sAbbreviation, sDescription, sIcon);
+		var app = App.Create(sName, sAbbreviation, sDescription, sIcon, sFriendlyId);
 
 		var sDescriptionUpdated = "Application 1 Description Update";
 
 		//Act
-		app.Update(app.Name, app.Abbreviation, sDescriptionUpdated, app.IconUrl);
+		app.Update(app.Name, app.Abbreviation, sDescriptionUpdated, app.IconUrl, sFriendlyId);
 
 		//Assert
 		Assert.Equal(sDescriptionUpdated, app.Description);
@@ -52,8 +54,9 @@ public class AppEntityTests
 		var sAbbreviation = "APL1";
 		var sDescription = "Application 1 Description";
 		var sIcon = "icon.png";
+		var sFriendlyId = "APL1_FRIENDLYID";
 
-		var app = App.Create(sName, sAbbreviation, sDescription, sIcon);
+		var app = App.Create(sName, sAbbreviation, sDescription, sIcon, sFriendlyId);
 
 		//Act
 		app.Enable();
@@ -70,8 +73,9 @@ public class AppEntityTests
 		var sAbbreviation = "APL1";
 		var sDescription = "Application 1 Description";
 		var sIcon = "icon.png";
+		var sFriendlyId = "APL1_FRIENDLYID";
 
-		var app = App.Create(sName, sAbbreviation, sDescription, sIcon);
+		var app = App.Create(sName, sAbbreviation, sDescription, sIcon, sFriendlyId);
 
 		//Act
 		app.Disable();

@@ -10,6 +10,8 @@ public sealed class Operation : Entity<OperationId>
 	public string Name { get; private set; } = default!;
 	public string Code { get; private set; } = default!;
 	public bool IsActive { get; private set; } = true;
+	public string FriendlyId { get; private set; } = default!;
+
 
 	//EF Relations
 	public Functionality? Functionality { get; init; }
@@ -18,15 +20,16 @@ public sealed class Operation : Entity<OperationId>
 	{
 	}
 
-	private Operation(OperationId id, FunctionalityId functionalityId, string name, string code, bool isActive) : base(id)
+	private Operation(OperationId id, FunctionalityId functionalityId, string name, string code, bool isActive, string friendlyId) : base(id)
 	{
 		FunctionalityId = functionalityId;
 		Name = name;
 		Code = code;
 		IsActive = isActive;
+		FriendlyId = friendlyId;
 	}
 
-	public static Operation Create(FunctionalityId functionalityId, string name, string code)
+	public static Operation Create(FunctionalityId functionalityId, string name, string code, string friendlyId)
 	{
 		var action = new Operation
 		(
@@ -34,16 +37,18 @@ public sealed class Operation : Entity<OperationId>
 			functionalityId,
 			name,
 			code,
-			true
+			true,
+			friendlyId
 		);
 
 		return action;
 	}
 
-	public void Update(string name, string code)
+	public void Update(string name, string code, string friendlyId)
 	{
 		Name = name;
 		Code = code;
+		FriendlyId = friendlyId;
 		LastUpdatedAt = DateTime.Now;
 	}
 

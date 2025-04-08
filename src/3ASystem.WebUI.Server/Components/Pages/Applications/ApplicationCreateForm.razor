@@ -28,6 +28,12 @@
         <ValidationMessage For="@(() => createApplication.IconUrl)" />
     </div>
 
+    <div class="mb-3">
+        <label for="abbreviation" class="form-label">Friendly Id</label>
+        <InputText id="abbreviation" class="form-control" @bind-Value="createApplication.FriendlyId" @oninput="() => ClearValidationMessage(nameof(createApplication.FriendlyId))" />
+        <ValidationMessage For="@(() => createApplication.FriendlyId)" />
+    </div>
+
     <button type="button" class="btn btn-primary" @onclick="() => HandleSave()" >Save</button>
     <button type="button" class="btn btn-secondary" @onclick="() => HandleCancel()">Cancel</button>
 
