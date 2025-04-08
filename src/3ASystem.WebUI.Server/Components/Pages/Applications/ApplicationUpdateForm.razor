@@ -31,9 +31,16 @@ else
             <InputText id="iconUrl" class="form-control" @bind-Value="updateApplication.IconUrl" @oninput="() => ClearValidationMessage(nameof(updateApplication.IconUrl))" />
             <ValidationMessage For="@(() => updateApplication.IconUrl)" />
         </div>
+
         <div class="mb-3">
-            <label for="isActive" class="form-label">Is Active</label>
-            <InputCheckbox id="isActive" class="form-check-input" @bind-Value="updateApplication.IsActive" @onchange="() => ClearValidationMessage(nameof(updateApplication.IsActive))" />
+            <label for="abbreviation" class="form-label">Friendly Id</label>
+            <InputText id="abbreviation" class="form-control" @bind-Value="updateApplication.FriendlyId" @oninput="() => ClearValidationMessage(nameof(updateApplication.FriendlyId))" />
+            <ValidationMessage For="@(() => updateApplication.FriendlyId)" />
+        </div>
+
+        <div class="mb-3 form-check form-switch">
+            <InputCheckbox id="isActive" class="form-check-input" role="switch"  disabled @bind-Value="updateApplication.IsActive" @onchange="() => ClearValidationMessage(nameof(updateApplication.IsActive))" />
+            <label for="isActive" class="form-label form-check-label">Is Active</label>
         </div>
 
         <button type="button" class="btn btn-primary" @onclick="() => HandleSubmit()">Save</button>

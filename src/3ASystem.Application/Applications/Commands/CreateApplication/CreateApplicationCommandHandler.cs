@@ -29,7 +29,7 @@ public sealed class CreateApplicationCommandHandler : ICommandHandler<CreateAppl
 			return Result.Failure<CreateApplicationResponse>(AppErrors.AbbreviationNotUnique);
 		}
 
-		var app = App.Create(request.Name, request.Abbreviation, request.Description, request.IconUrl);
+		var app = App.Create(request.Name, request.Abbreviation, request.Description, request.IconUrl, request.FriendlyId);
 
 		app.Raise(new AppCreatedDomainEvent(app.Id));
 
@@ -45,7 +45,8 @@ public sealed class CreateApplicationCommandHandler : ICommandHandler<CreateAppl
 			Description = app.Description,
 			IconUrl = app.IconUrl,
 			Hash = app.Hash,
-			IsActive = app.IsActive
+			IsActive = app.IsActive,
+			FriendlyId = app.FriendlyId
 		};
 
 		return finalResult;

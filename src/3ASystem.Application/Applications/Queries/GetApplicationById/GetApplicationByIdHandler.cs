@@ -35,7 +35,8 @@ public class GetApplicationByIdHandler : IQueryHandler<GetApplicationByIdQuery, 
 			IconUrl = application.IconUrl,
 			Id = application.Id.Value, 
 			IsActive = application.IsActive, 
-			Name = application.Name 
+			Name = application.Name,
+			FriendlyId = application.FriendlyId
 		};
 
 		return finalResult;

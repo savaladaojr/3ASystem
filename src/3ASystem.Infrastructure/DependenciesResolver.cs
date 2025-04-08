@@ -2,6 +2,7 @@
 using _3ASystem.Domain.Data.Repositories;
 using _3ASystem.Infrastructure.Data;
 using _3ASystem.Infrastructure.Data.Repositories;
+using Auth.Domain.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,9 @@ public static class DependenciesResolver
 		services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 		services.AddScoped<IAppRepository, AppRepository>();
+		services.AddScoped<IModuleRepository, ModuleRepository>();
+		services.AddScoped<IFunctionalityRepository, FunctionalityRepository>();
+		services.AddScoped<IOperationRepository, OperationRepository>();
 
 		return services;
 	}

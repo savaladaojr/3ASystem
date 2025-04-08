@@ -9,5 +9,6 @@ public sealed class EnableDisableApplicationCommandResponse
 	public string IconUrl { get; init; } = string.Empty;
 	public Guid Hash { get; init; } = default!;
 	public bool IsActive { get; init; } = default!;
+	public string FriendlyId { get; set; } = string.Empty;
 
 }

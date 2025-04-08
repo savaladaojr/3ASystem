@@ -26,7 +26,7 @@ public sealed class UpdateApplicationCommandHandler : ICommandHandler<UpdateAppl
 		if (app is null)
 			return Result.Failure<UpdateApplicationResponse>(AppErrors.NotFound(appId));
 
-		app.Update(request.Name, request.Abbreviation, request.Description, request.IconUrl);
+		app.Update(request.Name, request.Abbreviation, request.Description, request.IconUrl, request.FriendlyId);
 
 		app.Raise(new AppUpdatedDomainEvent(app.Id));
 
@@ -41,7 +41,8 @@ public sealed class UpdateApplicationCommandHandler : ICommandHandler<UpdateAppl
 			Description = app.Description,
 			IconUrl = app.IconUrl,
 			Hash = app.Hash,
-			IsActive = app.IsActive
+			IsActive = app.IsActive,
+			FriendlyId = app.FriendlyId
 		};
 
 		return finalResult;

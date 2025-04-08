@@ -62,7 +62,8 @@ public sealed class EnableDisableApplicationCommandHandler : ICommandHandler<Ena
 			Description = app.Description,
 			Hash = app.Hash,
 			IconUrl = app.IconUrl,
-			IsActive = app.IsActive
+			IsActive = app.IsActive,
+			FriendlyId = app.FriendlyId
 		};
 
 		return finalResult;

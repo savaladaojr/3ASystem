@@ -66,7 +66,8 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 						Abbreviation = result.Value.Abbreviation,
 						Description = result.Value.Description,
 						IconUrl = result.Value.IconUrl,
-						IsActive = result.Value.IsActive
+						IsActive = result.Value.IsActive,
+						FriendlyId =  result.Value.FriendlyId
 					};
 
 					_editContext = new EditContext(updateApplication);

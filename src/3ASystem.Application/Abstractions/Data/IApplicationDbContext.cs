@@ -1,5 +1,6 @@
 ﻿using _3ASystem.Domain.Entities.Applications;
 using _3ASystem.Domain.Entities.Functionalities;
+using _3ASystem.Domain.Entities.Modules;
 using _3ASystem.Domain.Entities.Operations;
 using _3ASystem.Domain.Entities.RoleOperations;
 using _3ASystem.Domain.Entities.Roles;
@@ -11,6 +12,7 @@ public interface IApplicationDbContext
 {
 	//#region DBSets
 	DbSet<App> Applications { get; set; }
+	DbSet<Module> Modules{ get; set; }
 	DbSet<Functionality> Functions { get; set; }
 	DbSet<Operation> Operations { get; set; }
 	DbSet<Role> Roles { get; set; }

@@ -15,5 +15,6 @@ public sealed class ApplicationResponse
 	public string IconUrl { get; init; } = string.Empty;
 	public Guid Hash { get; init; }
 	public bool IsActive { get; init; } = true;
+	public string FriendlyId { get; init; } = string.Empty;
 
 }
