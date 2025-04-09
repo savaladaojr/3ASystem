@@ -14,7 +14,13 @@ public sealed class AppRepository : _Repository<App, AppId>, IAppRepository
 
 	public async Task<App?> GetByAbbreviationAsync(string abbreviation)
 	{
-		var app = await Entity.AsNoTracking().FirstOrDefaultAsync(item => item.Abbreviation == abbreviation);
+		var app = await Entity.AsNoTracking().SingleOrDefaultAsync(item => item.Abbreviation == abbreviation);
+		return app;
+	}
+
+	public async Task<App?> GetByFriendlyIdAsync(string friendlyId)
+	{
+		var app = await Entity.AsNoTracking().SingleOrDefaultAsync(item => item.FriendlyId == friendlyId);
 		return app;
 	}
 }

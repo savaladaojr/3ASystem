@@ -12,7 +12,7 @@ public sealed class UpdateApplicationCommandHandler : ICommandHandler<UpdateAppl
 	private readonly IAppRepository _appRepository;
 	private readonly IUnitOfWork _unitOfWork;
 
-	public UpdateApplicationCommandHandler(IAppRepository appRepository,IUnitOfWork unitOfWork)
+	public UpdateApplicationCommandHandler(IUnitOfWork unitOfWork, IAppRepository appRepository)
 	{
 		_appRepository = appRepository;
 		_unitOfWork = unitOfWork;
@@ -25,6 +25,17 @@ public sealed class UpdateApplicationCommandHandler : ICommandHandler<UpdateAppl
 
 		if (app is null)
 			return Result.Failure<UpdateApplicationResponse>(AppErrors.NotFound(appId));
+
+		//Check if the Abbreviation is unique
+		var appAbbreviation = await _appRepository.GetByAbbreviationAsync(request.Abbreviation);
+		if ( appAbbreviation is not null && appAbbreviation.Id != app.Id)
+			return Result.Failure<UpdateApplicationResponse>(AppErrors.AbbreviationNotUnique);
+
+
+		//Check if the FriendlyID is unique
+		var appFriendlyId = await _appRepository.GetByFriendlyIdAsync(request.FriendlyId);
+		if (appFriendlyId is not null && appFriendlyId.Id != app.Id)
+			return Result.Failure<UpdateApplicationResponse>(AppErrors.FriendlyIdNotUnique);
 
 		app.Update(request.Name, request.Abbreviation, request.Description, request.IconUrl, request.FriendlyId);
 

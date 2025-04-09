@@ -11,7 +11,7 @@ public class DeleteApplicationsCommandHandle : ICommandHandler<DeleteApplication
 	private readonly IAppRepository _appRepository;
 	private readonly IUnitOfWork _unitOfWork;
 
-	public DeleteApplicationsCommandHandle(IAppRepository appRepository, IUnitOfWork unitOfWork)
+	public DeleteApplicationsCommandHandle(IUnitOfWork unitOfWork, IAppRepository appRepository)
 	{
 		_appRepository = appRepository;
 		_unitOfWork = unitOfWork;
