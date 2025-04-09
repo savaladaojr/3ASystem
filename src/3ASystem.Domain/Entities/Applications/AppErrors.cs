@@ -17,4 +17,8 @@ public static class AppErrors
 	public static readonly Error AbbreviationNotUnique = Error.Conflict(
 		"Applications.AbbreviationNotUnique",
 		"The provided Abbreviation already exist.");
+
+	public static readonly Error FriendlyIdNotUnique = Error.Conflict(
+	"Applications.FriendlyIdNotUnique",
+	"The provided FriendlyId already exist.");
 }

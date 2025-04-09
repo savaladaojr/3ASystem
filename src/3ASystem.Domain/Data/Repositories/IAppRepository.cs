@@ -6,5 +6,6 @@ namespace _3ASystem.Domain.Data.Repositories
 	public interface IAppRepository : IRepository<App, AppId>
 	{
 		Task<App?> GetByAbbreviationAsync(string abbreviation);
+		Task<App?> GetByFriendlyIdAsync(string friendlyId);
 	}
 }
