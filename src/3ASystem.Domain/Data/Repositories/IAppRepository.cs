@@ -7,5 +7,6 @@ namespace _3ASystem.Domain.Data.Repositories
 	{
 		Task<App?> GetByAbbreviationAsync(string abbreviation);
 		Task<App?> GetByFriendlyIdAsync(string friendlyId);
+		Task<App?> GetByHashAsync(Guid hash);
 	}
 }

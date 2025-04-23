@@ -10,9 +10,16 @@ public static class AppErrors
 	public static Error Unauthorized() =>
 		Error.Failure("Applications.Unauthorized", "You are not authorized to perform this action.");
 
+
 	public static readonly Error NotFoundByAbbreviation = Error.NotFound(
 		"Applications.NotFoundByAbbreviation",
-		"The application with the specified abbreviation was not found.");
+		"The application with the specified abbreviation was not found."
+	);
+
+	public static readonly Error NotFoundByHash = Error.NotFound(
+		"Applications.NotFound",
+		$"The application with the specified hash was not found"
+	);
 
 	public static readonly Error AbbreviationNotUnique = Error.Conflict(
 		"Applications.AbbreviationNotUnique",
@@ -21,4 +28,5 @@ public static class AppErrors
 	public static readonly Error FriendlyIdNotUnique = Error.Conflict(
 	"Applications.FriendlyIdNotUnique",
 	"The provided FriendlyId already exist.");
+
 }

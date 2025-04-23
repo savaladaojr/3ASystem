@@ -3,8 +3,8 @@ using _3ASystem.Application.Applications.Shared;
 
 namespace _3ASystem.Application.Applications.Queries.GetApplicationById;
 
-public sealed class GetApplicationByIdQuery : IQuery<ApplicationResponse>
+public sealed class GetApplicationByAbbreviationQuery : IQuery<ApplicationResponse>
 {
-	public Guid Id { get; set; }
+	public string Abbreviation { get; set; } = string.Empty;
 
 }

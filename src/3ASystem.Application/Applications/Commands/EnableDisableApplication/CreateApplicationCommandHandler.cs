@@ -2,6 +2,7 @@
 using _3ASystem.Application.Abstractions.Messaging;
 using _3ASystem.Application.Applications.Commands.CreateApplication;
 using _3ASystem.Application.Applications.Commands.UpdateApplication;
+using _3ASystem.Application.Applications.Shared;
 using _3ASystem.Domain.Data.Repositories;
 using _3ASystem.Domain.Entities.Applications;
 using _3ASystem.Domain.Shared;
@@ -11,7 +12,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace _3ASystem.Application.Applications.Commands.EnableDisableApplication;
 
-public sealed class EnableDisableApplicationCommandHandler : ICommandHandler<EnableDisableApplicationCommand, EnableDisableApplicationCommandResponse>
+public sealed class EnableDisableApplicationCommandHandler : ICommandHandler<EnableDisableApplicationCommand, ApplicationResponse>
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IAppRepository _appRepository;
@@ -22,7 +23,7 @@ public sealed class EnableDisableApplicationCommandHandler : ICommandHandler<Ena
 		_appRepository = appRepository;
 	}
 
-	public async Task<Result<EnableDisableApplicationCommandResponse>> Handle(EnableDisableApplicationCommand request, CancellationToken cancellationToken)
+	public async Task<Result<ApplicationResponse>> Handle(EnableDisableApplicationCommand request, CancellationToken cancellationToken)
 	{
 		var appId = new AppId(request.Id);
 
@@ -31,7 +32,7 @@ public sealed class EnableDisableApplicationCommandHandler : ICommandHandler<Ena
 
 		if (app is null)
 		{
-			return Result.Failure<EnableDisableApplicationCommandResponse>(AppErrors.NotFound(appId));
+			return Result.Failure<ApplicationResponse>(AppErrors.NotFound(appId));
 		}
 
 
@@ -54,7 +55,7 @@ public sealed class EnableDisableApplicationCommandHandler : ICommandHandler<Ena
 
 
 		//Return updated app
-		var finalResult = new EnableDisableApplicationCommandResponse()
+		var finalResult = new ApplicationResponse()
 		{
 			Id = app.Id.Value,
 			Name = app.Name,

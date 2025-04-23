@@ -6,26 +6,22 @@ using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.Applications.Queries.GetApplicationById;
 
-public class GetApplicationByIdHandler : IQueryHandler<GetApplicationByIdQuery, ApplicationResponse>
+public class GetApplicationByAbbreviationHandler : IQueryHandler<GetApplicationByAbbreviationQuery, ApplicationResponse>
 {
 	private readonly IAppRepository _appRepository;
 
-	public GetApplicationByIdHandler(IAppRepository appRepository)
+	public GetApplicationByAbbreviationHandler(IAppRepository appRepository)
 	{
 		_appRepository = appRepository;
 	}
 
-	public async Task<Result<ApplicationResponse>> Handle(GetApplicationByIdQuery request, CancellationToken cancellationToken)
+	public async Task<Result<ApplicationResponse>> Handle(GetApplicationByAbbreviationQuery request, CancellationToken cancellationToken)
 	{
-		var appId = new AppId(request.Id);
-
-		var application = await _appRepository.GetByIdAsync(appId);
-
+		var application = await _appRepository.GetByAbbreviationAsync(request.Abbreviation);
 
 		if (application is null)
-		{
-			return Result.Failure<ApplicationResponse>(AppErrors.NotFound(appId));
-		}
+			return Result.Failure<ApplicationResponse>(AppErrors.NotFoundByAbbreviation);
+
 
 		var finalResult = new ApplicationResponse() { 
 			Abbreviation = application.Abbreviation, 

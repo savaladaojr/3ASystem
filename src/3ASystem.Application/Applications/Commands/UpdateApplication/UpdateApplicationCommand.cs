@@ -1,4 +1,5 @@
 ﻿using _3ASystem.Application.Abstractions.Messaging;
+using _3ASystem.Application.Applications.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace _3ASystem.Application.Applications.Commands.UpdateApplication
 {
-	public sealed class UpdateApplicationCommand : ICommand<UpdateApplicationResponse>
+	public sealed class UpdateApplicationCommand : ICommand<ApplicationResponse>
 	{
 		public Guid Id { get; set; } = default!;
 		public string Name { get; set; } = string.Empty;

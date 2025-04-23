@@ -1,4 +1,5 @@
 ﻿using _3ASystem.Application.Abstractions.Messaging;
+using _3ASystem.Application.Applications.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace _3ASystem.Application.Applications.Commands.CreateApplication;
 
-public sealed class CreateApplicationCommand : ICommand<CreateApplicationResponse>
+public sealed class CreateApplicationCommand : ICommand<ApplicationResponse>
 {
 	public string Name { get; set; } = string.Empty;
 	public string Abbreviation { get; set; } = string.Empty;

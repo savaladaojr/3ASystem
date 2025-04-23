@@ -16,11 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Applications\Queries\GetApplicationByHash\" />
-    <Folder Include="Applications\Queries\GetApplicationByAbbreviation\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\3ASystem.Domain\3ASystem.Domain.csproj" />
   </ItemGroup>
 
