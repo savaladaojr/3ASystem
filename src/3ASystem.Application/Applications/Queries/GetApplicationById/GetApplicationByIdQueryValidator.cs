@@ -6,7 +6,7 @@ public sealed class GetApplicationByIdQueryValidator : AbstractValidator<GetAppl
 {
 	public GetApplicationByIdQueryValidator()
 	{
-		RuleFor(c => c.Id).NotEqual(Guid.Empty);
+		RuleFor(c => c.Id).NotEmpty();
 	}
 
 }

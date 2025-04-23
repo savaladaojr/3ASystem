@@ -2,4 +2,4 @@
 
 namespace _3ASystem.Application.Applications.Commands.DeleteApplication;
 
-public sealed record DeleteApplicationsCommand(Guid Id) : ICommand;
+public sealed record DeleteApplicationCommand(Guid Id) : ICommand;

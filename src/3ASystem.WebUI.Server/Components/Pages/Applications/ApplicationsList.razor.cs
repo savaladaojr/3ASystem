@@ -144,7 +144,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 			if (deleteId == Guid.Empty) return;
 
 			// Send an event to MediatR
-			var result = await Mediator.Send(new DeleteApplicationsCommand(deleteId));
+			var result = await Mediator.Send(new DeleteApplicationCommand(deleteId));
 			if (result.IsSuccess)
 			{
 				await FetchData();

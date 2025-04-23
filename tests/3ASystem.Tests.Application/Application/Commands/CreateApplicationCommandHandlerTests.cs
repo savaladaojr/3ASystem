@@ -126,7 +126,7 @@ public class CreateApplicationCommandHandlerTests
 	}
 
 
-	[Fact(DisplayName = "CreateApplicationCommandHandler Should Return CreateApplicationResponse")]
+	[Fact(DisplayName = "CreateApplicationCommandHandler Should Return ApplicationResponse")]
 	public async Task CreateApplicationCommandHandler_Should_ReturnCreateApplicationResponse()
 	{
 		// Arrange
@@ -158,7 +158,6 @@ public class CreateApplicationCommandHandlerTests
 
 		// Act
 		Result<ApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
-
 
 		// Assert
 		result.IsFailure.Should().BeFalse(); //Assert.False(result.IsFailure);

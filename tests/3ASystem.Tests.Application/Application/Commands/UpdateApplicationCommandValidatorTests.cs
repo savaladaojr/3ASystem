@@ -8,6 +8,7 @@ public class UpdateApplicationCommandValidatorTests
 	[Fact(DisplayName = "UpdateApplicationCommandValidator Should Not Trigger Any Validation Issue When A Fully Filed Command Is Used")]
 	public async Task UpdateApplicationCommandValidator_Should_NotThrowValidationError_WhenFullyFiledCommandIsUsed()
 	{
+		//Arrange
 		var command = new UpdateApplicationCommand
 		{
 			Id = Guid.NewGuid(),
@@ -24,15 +25,18 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new UpdateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+		//Assert
 		result.IsValid.Should().BeTrue();
 	}
 
 	[Fact(DisplayName = "UpdateApplicationCommandValidator Should Throw A Validation Error When Id Is not Provided")]
 	public async Task UpdateApplicationCommandValidator_Should_ThrowValidationError_WhenIdIsNotProvided()
 	{
-
+		//Arrange
 		var command = new UpdateApplicationCommand
 		{
 			Id = Guid.Empty,
@@ -49,8 +53,11 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new UpdateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+		//Assert
 		result.IsValid.Should().BeFalse();
 		result.Errors.Should().ContainSingle(e => e.PropertyName == "Id");
 		result.Errors.Should().Contain(e => e.ErrorCode == "NotEmptyValidator");
@@ -62,7 +69,7 @@ and intelligent workflow automation to help your team achieve more, faster.",
 	[Fact(DisplayName = "UpdateApplicationCommandValidator Should Throw A Validation Error When Name Is Greater Than 100 Chars")]
 	public async Task UpdateApplicationCommandValidator_Should_ThrowValidationError_WhenNameGreaterThan100Chars()
 	{
-
+		//Arrange
 		var command = new UpdateApplicationCommand
 		{
 			Id = Guid.NewGuid(),
@@ -79,8 +86,11 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new UpdateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+		//Assert
 		result.IsValid.Should().BeFalse();
 		result.Errors.Should().ContainSingle(e => e.PropertyName == "Name");
 		result.Errors.Should().Contain(e => e.ErrorCode == "MaximumLengthValidator");
@@ -110,8 +120,11 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new UpdateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+		//Assert
 		result.IsValid.Should().BeFalse();
 		result.Errors.Should().ContainSingle(e => e.PropertyName == "Abbreviation");
 		result.Errors.Should().Contain(e => e.ErrorCode == "MaximumLengthValidator");
@@ -140,8 +153,11 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new UpdateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+		//Assert
 		result.IsValid.Should().BeFalse();
 		result.Errors.Should().ContainSingle(e => e.PropertyName == "Name");
 		result.Errors.Should().Contain(e => e.ErrorCode == "NotEmptyValidator");
@@ -170,8 +186,12 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new UpdateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+
+		//Assert
 		result.IsValid.Should().BeFalse();
 		result.Errors.Should().ContainSingle(e => e.PropertyName == "Abbreviation");
 		result.Errors.Should().Contain(e => e.ErrorCode == "NotEmptyValidator");
@@ -197,8 +217,11 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new UpdateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+		//Assert
 		result.IsValid.Should().BeFalse();
 		result.Errors.Should().ContainSingle(e => e.PropertyName == "Description");
 		result.Errors.Should().Contain(e => e.ErrorCode == "NotEmptyValidator");
@@ -227,8 +250,11 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new UpdateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+		//Assert
 		result.IsValid.Should().BeFalse();
 		result.Errors.Should().ContainSingle(e => e.PropertyName == "FriendlyId");
 		result.Errors.Should().Contain(e => e.ErrorCode == "NotEmptyValidator");
@@ -257,8 +283,11 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new UpdateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+		//Assert
 		result.IsValid.Should().BeFalse();
 		result.Errors.Should().ContainSingle(e => e.PropertyName == "FriendlyId");
 		result.Errors.Should().Contain(e => e.ErrorCode == "MaximumLengthValidator");
