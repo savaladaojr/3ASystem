@@ -1,5 +1,6 @@
 ﻿using _3ASystem.Application.Abstractions.Data;
 using _3ASystem.Application.Applications.Commands.CreateApplication;
+using _3ASystem.Application.Applications.Shared;
 using _3ASystem.Domain.Data.Repositories;
 using _3ASystem.Domain.Entities.Applications;
 using _3ASystem.Domain.Shared;
@@ -40,7 +41,7 @@ public class CreateApplicationCommandHandlerTests
 		_appRepository.GetByAbbreviationAsync(command.Abbreviation).Returns(existentApp);	
 
 		// Act
-		Result<CreateApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
+		Result<ApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
 
 		// Assert
 		result.IsFailure.Should().BeTrue();
@@ -76,7 +77,7 @@ public class CreateApplicationCommandHandlerTests
 		_appRepository.GetByAbbreviationAsync(command.Abbreviation).Returns(appExistent);
 
 		// Act
-		Result<CreateApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
+		Result<ApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
 
 		// Assert
 		await _unitOfWork.Received(0).SaveChangesAsync(Arg.Any<CancellationToken>());
@@ -116,7 +117,7 @@ public class CreateApplicationCommandHandlerTests
 		_unitOfWork.SaveChangesAsync(Arg.Any<CancellationToken>()).Returns(1);
 
 		// Act
-		Result<CreateApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
+		Result<ApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
 
 
 		// Assert
@@ -125,7 +126,7 @@ public class CreateApplicationCommandHandlerTests
 	}
 
 
-	[Fact(DisplayName = "CreateApplicationCommandHandler Should Return CreateApplicationResponse")]
+	[Fact(DisplayName = "CreateApplicationCommandHandler Should Return ApplicationResponse")]
 	public async Task CreateApplicationCommandHandler_Should_ReturnCreateApplicationResponse()
 	{
 		// Arrange
@@ -156,8 +157,7 @@ public class CreateApplicationCommandHandlerTests
 		_unitOfWork.SaveChangesAsync(Arg.Any<CancellationToken>()).Returns(1);
 
 		// Act
-		Result<CreateApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
-
+		Result<ApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
 
 		// Assert
 		result.IsFailure.Should().BeFalse(); //Assert.False(result.IsFailure);

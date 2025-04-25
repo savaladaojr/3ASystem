@@ -6,26 +6,24 @@ using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.Applications.Commands.DeleteApplication;
 
-public class DeleteApplicationsCommandHandle : ICommandHandler<DeleteApplicationsCommand>
+public class DeleteApplicationCommandHandle : ICommandHandler<DeleteApplicationCommand>
 {
 	private readonly IAppRepository _appRepository;
 	private readonly IUnitOfWork _unitOfWork;
 
-	public DeleteApplicationsCommandHandle(IUnitOfWork unitOfWork, IAppRepository appRepository)
+	public DeleteApplicationCommandHandle(IUnitOfWork unitOfWork, IAppRepository appRepository)
 	{
 		_appRepository = appRepository;
 		_unitOfWork = unitOfWork;
 	}
 
-	public async Task<Result> Handle(DeleteApplicationsCommand request, CancellationToken cancellationToken)
+	public async Task<Result> Handle(DeleteApplicationCommand request, CancellationToken cancellationToken)
 	{
 		var appId = new AppId(request.Id);
 		var app = await _appRepository.GetByIdAsync(appId);
 
 		if (app is null)
-		{
 			return Result.Failure(AppErrors.NotFound(appId));
-		}
 
 		_appRepository.NoTrack(app);
 		_appRepository.Delete(appId);

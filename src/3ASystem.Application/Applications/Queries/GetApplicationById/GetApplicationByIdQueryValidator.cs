@@ -1,10 +1,4 @@
-﻿using _3ASystem.Application.Applications.Commands.DeleteApplication;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
 namespace _3ASystem.Application.Applications.Queries.GetApplicationById;
 
@@ -12,7 +6,7 @@ public sealed class GetApplicationByIdQueryValidator : AbstractValidator<GetAppl
 {
 	public GetApplicationByIdQueryValidator()
 	{
-		RuleFor(c => c.Id).NotEqual(Guid.Empty);
+		RuleFor(c => c.Id).NotEmpty();
 	}
 
 }

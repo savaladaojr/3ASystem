@@ -1,6 +1,7 @@
 ﻿using _3ASystem.Application.Applications.Commands.DeleteApplication;
 using _3ASystem.Application.Applications.Commands.EnableDisableApplication;
 using _3ASystem.Application.Applications.Queries.GetApplications;
+using _3ASystem.Application.Applications.Shared;
 using _3ASystem.Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Components;
@@ -24,7 +25,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 		private ApplicationUpdateForm applicationUpdateForm = default!;
 
 
-		private List<ApplicationResponse>? _records = null;
+		private List<ApplicationCResponse>? _records = null;
 		private string _error = string.Empty;
 
 		private Guid deleteId = Guid.Empty;
@@ -143,7 +144,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 			if (deleteId == Guid.Empty) return;
 
 			// Send an event to MediatR
-			var result = await Mediator.Send(new DeleteApplicationsCommand(deleteId));
+			var result = await Mediator.Send(new DeleteApplicationCommand(deleteId));
 			if (result.IsSuccess)
 			{
 				await FetchData();

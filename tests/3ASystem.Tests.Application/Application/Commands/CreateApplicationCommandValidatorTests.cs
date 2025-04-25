@@ -9,6 +9,7 @@ public class CreateApplicationCommandValidatorTests
 	[Fact(DisplayName = "CreateApplicationCommandValidator Should Not Trigger Any Validation Issue When A Fully Filed Command Is Used")]
 	public async Task CreateApplicationCommandValidator_Should_NotThrowValidationError_WhenFullyFiledCommandIsUsed()
 	{
+		// Arrange
 		var command = new CreateApplicationCommand
 		{
 			Name = "Ultimate Productivity Suite: Task Management, Collaboration, Time Tracking, and Workflow for Teams",
@@ -24,15 +25,18 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new CreateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+		//Assert
 		result.IsValid.Should().BeTrue();
 	}
 
 	[Fact(DisplayName = "CreateApplicationCommandValidator Should Throw A Validation Error When Name Is Greater Than 100 Chars")]
 	public async Task CreateApplicationCommandValidator_Should_ThrowValidationError_WhenNameGreaterThan100Chars()
 	{
-
+		// Arrange
 		var command = new CreateApplicationCommand
 		{
 			Name = "Ultimate Productivity Suite: Task Management, Collaboration, Time Tracking, and Workflow Automation for Teams",
@@ -48,8 +52,11 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new CreateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+		//Assert
 		result.IsValid.Should().BeFalse();
 		result.Errors.Should().ContainSingle(e => e.PropertyName == "Name");
 		result.Errors.Should().Contain(e => e.ErrorCode == "MaximumLengthValidator");
@@ -78,8 +85,11 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new CreateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+		//Assert
 		result.IsValid.Should().BeFalse();
 		result.Errors.Should().ContainSingle(e => e.PropertyName == "Abbreviation");
 		result.Errors.Should().Contain(e => e.ErrorCode == "MaximumLengthValidator");
@@ -107,8 +117,11 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new CreateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+		//Assert
 		result.IsValid.Should().BeFalse();
 		result.Errors.Should().ContainSingle(e => e.PropertyName == "Name");
 		result.Errors.Should().Contain(e => e.ErrorCode == "NotEmptyValidator");
@@ -136,8 +149,12 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new CreateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+
+		//Assert
 		result.IsValid.Should().BeFalse();
 		result.Errors.Should().ContainSingle(e => e.PropertyName == "Abbreviation");
 		result.Errors.Should().Contain(e => e.ErrorCode == "NotEmptyValidator");
@@ -162,8 +179,11 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new CreateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+		//Assert
 		result.IsValid.Should().BeFalse();
 		result.Errors.Should().ContainSingle(e => e.PropertyName == "Description");
 		result.Errors.Should().Contain(e => e.ErrorCode == "NotEmptyValidator");
@@ -191,8 +211,11 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new CreateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+		//Assert
 		result.IsValid.Should().BeFalse();
 		result.Errors.Should().ContainSingle(e => e.PropertyName == "FriendlyId");
 		result.Errors.Should().Contain(e => e.ErrorCode == "NotEmptyValidator");
@@ -220,8 +243,12 @@ and intelligent workflow automation to help your team achieve more, faster.",
 		};
 
 		var validator = new CreateApplicationCommandValidator();
+
+		//Act
 		var result = await validator.ValidateAsync(command);
 
+
+		//Assert
 		result.IsValid.Should().BeFalse();
 		result.Errors.Should().ContainSingle(e => e.PropertyName == "FriendlyId");
 		result.Errors.Should().Contain(e => e.ErrorCode == "MaximumLengthValidator");

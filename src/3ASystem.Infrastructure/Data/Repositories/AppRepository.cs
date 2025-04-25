@@ -18,9 +18,16 @@ public sealed class AppRepository : _Repository<App, AppId>, IAppRepository
 		return app;
 	}
 
+	public async Task<App?> GetByHashAsync(Guid hash)
+	{
+		var app = await Entity.AsNoTracking().SingleOrDefaultAsync(item => item.Hash == hash);
+		return app;
+	}
+
 	public async Task<App?> GetByFriendlyIdAsync(string friendlyId)
 	{
 		var app = await Entity.AsNoTracking().SingleOrDefaultAsync(item => item.FriendlyId == friendlyId);
 		return app;
 	}
+
 }
