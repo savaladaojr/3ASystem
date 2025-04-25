@@ -31,10 +31,7 @@ public sealed class EnableDisableApplicationCommandHandler : ICommandHandler<Ena
 
 
 		if (app is null)
-		{
 			return Result.Failure<ApplicationResponse>(AppErrors.NotFound(appId));
-		}
-
 
 		//handle disable/enable
 		if (app.IsActive)
@@ -47,7 +44,6 @@ public sealed class EnableDisableApplicationCommandHandler : ICommandHandler<Ena
 			app.Enable();
 			app.Raise(new AppEnabledDomainEvent(app.Id));
 		}
-			
 
 		//Save changes
 		_appRepository.Update(app);

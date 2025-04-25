@@ -7,7 +7,7 @@ namespace _3ASystem.Tests.Application.Application.Commands;
 public class DeleteApplicationCommandValidatorTests
 {
 
-	[Fact(DisplayName = "DeleteApplicationCommandValidator Should Not Trigger Any Validation Issue When A Fully Filed Command Is Used")]
+	[Fact(DisplayName = "DeleteApplicationCommandValidator Should Not Trigger Any Validation Issue When A Fully Filled Command Is Used")]
 	public async Task DeleteApplicationCommandValidator_Should_NotThrowValidationError_WhenFullyFiledCommandIsUsed()
 	{
 		// Arrange
