@@ -31,7 +31,9 @@ public class GetApplicationByFriendlyIdHandler : IQueryHandler<GetApplicationByF
 			Id = application.Id.Value, 
 			IsActive = application.IsActive, 
 			Name = application.Name,
-			FriendlyId = application.FriendlyId
+			FriendlyId = application.FriendlyId,
+			CreatedAt = application.CreatedAt,
+			UpdatedAt = application.LastUpdatedAt
 		};
 
 		return finalResult;

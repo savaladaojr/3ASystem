@@ -61,7 +61,7 @@ public class EnableDisableApplicationCommandHandlerTests
 		var appId = existentApp.Id;
 		var command = new EnableDisableApplicationCommand() { Id = appId.Value };
 
-		App? appNull = null;
+		//App? appNull = null;
 
 		_appRepository.GetByIdAsync(Arg.Any<AppId>()).Returns(existentApp); //record found
 

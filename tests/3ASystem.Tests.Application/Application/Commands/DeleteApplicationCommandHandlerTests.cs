@@ -60,7 +60,7 @@ public class DeleteApplicationCommandHandlerTests
 		var appId = existentApp.Id;
 		var command = new DeleteApplicationCommand(appId.Value);
 
-		App? appNull = null;
+		//App? appNull = null;
 
 		_appRepository.GetByIdAsync(Arg.Any<AppId>()).Returns(existentApp); //record found
 
