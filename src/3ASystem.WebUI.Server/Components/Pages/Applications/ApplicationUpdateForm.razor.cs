@@ -1,12 +1,9 @@
-﻿using _3ASystem.Application.Applications.Commands.CreateApplication;
-using _3ASystem.Application.Applications.Commands.UpdateApplication;
-using _3ASystem.Application.Applications.Queries.GetApplicationById;
+﻿using _3ASystem.Application.UseCases.Applications.Commands.UpdateApplication;
+using _3ASystem.Application.UseCases.Applications.Queries.GetApplicationById;
 using _3ASystem.Domain.Shared;
 using MediatR;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 
 namespace _3ASystem.WebUI.Server.Components.Pages.Applications

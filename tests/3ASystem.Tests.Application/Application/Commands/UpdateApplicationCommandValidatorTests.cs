@@ -1,4 +1,4 @@
-﻿using _3ASystem.Application.Applications.Commands.UpdateApplication;
+﻿using _3ASystem.Application.UseCases.Applications.Commands.UpdateApplication;
 using FluentAssertions;
 
 namespace _3ASystem.Tests.Application.Application.Commands;

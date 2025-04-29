@@ -1,10 +1,10 @@
 ﻿using _3ASystem.Application.Abstractions.Data;
-using _3ASystem.Application.Applications.Commands.CreateApplication;
-using _3ASystem.Application.Applications.Queries.GetApplicationByFriendlyId;
-using _3ASystem.Application.Applications.Queries.GetApplicationByHash;
-using _3ASystem.Application.Applications.Queries.GetApplicationById;
-using _3ASystem.Application.Applications.Queries.GetApplications;
-using _3ASystem.Application.Applications.Shared;
+using _3ASystem.Application.UseCases.Applications.Queries.GetApplicationByAbbreviation;
+using _3ASystem.Application.UseCases.Applications.Queries.GetApplicationByFriendlyId;
+using _3ASystem.Application.UseCases.Applications.Queries.GetApplicationByHash;
+using _3ASystem.Application.UseCases.Applications.Queries.GetApplicationById;
+using _3ASystem.Application.UseCases.Applications.Queries.GetApplications;
+using _3ASystem.Application.UseCases.Applications.Responses;
 using _3ASystem.Domain.Data.Repositories;
 using _3ASystem.Domain.Entities.Applications;
 using _3ASystem.Domain.Shared;
