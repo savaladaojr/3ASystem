@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UseCases\Modules\" />
+    <Folder Include="UseCases\Modules\Commands\" />
   </ItemGroup>
 
 </Project>
