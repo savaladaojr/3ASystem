@@ -1,8 +1,7 @@
-﻿using _3ASystem.Application.Applications.Commands.DeleteApplication;
-using _3ASystem.Application.Applications.Commands.EnableDisableApplication;
-using _3ASystem.Application.Applications.Queries.GetApplications;
-using _3ASystem.Application.Applications.Shared;
-using _3ASystem.Domain.Shared;
+﻿using _3ASystem.Application.UseCases.Applications.Commands.DeleteApplication;
+using _3ASystem.Application.UseCases.Applications.Commands.EnableDisableApplication;
+using _3ASystem.Application.UseCases.Applications.Queries.GetApplications;
+using _3ASystem.Application.UseCases.Applications.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;

@@ -19,4 +19,8 @@
     <ProjectReference Include="..\3ASystem.Domain\3ASystem.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\Modules\" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
 ﻿using _3ASystem.Application.Abstractions.Data;
-using _3ASystem.Application.Applications.Commands.UpdateApplication;
-using _3ASystem.Application.Applications.Shared;
+using _3ASystem.Application.UseCases.Applications.Commands.UpdateApplication;
+using _3ASystem.Application.UseCases.Applications.Responses;
 using _3ASystem.Domain.Data.Repositories;
 using _3ASystem.Domain.Entities.Applications;
 using _3ASystem.Domain.Shared;

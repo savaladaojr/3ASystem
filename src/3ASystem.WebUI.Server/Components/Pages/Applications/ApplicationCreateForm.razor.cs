@@ -1,4 +1,4 @@
-﻿using _3ASystem.Application.Applications.Commands.CreateApplication;
+﻿using _3ASystem.Application.UseCases.Applications.Commands.CreateApplication;
 using _3ASystem.Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Components;

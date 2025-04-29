@@ -1,5 +1,4 @@
-﻿using _3ASystem.Application.Applications.Commands.CreateApplication;
-using _3ASystem.Application.Applications.Commands.DeleteApplication;
+﻿using _3ASystem.Application.UseCases.Applications.Commands.DeleteApplication;
 using FluentAssertions;
 
 namespace _3ASystem.Tests.Application.Application.Commands;
