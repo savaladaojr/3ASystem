@@ -37,7 +37,7 @@ public class GetApplicationByIdHandler : IQueryHandler<GetApplicationByIdQuery, 
 			Name = application.Name,
 			FriendlyId = application.FriendlyId,
 			CreatedAt = application.CreatedAt,
-			UpdatedAt = application.LastUpdatedAt
+			LastUpdatedAt = application.LastUpdatedAt
 		};
 
 		return finalResult;

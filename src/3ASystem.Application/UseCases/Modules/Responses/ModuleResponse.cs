@@ -13,6 +13,6 @@ public sealed class ModuleResponse
 	public bool IsPartOfMenu { get; init; } = true;
 
 	public DateTime CreatedAt { get; init; } = default!;
-	public DateTime UpdatedAt { get; init; } = default!;
+	public DateTime LastUpdatedAt { get; init; } = default!;
 
 }

@@ -54,7 +54,9 @@ public sealed class UpdateApplicationCommandHandler : ICommandHandler<UpdateAppl
 			IconUrl = app.IconUrl,
 			Hash = app.Hash,
 			IsActive = app.IsActive,
-			FriendlyId = app.FriendlyId
+			FriendlyId = app.FriendlyId,
+			CreatedAt = app.CreatedAt,
+			LastUpdatedAt = app.LastUpdatedAt
 		};
 
 		return finalResult;
