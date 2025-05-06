@@ -33,7 +33,7 @@ public class GetApplicationByFriendlyIdHandler : IQueryHandler<GetApplicationByF
 			Name = application.Name,
 			FriendlyId = application.FriendlyId,
 			CreatedAt = application.CreatedAt,
-			UpdatedAt = application.LastUpdatedAt
+			LastUpdatedAt = application.LastUpdatedAt
 		};
 
 		return finalResult;

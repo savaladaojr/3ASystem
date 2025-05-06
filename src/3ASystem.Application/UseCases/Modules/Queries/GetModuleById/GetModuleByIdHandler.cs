@@ -32,9 +32,14 @@ public class GetModuleByIdHandler : IQueryHandler<GetModuleByIdQuery, ModuleResp
 			Id = module.Id.Value,
 			ApplicationId = module.ApplicationId.Value,
 			Name = module.Name,
+			Abbreviation = module.Abbreviation,
 			Description = module.Description,
+			FriendlyId = module.FriendlyId,
+			IconUrl = module.IconUrl,
+			IsActive = module.IsActive,
+			IsPartOfMenu = module.IsPartOfMenu,
 			CreatedAt = module.CreatedAt,
-			UpdatedAt = module.LastUpdatedAt,
+			LastUpdatedAt = module.LastUpdatedAt,
 		};
 
 		return finalResult;

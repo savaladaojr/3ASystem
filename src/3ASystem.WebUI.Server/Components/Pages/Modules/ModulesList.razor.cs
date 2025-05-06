@@ -1,0 +1,200 @@
+﻿using _3ASystem.Application.UseCases.Applications.Queries.GetApplications;
+using _3ASystem.Application.UseCases.Applications.Responses;
+using _3ASystem.Application.UseCases.Modules.Commands.DeleteModule;
+using _3ASystem.Application.UseCases.Modules.Commands.EnableDisableModule;
+using _3ASystem.Application.UseCases.Modules.Queries.GetModules;
+using _3ASystem.Application.UseCases.Modules.Responses;
+using MediatR;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+
+namespace _3ASystem.WebUI.Server.Components.Pages.Modules
+{
+    public partial class ModulesList 
+	{
+		[Inject]
+		public IMediator Mediator { get; set; } = default!;
+
+		[Inject]
+		public IJSRuntime JSRuntime { get; set; } = default!;
+
+		[Inject]
+		public NavigationManager Navigation { get; set; } = default!;
+
+
+		private List<ApplicationCResponse>? _applications = new List<ApplicationCResponse>();
+
+		private ModuleCreateForm moduleCreateForm = default!;
+		private ModuleUpdateForm moduleUpdateForm = default!;
+
+		private List<ModuleCResponse>? _records = null;
+		private string _error = string.Empty;
+
+		private Guid deleteId = Guid.Empty;
+
+
+
+		protected override async Task OnInitializedAsync()
+		{
+			await LoadApplication();
+			await FetchData();
+		}
+
+
+		private async Task LoadApplication()
+		{
+			// Send an event to MediatR
+			var result = await Mediator.Send(new GetApplicationsQuery());
+			if (result.IsSuccess)
+			{
+				_applications = result.Value!;
+			}
+
+		}
+
+		private async Task FetchData()
+		{
+			// Send an event to MediatR
+			var result = await Mediator.Send(new GetModulesQuery());
+			if (result.IsSuccess)
+			{
+				_records = result.Value;
+			}
+			else
+			{
+				_error = result.Error.Description;
+			}
+		}
+
+		private async Task CreateModule()
+		{
+			await moduleCreateForm.Start();
+			await ShowCreateModal();
+			//Navigation.NavigateTo("/applications/create");
+		}
+
+		private async Task ShowCreateModal()
+		{
+			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.getOrCreateInstance", "#createApplicationModal").AsTask().Wait();
+			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.show", "#createApplicationModal").AsTask().Wait();
+
+			// Using the Bootstrap 5 Modal API with options to disable closing when clicking outside or pressing ESC
+			await JSRuntime.InvokeVoidAsync("eval", "new bootstrap.Modal(document.getElementById('createModuleModal'), { backdrop: 'static', keyboard: true }).show();");
+		}
+
+		private async Task HideModalCreateModal()
+		{
+			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.hide", "#deleteConfirmationModal");
+			await JSRuntime.InvokeVoidAsync("eval", "bootstrap.Modal.getOrCreateInstance(document.getElementById('createModuleModal')).hide()");
+		}
+
+		private async Task ModuleCreateForm_CancelClick()
+		{
+			await HideModalCreateModal();
+		}
+
+		private async Task ModuleCreateForm_SaveClickSuccess()
+		{
+			await HideModalCreateModal();
+			await FetchData();
+			StateHasChanged();
+		}
+
+
+
+		private async Task EditModule(Guid id)
+		{
+
+			await moduleUpdateForm.Start(id);
+			await ShowUpdateModal();
+			//Navigation.NavigateTo("/applications/edit/" + id);
+		}
+
+		private async Task ShowUpdateModal()
+		{
+			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.getOrCreateInstance", "#updateModuleModal").AsTask().Wait();
+			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.show", "#updateModuleModal").AsTask().Wait();
+
+			// Using the Bootstrap 5 Modal API with options to disable closing when clicking outside or pressing ESC
+			await JSRuntime.InvokeVoidAsync("eval", "new bootstrap.Modal(document.getElementById('updateModuleModal'), { backdrop: 'static', keyboard: true }).show();");
+		}
+
+		private async Task HideModalUpdateModal()
+		{
+			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.hide", "#deleteConfirmationModal");
+			await JSRuntime.InvokeVoidAsync("eval", "bootstrap.Modal.getOrCreateInstance(document.getElementById('updateModuleModal')).hide()");
+		}
+
+		private async Task ModuleUpdateForm_CancelClick()
+		{
+			await HideModalUpdateModal();
+		}
+
+		private async Task ModuleUpdateForm_SaveClickSuccess()
+		{
+			await HideModalUpdateModal();
+			await FetchData();
+			StateHasChanged();
+		}
+
+
+
+
+		private async Task AskConfirmDelete(Guid id)
+		{
+			deleteId = id;
+			await ShowModalAskConfirm();
+		}
+
+		private async Task ShowModalAskConfirm()
+		{
+			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.getOrCreateInstance", "#deleteConfirmationModal").AsTask().Wait();
+			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.show", "#deleteConfirmationModal");
+			await JSRuntime.InvokeVoidAsync("eval", "new bootstrap.Modal(document.getElementById('deleteConfirmationModal'), { backdrop: 'static', keyboard: true }).show();");
+		}
+
+		private async Task ConfirmDelete()
+		{
+			if (deleteId == Guid.Empty) return;
+
+			// Send an event to MediatR
+			var result = await Mediator.Send(new DeleteModuleCommand(deleteId));
+			if (result.IsSuccess)
+			{
+				await FetchData();
+				StateHasChanged();
+			}
+			else
+			{
+				_error = result.Error.Description;
+			}
+
+			deleteId = Guid.Empty;
+			await HideModalAskConfirmDelete();
+		}
+
+		private async Task HideModalAskConfirmDelete()
+		{
+			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.hide", "#deleteConfirmationModal");
+			await JSRuntime.InvokeVoidAsync("eval", "bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteConfirmationModal')).hide()");
+		}
+
+
+		private async void EnableDisable(Guid id)
+		{
+			var result = await Mediator.Send(new EnableDisableModuleCommand() { Id = id});
+			if (result.IsSuccess)
+			{
+				await FetchData();
+				StateHasChanged();
+			}
+			else
+			{
+				_error = result.Error.Description;
+			}
+
+		}
+
+	}
+
+}

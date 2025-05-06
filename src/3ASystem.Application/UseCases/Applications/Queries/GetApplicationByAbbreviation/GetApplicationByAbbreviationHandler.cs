@@ -33,7 +33,7 @@ public class GetApplicationByAbbreviationHandler : IQueryHandler<GetApplicationB
 			Name = application.Name,
 			FriendlyId = application.FriendlyId,
 			CreatedAt = application.CreatedAt,
-			UpdatedAt = application.LastUpdatedAt
+			LastUpdatedAt = application.LastUpdatedAt
 		};
 
 		return finalResult;

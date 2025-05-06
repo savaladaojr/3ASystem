@@ -17,5 +17,5 @@ public sealed class ApplicationResponse
 	public bool IsActive { get; init; } = true;
 	public string FriendlyId { get; init; } = string.Empty;
 	public DateTime CreatedAt { get; init; } = default!;
-	public DateTime UpdatedAt { get; init; } = default!;
+	public DateTime LastUpdatedAt { get; init; } = default!;
 }

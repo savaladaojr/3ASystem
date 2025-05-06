@@ -13,6 +13,12 @@ public sealed class ModuleRepository : _Repository<Module, ModuleId>, IModuleRep
 
 	}
 
+	public async Task<Module?> GetByAbbreviationAsync(string abbreviation)
+	{
+		var module = await Entity.AsNoTracking().FirstOrDefaultAsync(item => item.Abbreviation == abbreviation);
+		return module;
+	}
+
 	public async Task<Module?> GetByFriendlyIdAsync(string friendlyId)
 	{
 		var module = await Entity.AsNoTracking().FirstOrDefaultAsync(item => item.FriendlyId == friendlyId);

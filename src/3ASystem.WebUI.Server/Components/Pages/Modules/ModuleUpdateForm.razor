@@ -1,0 +1,72 @@
+﻿@* @page "/Modules/Edit/{id:guid}" *@
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+@if (updateModule == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<EditForm EditContext="@_editContext">
+		@*         <DataAnnotationsValidator />
+        <ValidationSummary /> *@
+
+		<div class="mb-3">
+			<label for="name" class="form-label">Application</label>
+			<InputSelect id="applicationId" class="form-select" @bind-Value="updateModule.ApplicationId" @oninput="() => ClearValidationMessage(nameof(updateModule.ApplicationId))">
+				<option value="">Select an Application</option>
+				@foreach (var application in ListOfApplications)
+				{
+					<option value="@application.Id">@application.Name</option>
+				}
+			</InputSelect>
+			<ValidationMessage For="@(() => updateModule.ApplicationId)" />
+		</div>
+
+		<div class="mb-3">
+			<label for="name" class="form-label">Name</label>
+			<InputText id="name" class="form-control" @bind-Value="updateModule.Name" @oninput="() => ClearValidationMessage(nameof(updateModule.Name))" />
+			<ValidationMessage For="@(() => updateModule.Name)" />
+		</div>
+		<div class="mb-3">
+			<label for="abbreviation" class="form-label">Abbreviation</label>
+			<InputText id="abbreviation" class="form-control" @bind-Value="updateModule.Abbreviation" @oninput="() => ClearValidationMessage(nameof(updateModule.Abbreviation))" />
+			<ValidationMessage For="@(() => updateModule.Abbreviation)" />
+		</div>
+		<div class="mb-3">
+			<label for="description" class="form-label">Description</label>
+			<InputTextArea id="description" class="form-control" @bind-Value="updateModule.Description" @oninput="() => ClearValidationMessage(nameof(updateModule.Description))" />
+			<ValidationMessage For="@(() => updateModule.Description)" />
+		</div>
+		<div class="mb-3">
+			<label for="iconUrl" class="form-label">Icon URL</label>
+			<InputText id="iconUrl" class="form-control" @bind-Value="updateModule.IconUrl" @oninput="() => ClearValidationMessage(nameof(updateModule.IconUrl))" />
+			<ValidationMessage For="@(() => updateModule.IconUrl)" />
+		</div>
+
+		<div class="mb-3">
+			<label for="abbreviation" class="form-label">Friendly Id</label>
+			<InputText id="abbreviation" class="form-control" @bind-Value="updateModule.FriendlyId" @oninput="() => ClearValidationMessage(nameof(updateModule.FriendlyId))" />
+			<ValidationMessage For="@(() => updateModule.FriendlyId)" />
+		</div>
+
+		<div class="row g-3">
+			<div class="col">
+				<div class="mb-3 form-check form-switch">
+					<InputCheckbox id="IsPartOfMenu" class="form-check-input" role="switch" @bind-Value="updateModule.IsPartOfMenu" @onchange="() => ClearValidationMessage(nameof(updateModule.IsPartOfMenu))" />
+					<label for="IsPartOfMenu" class="form-label form-check-label">Show in Main Menu</label>
+				</div>
+			</div>
+			<div class="col">
+				<div class="mb-3 form-check form-switch">
+					<InputCheckbox id="isActive" class="form-check-input" role="switch" disabled @bind-Value="updateModule.IsActive" @onchange="() => ClearValidationMessage(nameof(updateModule.IsActive))" />
+					<label for="isActive" class="form-label form-check-label">Is Active</label>
+				</div>
+			</div>
+		</div>
+
+		<button type="button" class="btn btn-primary" @onclick="() => HandleSubmit()">Save</button>
+		<button type="button" class="btn btn-secondary" @onclick="() => CancelUpdateAsync()">Cancel</button>
+	</EditForm>
+
+}
