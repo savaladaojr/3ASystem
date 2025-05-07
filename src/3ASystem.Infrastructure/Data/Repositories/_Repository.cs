@@ -1,4 +1,4 @@
-﻿using _3ASystem.Domain.Data;
+﻿using _3ASystem.Application.Abstractions.Data;
 using _3ASystem.Domain.Shared;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

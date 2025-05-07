@@ -1,4 +1,4 @@
-﻿using _3ASystem.Domain.Data.Repositories;
+﻿using _3ASystem.Application.Abstractions.Data.Repositories;
 using _3ASystem.Domain.Entities.Functionalities;
 
 namespace _3ASystem.Infrastructure.Data.Repositories;

@@ -1,8 +1,6 @@
-﻿using _3ASystem.Domain.Data;
-using _3ASystem.Domain.Entities.Applications;
-using _3ASystem.Domain.Entities.Modules;
+﻿using _3ASystem.Domain.Entities.Modules;
 
-namespace _3ASystem.Domain.Data.Repositories
+namespace _3ASystem.Application.Abstractions.Data.Repositories
 {
 	public interface IModuleRepository : IRepository<Module, ModuleId>
 	{

@@ -1,8 +1,7 @@
 ﻿using _3ASystem.Application.Abstractions.Data;
-using _3ASystem.Domain.Data.Repositories;
+using _3ASystem.Application.Abstractions.Data.Repositories;
 using _3ASystem.Infrastructure.Data;
 using _3ASystem.Infrastructure.Data.Repositories;
-using Auth.Domain.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
