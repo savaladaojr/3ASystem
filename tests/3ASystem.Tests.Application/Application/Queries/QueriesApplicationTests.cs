@@ -1,11 +1,11 @@
 ﻿using _3ASystem.Application.Abstractions.Data;
+using _3ASystem.Application.Abstractions.Data.Repositories;
 using _3ASystem.Application.UseCases.Applications.Queries.GetApplicationByAbbreviation;
 using _3ASystem.Application.UseCases.Applications.Queries.GetApplicationByFriendlyId;
 using _3ASystem.Application.UseCases.Applications.Queries.GetApplicationByHash;
 using _3ASystem.Application.UseCases.Applications.Queries.GetApplicationById;
 using _3ASystem.Application.UseCases.Applications.Queries.GetApplications;
 using _3ASystem.Application.UseCases.Applications.Responses;
-using _3ASystem.Domain.Data.Repositories;
 using _3ASystem.Domain.Entities.Applications;
 using _3ASystem.Domain.Shared;
 using AutoFixture;

@@ -1,5 +1,5 @@
-﻿using _3ASystem.Domain.Entities.Operations;
-using Auth.Domain.Data.Repositories;
+﻿using _3ASystem.Application.Abstractions.Data.Repositories;
+using _3ASystem.Domain.Entities.Operations;
 
 namespace _3ASystem.Infrastructure.Data.Repositories;
 

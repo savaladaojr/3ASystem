@@ -1,7 +1,7 @@
 ﻿using _3ASystem.Application.Abstractions.Data;
+using _3ASystem.Application.Abstractions.Data.Repositories;
 using _3ASystem.Application.Abstractions.Messaging;
 using _3ASystem.Application.UseCases.Applications.Responses;
-using _3ASystem.Domain.Data.Repositories;
 using _3ASystem.Domain.Entities.Applications;
 using _3ASystem.Domain.Shared;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
