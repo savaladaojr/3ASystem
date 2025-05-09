@@ -7,6 +7,7 @@ public interface IRepository<TEntity>
 	where TEntity : Entity
 {
 	Task<IEnumerable<TEntity>> GetAllAsync();
+	Task<IPagedResult<TEntity>> GetAllAsync(int skip, int take);
 	Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includePaths);
 	Task<TEntity?> GetByIdAsync(object[] keyValues);
 	Task<TEntity?> GetByIdAsync(object[] keyValues, params Expression<Func<TEntity, object>>[] includePaths);
@@ -23,6 +24,7 @@ where TEntity : Entity<TEntityId>
 where TEntityId : class
 {
 	Task<IEnumerable<TEntity>> GetAllAsync();
+	Task<IPagedResult<TEntity>> GetAllAsync(int skip, int take);
 	Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includePaths);
 	Task<TEntity?> GetByIdAsync(TEntityId id);
 	Task<TEntity?> GetByIdAsync(TEntityId id, params Expression<Func<TEntity, object>>[] includePaths);
