@@ -2,10 +2,11 @@
 using _3ASystem.Domain.Shared;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Numerics;
 
 namespace _3ASystem.Infrastructure.Data.Repositories;
 
-public abstract class _Repository<TEntity> : IRepository<TEntity>
+public abstract partial class _Repository<TEntity> : IRepository<TEntity>
 	where TEntity : Entity
 {
 	protected ApplicationDbContext _dbContext;
@@ -44,6 +45,20 @@ public abstract class _Repository<TEntity> : IRepository<TEntity>
 	public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
 	{
 		return await Entity.AsNoTracking().ToListAsync();
+	}
+
+	public virtual async Task<IPagedResult<TEntity>> GetAllAsync(int skip, int take)
+	{
+		var count = await Entity.AsNoTracking().CountAsync();
+		var records = await Entity.AsNoTracking().Skip(skip).Take(take).ToListAsync();
+
+		var finalResult = new PagedResult<TEntity>
+		{
+			TotalOfRecords = count,
+			Records = records
+		};
+
+		return finalResult;
 	}
 
 	public virtual async Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includePaths)
@@ -106,7 +121,6 @@ public abstract class _Repository<TEntity> : IRepository<TEntity>
 		return current.Include(item);
 	}
 
-
 }
 
 
@@ -126,6 +140,21 @@ public abstract class _Repository<TEntity, TEntityId> : IRepository<TEntity, TEn
 	public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
 	{
 		return await Entity.AsNoTracking().ToListAsync();
+	}
+
+	public virtual async Task<IPagedResult<TEntity>> GetAllAsync(int skip, int take)
+	{
+		var count = await Entity.AsNoTracking().CountAsync();
+
+		var records = await Entity.AsNoTracking().OrderBy(ord => ord.CreatedAt).Skip(skip).Take(take).ToListAsync();
+
+		var finalResult = new PagedResult<TEntity>
+		{
+			TotalOfRecords = count,
+			Records = records
+		};
+
+		return finalResult;
 	}
 
 	public virtual async Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includePaths)

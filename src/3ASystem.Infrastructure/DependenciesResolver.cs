@@ -1,7 +1,9 @@
 ﻿using _3ASystem.Application.Abstractions.Data;
 using _3ASystem.Application.Abstractions.Data.Repositories;
+using _3ASystem.Application.Abstractions.Services;
 using _3ASystem.Infrastructure.Data;
 using _3ASystem.Infrastructure.Data.Repositories;
+using _3ASystem.Infrastructure.Services.EmailService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +16,7 @@ public static class DependenciesResolver
 	public static IServiceCollection AddInfrastructureDependencies(
 		this IServiceCollection services, IConfiguration configuration)
 	{
-
+		services.AddMemoryCache();
 		services.AddDbContext<ApplicationDbContext>(options =>
 			options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
 		);
@@ -26,6 +28,12 @@ public static class DependenciesResolver
 		services.AddScoped<IModuleRepository, ModuleRepository>();
 		services.AddScoped<IFunctionalityRepository, FunctionalityRepository>();
 		services.AddScoped<IOperationRepository, OperationRepository>();
+
+
+		//Email Service
+		services.AddScoped<IEmailService, EmailService>();
+
+
 
 		return services;
 	}

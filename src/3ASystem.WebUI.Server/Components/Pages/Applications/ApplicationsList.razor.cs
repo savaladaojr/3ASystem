@@ -1,6 +1,6 @@
 ﻿using _3ASystem.Application.UseCases.Applications.Commands.DeleteApplication;
 using _3ASystem.Application.UseCases.Applications.Commands.EnableDisableApplication;
-using _3ASystem.Application.UseCases.Applications.Queries.GetApplications;
+using _3ASystem.Application.UseCases.Applications.Queries.GetApplicationsPaged;
 using _3ASystem.Application.UseCases.Applications.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Components;
@@ -8,7 +8,7 @@ using Microsoft.JSInterop;
 
 namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 {
-    public partial class ApplicationsList 
+	public partial class ApplicationsList
 	{
 		[Inject]
 		public IMediator Mediator { get; set; } = default!;
@@ -23,27 +23,31 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 		private ApplicationCreateForm applicationCreateForm = default!;
 		private ApplicationUpdateForm applicationUpdateForm = default!;
 
+		private int _totalOfRecords = 0;
+		private List<ApplicationCResponse>? _records = [];
 
-		private List<ApplicationCResponse>? _records = null;
+		private bool isLoading = false;
 		private string _error = string.Empty;
 
 		private Guid deleteId = Guid.Empty;
 
+		private int previousPage = -1;
 
 
 		protected override async Task OnInitializedAsync()
 		{
-			await FetchData();
 
+			await FetchData();
 		}
+
 
 		private async Task FetchData()
 		{
 			// Send an event to MediatR
-			var result = await Mediator.Send(new GetApplicationsQuery());
+			var result = await Mediator.Send(new GetApplicationsPagedQuery() { Page = 1, PageSize = 5 });
 			if (result.IsSuccess)
 			{
-				_records = result.Value;
+				_records = result.Value.Records;
 			}
 			else
 			{
@@ -81,7 +85,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 		private async Task ApplicationCreateForm_SaveClickSuccess()
 		{
 			await HideModalCreateModal();
-			await FetchData();
+			//await FetchData();
 			StateHasChanged();
 		}
 
@@ -118,7 +122,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 		private async Task ApplicationUpdateForm_SaveClickSuccess()
 		{
 			await HideModalUpdateModal();
-			await FetchData();
+			//await FetchData();
 			StateHasChanged();
 		}
 
@@ -146,7 +150,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 			var result = await Mediator.Send(new DeleteApplicationCommand(deleteId));
 			if (result.IsSuccess)
 			{
-				await FetchData();
+				//await FetchData();
 				StateHasChanged();
 			}
 			else
@@ -167,10 +171,11 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 
 		private async void EnableDisable(Guid id)
 		{
-			var result = await Mediator.Send(new EnableDisableApplicationCommand() { Id = id});
+			var result = await Mediator.Send(new EnableDisableApplicationCommand() { Id = id });
 			if (result.IsSuccess)
 			{
 				await FetchData();
+				//await grid.RefreshDataAsync();
 				StateHasChanged();
 			}
 			else

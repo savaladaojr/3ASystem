@@ -1,6 +1,8 @@
 using _3ASystem.Application;
 using _3ASystem.Infrastructure;
+using _3ASystem.Infrastructure.Services.EmailService;
 using _3ASystem.WebUI.Server.Components;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,10 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
+builder.Services.AddMemoryCache(); //Interesting 
 builder.Services.AddApplicationDependencies();
 builder.Services.AddInfrastructureDependencies(builder.Configuration);
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
