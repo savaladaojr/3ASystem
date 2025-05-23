@@ -1,29 +1,54 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">3ASystem</a>
-    </div>
-</div>
+﻿@implements IDisposable
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+@inject NavigationManager NavigationManager
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
+<MudNavMenu>
+	<MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="applications">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Applications
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="modules">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Modules
-            </NavLink>
-        </div>
-    </nav>
-</div>
+	<MudNavLink Href="applications" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ViewList">Applications</MudNavLink>
+	<MudNavLink Href="modules" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.FormatListBulleted">Modules</MudNavLink>
+	<MudNavLink Href="Account/Register" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person">New User</MudNavLink>
+
+	<MudDivider Class="my-3" />
+
+	<AuthorizeView>
+		<Authorized>
+			<MudNavLink Href="Account/Manage" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person">@context.User.Identity?.Name</MudNavLink>
+			<MudDivider Class="my-3" />
+			<form action="Account/Logout" method="post">
+				<AntiforgeryToken />
+				<input type="hidden" name="ReturnUrl" value="@currentUrl" />
+				<button type="submit" class="mud-nav-link mud-ripple">
+					<MudIcon Icon="@Icons.Material.Filled.Logout" Color="Color.Info" Class="mr-3"></MudIcon> Logout
+				</button>
+			</form>
+		</Authorized>
+
+		<NotAuthorized>
+			<MudNavLink Href="Account/Login" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Password">Login</MudNavLink>
+		</NotAuthorized>
+	</AuthorizeView>
+</MudNavMenu>
+
+
+@code {
+	private string? currentUrl;
+
+	protected override void OnInitialized()
+	{
+		currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+		NavigationManager.LocationChanged += OnLocationChanged;
+	}
+
+	private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+	{
+		currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+		StateHasChanged();
+	}
+
+	public void Dispose()
+	{
+		NavigationManager.LocationChanged -= OnLocationChanged;
+	}
+}
 

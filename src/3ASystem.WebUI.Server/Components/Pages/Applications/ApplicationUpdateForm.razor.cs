@@ -12,7 +12,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 
 	public partial class ApplicationUpdateForm : ComponentBase
 	{       // Define an EventCallback to notify the parent component
-		[Parameter] public EventCallback OnSaveClickSuccess { get; set; }
+		[Parameter] public EventCallback<string> OnSaveClickSuccess { get; set; }
 		[Parameter] public EventCallback OnCancelClick { get; set; }
 
 
@@ -78,8 +78,10 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 
 		}
 
-		private async Task HandleSubmit()
+		private async Task HandleUpdateAsync()
 		{
+			if (!IsValidSubmit()) return;
+
 			_isSubmitting = true;
 			_error = string.Empty;
 			_messageStore!.Clear();
@@ -91,7 +93,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 				//Navigation.NavigateTo("/applications");
 
 				// Call the parent method via the EventCallback
-				await OnSaveClickSuccess.InvokeAsync(null);
+				await OnSaveClickSuccess.InvokeAsync($"Application [{result.Value.Name}] successfully updated.");
 			}
 			else
 			{
@@ -114,7 +116,13 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 			_isSubmitting = false;
 		}
 
-		private async Task CancelUpdateAsync()
+		private bool IsValidSubmit()
+		{
+			var valid = _editContext!.Validate();
+			return valid;
+		}
+
+		private async Task HandleCancelAsync()
 		{
 			//Navigation.NavigateTo("/applications");
 

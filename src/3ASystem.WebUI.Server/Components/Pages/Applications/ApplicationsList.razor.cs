@@ -2,9 +2,11 @@
 using _3ASystem.Application.UseCases.Applications.Commands.EnableDisableApplication;
 using _3ASystem.Application.UseCases.Applications.Queries.GetApplicationsPaged;
 using _3ASystem.Application.UseCases.Applications.Responses;
+using _3ASystem.WebUI.Server.Components._Shared;
 using MediatR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using MudBlazor;
 
 namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 {
@@ -19,138 +21,188 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 		[Inject]
 		public NavigationManager Navigation { get; set; } = default!;
 
+		[Inject]
+		public IDialogService DialogService { get; set; } = default!;
 
-		private ApplicationCreateForm applicationCreateForm = default!;
-		private ApplicationUpdateForm applicationUpdateForm = default!;
+		[Inject]
+		public ISnackbar Snackbar { get; set; } = default!;
 
-		private int _totalOfRecords = 0;
 		private List<ApplicationCResponse>? _records = [];
 
-		private bool isLoading = false;
 		private string _error = string.Empty;
+		private bool isLoading = true;
+
+		private int _totalOfRecords = 0;
+		private int _selectedPage = 1;
+		private int _pageSize = 10;
+		private int _totalOfPages = 1;
 
 		private Guid deleteId = Guid.Empty;
 
-		private int previousPage = -1;
-
+		private IDialogReference dlg = default!;
 
 		protected override async Task OnInitializedAsync()
 		{
-
 			await FetchData();
 		}
-
 
 		private async Task FetchData()
 		{
 			// Send an event to MediatR
-			var result = await Mediator.Send(new GetApplicationsPagedQuery() { Page = 1, PageSize = 5 });
+			isLoading = true;
+			var result = await Mediator.Send(new GetApplicationsPagedQuery() { Page = _selectedPage, PageSize = _pageSize });
 			if (result.IsSuccess)
 			{
+				_totalOfRecords = result.Value.TotalOfRecords;
+				_totalOfPages = result.Value.TotalOfPages;
+
 				_records = result.Value.Records;
 			}
 			else
 			{
 				_error = result.Error.Description;
 			}
+			isLoading = false;
+		}
+
+		private async Task PageChanged(int pageNumber)
+		{
+			_selectedPage = pageNumber;
+			await FetchData();
+			StateHasChanged();
 		}
 
 		private async Task CreateApplication()
 		{
-			await applicationCreateForm.Start();
-			await ShowCreateModal();
-			//Navigation.NavigateTo("/applications/create");
+			var parameters = new DialogParameters
+			{
+				{ nameof(ModalComponent.Icon), Icons.Material.Filled.AppRegistration},
+				{ nameof(ModalComponent.Title), "Create New Application" },
+				{ nameof(ModalComponent.Body), true },
+				{ nameof(ModalComponent.SubmitText), "Save"},
+				{ nameof(ModalComponent.ShowActionButtons), false }
+
+				/*{ nameof(ModalComponent.OnSubmit), EventCallback.Factory.Create(this, () => {
+					Console.WriteLine(3);
+					DialogService.Close(dlg, DialogResult.Cancel());
+				})}*/
+			};
+
+			parameters.Add(nameof(ModalComponent.Body), (RenderFragment)(builder =>
+			{
+				builder.OpenComponent<ApplicationCreateForm>(0);
+				builder.AddComponentParameter(1,
+					nameof(ApplicationCreateForm.OnSaveClickSuccess),
+					EventCallback.Factory.Create(this, async (string successMessage) =>
+					{
+						DialogService.Close(dlg, DialogResult.Cancel());
+
+						Snackbar.Clear();
+						Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopRight;
+						Snackbar.Add(successMessage, Severity.Success);
+
+						await FetchData();
+						StateHasChanged();
+					})
+				);
+				builder.AddComponentParameter(2,
+					nameof(ApplicationCreateForm.OnCancelClick),
+					EventCallback.Factory.Create(this, () =>
+					{
+						DialogService.Close(dlg, DialogResult.Cancel());
+					})
+				);
+				builder.CloseComponent();
+			}));
+
+			var options = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseButton = false, CloseOnEscapeKey = false, BackdropClick = false };
+			dlg = await DialogService.ShowAsync<ModalComponent>("Create New Application", parameters, options);
+
+			//await dlg.Result;
 		}
-
-		private async Task ShowCreateModal()
-		{
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.getOrCreateInstance", "#createApplicationModal").AsTask().Wait();
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.show", "#createApplicationModal").AsTask().Wait();
-
-			// Using the Bootstrap 5 Modal API with options to disable closing when clicking outside or pressing ESC
-			await JSRuntime.InvokeVoidAsync("eval", "new bootstrap.Modal(document.getElementById('createApplicationModal'), { backdrop: 'static', keyboard: true }).show();");
-		}
-
-		private async Task HideModalCreateModal()
-		{
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.hide", "#deleteConfirmationModal");
-			await JSRuntime.InvokeVoidAsync("eval", "bootstrap.Modal.getOrCreateInstance(document.getElementById('createApplicationModal')).hide()");
-		}
-
-		private async Task ApplicationCreateForm_CancelClick()
-		{
-			await HideModalCreateModal();
-		}
-
-		private async Task ApplicationCreateForm_SaveClickSuccess()
-		{
-			await HideModalCreateModal();
-			//await FetchData();
-			StateHasChanged();
-		}
-
-
 
 		private async Task EditApplication(Guid id)
 		{
+			var parameters = new DialogParameters
+			{
+				{ nameof(ModalComponent.Icon), Icons.Material.Filled.AppRegistration},
+				{ nameof(ModalComponent.Title), "Edit Application" },
+				{ nameof(ModalComponent.Body), true },
+				{ nameof(ModalComponent.SubmitText), "Save"},
+				{ nameof(ModalComponent.ShowActionButtons), false }
 
-			await applicationUpdateForm.Start(id);
-			await ShowUpdateModal();
-			//Navigation.NavigateTo("/applications/edit/" + id);
+				/*{ nameof(ModalComponent.OnSubmit), EventCallback.Factory.Create(this, () => {
+					Console.WriteLine(3);
+					DialogService.Close(dlg, DialogResult.Cancel());
+				})}*/
+			};
+
+			parameters.Add(nameof(ModalComponent.Body), (RenderFragment)(builder =>
+			{
+				builder.OpenComponent<ApplicationUpdateForm>(0);
+				builder.AddComponentParameter(1, nameof(ApplicationUpdateForm.Id), id);
+				builder.AddComponentParameter(2, 
+					nameof(ApplicationUpdateForm.OnSaveClickSuccess),
+					EventCallback.Factory.Create(this, async (string successMessage) =>
+					{
+						DialogService.Close(dlg, DialogResult.Cancel());
+
+						Snackbar.Clear();
+						Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopRight;
+						Snackbar.Add(successMessage, Severity.Success);
+
+						await FetchData();
+						StateHasChanged();
+
+					})
+				);
+				builder.AddComponentParameter(3,
+					nameof(ApplicationUpdateForm.OnCancelClick),
+					EventCallback.Factory.Create(this, () =>
+					{
+						DialogService.Close(dlg, DialogResult.Cancel());
+					})
+				);
+				builder.CloseComponent();
+			}));
+
+			var options = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseButton = false, CloseOnEscapeKey = false, BackdropClick = false };
+			dlg = await DialogService.ShowAsync<ModalComponent>("Create New Application", parameters, options);
+
 		}
-
-		private async Task ShowUpdateModal()
-		{
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.getOrCreateInstance", "#createApplicationModal").AsTask().Wait();
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.show", "#createApplicationModal").AsTask().Wait();
-
-			// Using the Bootstrap 5 Modal API with options to disable closing when clicking outside or pressing ESC
-			await JSRuntime.InvokeVoidAsync("eval", "new bootstrap.Modal(document.getElementById('updateApplicationModal'), { backdrop: 'static', keyboard: true }).show();");
-		}
-
-		private async Task HideModalUpdateModal()
-		{
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.hide", "#deleteConfirmationModal");
-			await JSRuntime.InvokeVoidAsync("eval", "bootstrap.Modal.getOrCreateInstance(document.getElementById('updateApplicationModal')).hide()");
-		}
-
-		private async Task ApplicationUpdateForm_CancelClick()
-		{
-			await HideModalUpdateModal();
-		}
-
-		private async Task ApplicationUpdateForm_SaveClickSuccess()
-		{
-			await HideModalUpdateModal();
-			//await FetchData();
-			StateHasChanged();
-		}
-
-
-
 
 		private async Task AskConfirmDelete(Guid id)
 		{
-			deleteId = id;
-			await ShowModalAskConfirm();
+			var parameters = new DialogParameters<ConfirmDialogComponent>
+			{
+				{ x => x.ContentText, "Do you really want to delete this record? This process cannot be undone." },
+				{ x => x.ButtonText, "Delete" },
+				{ x => x.Color, Color.Error }
+			};
+
+			var options = new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall, CloseButton = true, CloseOnEscapeKey = true, BackdropClick=false };
+
+			var dialog = await DialogService.ShowAsync<ConfirmDialogComponent>("Delete", parameters, options);
+			var result = await dialog.Result;
+			if (result is not null && result.Canceled is false)
+			{
+				var data = (bool)result.Data!;
+				if (data)
+				{
+					await ConfirmDelete(id);
+				}
+			}
 		}
 
-		private async Task ShowModalAskConfirm()
+		private async Task ConfirmDelete(Guid id)
 		{
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.getOrCreateInstance", "#deleteConfirmationModal").AsTask().Wait();
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.show", "#deleteConfirmationModal");
-			await JSRuntime.InvokeVoidAsync("eval", "new bootstrap.Modal(document.getElementById('deleteConfirmationModal'), { backdrop: 'static', keyboard: true }).show();");
-		}
-
-		private async Task ConfirmDelete()
-		{
-			if (deleteId == Guid.Empty) return;
+			if (id == Guid.Empty) return;
 
 			// Send an event to MediatR
-			var result = await Mediator.Send(new DeleteApplicationCommand(deleteId));
+			var result = await Mediator.Send(new DeleteApplicationCommand(id));
 			if (result.IsSuccess)
 			{
-				//await FetchData();
+				await FetchData();
 				StateHasChanged();
 			}
 			else
@@ -158,16 +210,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 				_error = result.Error.Description;
 			}
 
-			deleteId = Guid.Empty;
-			await HideModalAskConfirmDelete();
 		}
-
-		private async Task HideModalAskConfirmDelete()
-		{
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.hide", "#deleteConfirmationModal");
-			await JSRuntime.InvokeVoidAsync("eval", "bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteConfirmationModal')).hide()");
-		}
-
 
 		private async void EnableDisable(Guid id)
 		{
