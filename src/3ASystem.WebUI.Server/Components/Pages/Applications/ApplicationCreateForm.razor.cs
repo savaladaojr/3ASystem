@@ -12,7 +12,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 	public partial class ApplicationCreateForm : ComponentBase
 	{
 		// Define an EventCallback to notify the parent component
-		[Parameter] public EventCallback OnSaveClickSuccess { get; set; }
+		[Parameter] public EventCallback<string> OnSaveClickSuccess { get; set; }
 		[Parameter] public EventCallback OnCancelClick { get; set; }
 
 
@@ -48,14 +48,16 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 			return task;
 		}
 
-		private async Task HandleCancel()
+		private async Task HandleCancelAsync()
 		{
 			// Call the parent method via the EventCallback
 			await OnCancelClick.InvokeAsync(null);
 		}
 
-		private async Task HandleSave()
+		private async Task HandleCreateAsync()
 		{
+			if (!IsValidSubmit()) return;
+
 			_isSubmitting = true;
 			_error = string.Empty;
 
@@ -65,7 +67,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 			if (result.IsSuccess)
 			{
 				// Call the parent method via the EventCallback
-				await OnSaveClickSuccess.InvokeAsync(null);
+				await OnSaveClickSuccess.InvokeAsync($"Application [{result.Value.Name}] successfully created." );
 			}
 			else
 			{
@@ -89,6 +91,13 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 
 			}
 			_isSubmitting = false;
+
+		}
+
+		private bool IsValidSubmit()
+		{
+			var valid = _editContext!.Validate();
+			return valid;
 		}
 
 		private void ClearValidationMessage(string fieldName)

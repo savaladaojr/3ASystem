@@ -1,65 +1,58 @@
-﻿@using Microsoft.JSInterop
-@inject IJSRuntime JSRuntime
+﻿
+<MudDialog>
+	<TitleContent>
+		<MudText Typo="Typo.h6">
+			@if (!string.IsNullOrEmpty(@Icon))
+			{
+				<MudIcon Icon="@Icon" Class="mr-3 mb-n1" />
+			}
+			@Title
+		</MudText>
+	</TitleContent>
+	<DialogContent>
+		@Body
+	</DialogContent>
 
-<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
-    @* <div class="modal-dialog modal-top-centered"> *@
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">@Title</h5>
-
-                @if (ShowdismissButton)
-                {
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                }
-            </div>
-            <div class="modal-body">
-                @Body
-            </div>
-
-            @if (ShowActionButtons)
-            {
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" @onclick="OnConfirm">Save changes</button>
-            </div>
-            }
-        </div>
-    </div>
-</div>
-
-
+	<DialogActions>
+		@if (ShowActionButtons)
+		{
+			<MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="Cancel">Cancel</MudButton>
+			<MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Submit">@SubmitText</MudButton>
+		}
+	</DialogActions>
+</MudDialog>
 
 @code {
-    [Parameter]
-	public string ModalId { get; set; } = string.Empty;
+	[CascadingParameter]
+	private IMudDialogInstance MudDialog { get; set; } = default!;
 
-    [Parameter]
-    public string Title { get; set; } = string.Empty;
+	[Parameter]
+	public string Icon { get; set; } = default!;
 
-    [Parameter]
-    public RenderFragment Body { get; set; } = default!;
+	[Parameter]
+	public string Title { get; set; } = string.Empty;
 
-    [Parameter]
-    public EventCallback OnConfirm { get; set; }
+	[Parameter]
+	public RenderFragment Body { get; set; } = default!;
 
-    [Parameter]
-    public bool ShowdismissButton { get; set; } = true;
+	[Parameter]
+	public string CancelText { get; set; } = "Cancel";
 
-    [Parameter]
-    public bool ShowActionButtons { get; set; } = true;
+	[Parameter]
+	public string SubmitText { get; set; } = "Ok";
 
-    public async Task ShowModal()
-    {
-        // Using the Bootstrap 5 Modal API with options to disable closing when clicking outside or pressing ESC
-        await JSRuntime.InvokeVoidAsync("eval", "new bootstrap.Modal(document.getElementById('myModal'), { backdrop: 'static', keyboard: true }).show();");
-    }
+	[Parameter]
+	public bool ShowActionButtons { get; set; } = true;
 
-    public async Task HideModal()
-    {
-        // Using the Bootstrap 5 Modal API to hide the modal
-        //await JSRuntime.InvokeVoidAsync("eval", "new bootstrap.Modal(document.getElementById('myModal')).hide();");
-        await JSRuntime.InvokeVoidAsync("eval", "bootstrap.Modal.getOrCreateInstance(document.getElementById('myModal')).hide()");
-    }
+	[Parameter]
+	public EventCallback? OnSubmit { get; set; } = default!;
+
+	private void Submit()
+	{
+		OnSubmit?.InvokeAsync();
+		MudDialog.Close(DialogResult.Ok(true));
+	}
+
+	private void Cancel() => MudDialog.Cancel();
 
 }

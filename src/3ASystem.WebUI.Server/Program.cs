@@ -1,11 +1,12 @@
 using _3ASystem.Application;
 using _3ASystem.Infrastructure;
-using _3ASystem.Infrastructure.Services.EmailService;
 using _3ASystem.WebUI.Server.Components;
-using Microsoft.Extensions.Configuration;
-using Serilog;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add MudBlazor services
+builder.Services.AddMudServices();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -14,6 +15,8 @@ builder.Services.AddRazorComponents()
 builder.Services.AddMemoryCache(); //Interesting 
 builder.Services.AddApplicationDependencies();
 builder.Services.AddInfrastructureDependencies(builder.Configuration);
+
+builder.Services.AddAuthenticationAutorizationToBlazorApp(builder.Configuration);
 
 var app = builder.Build();
 
@@ -35,5 +38,8 @@ app.UseAntiforgery();
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
 	.AddInteractiveServerRenderMode();
+
+// Add additional endpoints required by the Identity /Account Razor components.
+app.MapAdditionalIdentityEndpoints();
 
 app.Run();

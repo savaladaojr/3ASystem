@@ -1,21 +1,10 @@
 ﻿
 
-::deep tr {
-	height: 2em;
-}
 
-::deep tr:has(> td:not(:empty)) > td {
-	display: table-cell;
-}
+@media (max-width: 600px) {
 
-::deep td:empty {
-	display: none;
-}
-
-::deep .icon_column {
-	width: 40px;
-}
-
-::deep .name_column {
-	width: *;
+	.icon_column {
+		width: 8%;
+		max-width: 50px
+	}
 }

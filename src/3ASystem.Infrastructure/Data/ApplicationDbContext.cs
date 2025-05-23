@@ -25,7 +25,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWor
 	public DbSet<RoleOperation> RoleOperations { get; set; }
 
 
-	public ApplicationDbContext(DbContextOptions options, IPublisher publisher) : base(options)
+	public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IPublisher publisher) : base(options)
 	{
 		_publisher = publisher;
 

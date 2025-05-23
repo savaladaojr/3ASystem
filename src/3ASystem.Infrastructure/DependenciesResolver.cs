@@ -17,8 +17,10 @@ public static class DependenciesResolver
 		this IServiceCollection services, IConfiguration configuration)
 	{
 		services.AddMemoryCache();
+
+		var connectionString = configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 		services.AddDbContext<ApplicationDbContext>(options =>
-			options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
+			options.UseSqlServer(connectionString)
 		);
 
 		services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
