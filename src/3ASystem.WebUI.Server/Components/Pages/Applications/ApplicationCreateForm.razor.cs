@@ -54,7 +54,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 			await OnCancelClick.InvokeAsync(null);
 		}
 
-		private async Task HandleCreateAsync()
+		private async Task HandleSubmitAsync()
 		{
 			if (!IsValidSubmit()) return;
 

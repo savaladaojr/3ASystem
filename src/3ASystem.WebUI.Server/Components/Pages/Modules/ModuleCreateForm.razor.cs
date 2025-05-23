@@ -1,5 +1,4 @@
-﻿using _3ASystem.Application.UseCases.Applications.Queries.GetApplications;
-using _3ASystem.Application.UseCases.Applications.Responses;
+﻿using _3ASystem.Application.UseCases.Applications.Responses;
 using _3ASystem.Application.UseCases.Modules.Commands.CreateModule;
 using _3ASystem.Domain.Shared;
 using MediatR;
@@ -12,7 +11,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 	public partial class ModuleCreateForm : ComponentBase
 	{
 		// Define an EventCallback to notify the parent component
-		[Parameter] public EventCallback OnSaveClickSuccess { get; set; }
+		[Parameter] public EventCallback<string> OnSaveClickSuccess { get; set; }
 		[Parameter] public EventCallback OnCancelClick { get; set; }
 
 		[Parameter]
@@ -40,7 +39,6 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 			await Start();
 		}
 
-
 		public async Task<bool> Start()
 		{
 			createModule = new CreateModuleCommand();
@@ -51,14 +49,16 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 			return task;
 		}
 
-		private async Task HandleCancel()
+		private async Task HandleCancelAsync()
 		{
 			// Call the parent method via the EventCallback
 			await OnCancelClick.InvokeAsync(null);
 		}
 
-		private async Task HandleSave()
+		private async Task HandleSubmitAsync()
 		{
+			if (!IsValidSubmit()) return;
+
 			_isSubmitting = true;
 			_error = string.Empty;
 
@@ -68,7 +68,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 			if (result.IsSuccess)
 			{
 				// Call the parent method via the EventCallback
-				await OnSaveClickSuccess.InvokeAsync(null);
+				await OnSaveClickSuccess.InvokeAsync($"Module [{result.Value.Name}] successfully created.");
 			}
 			else
 			{
@@ -92,6 +92,13 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 
 			}
 			_isSubmitting = false;
+		}
+
+
+		private bool IsValidSubmit()
+		{
+			var valid = _editContext!.Validate();
+			return valid;
 		}
 
 		private void ClearValidationMessage(string fieldName)

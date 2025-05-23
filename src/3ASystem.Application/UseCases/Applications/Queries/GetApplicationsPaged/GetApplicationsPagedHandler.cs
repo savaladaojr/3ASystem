@@ -27,10 +27,8 @@ public class GetApplicationsPagedHandler : IQueryHandler<GetApplicationsPagedQue
 		var finalResult = new PagedList<ApplicationCResponse>()
 		{
 			ActualPage = request.Page,
-			TotalOfPages = (int)Math.Ceiling((double)result.TotalOfRecords / request.PageSize),
 			TotalOfRecordsPerPage = request.PageSize,
 			TotalOfRecords = result.TotalOfRecords,
-			
 
 			Records = [.. applications.Select(app =>
 				new ApplicationCResponse

@@ -1,10 +1,22 @@
 ﻿
-
-
-@media (max-width: 600px) {
-
-	.icon_column {
-		width: 8%;
-		max-width: 50px
-	}
+/*
+::deep tr {
+	height: 2em;
 }
+
+	::deep tr:has(> td:not(:empty)) > td {
+		display: table-cell;
+	}
+
+::deep td:empty {
+	display: none;
+}
+
+::deep .icon_column {
+	width: 40px;
+}
+
+::deep .name_column {
+	width: *;
+}
+*/

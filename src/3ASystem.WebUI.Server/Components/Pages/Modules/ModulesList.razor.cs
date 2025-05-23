@@ -2,11 +2,13 @@
 using _3ASystem.Application.UseCases.Applications.Responses;
 using _3ASystem.Application.UseCases.Modules.Commands.DeleteModule;
 using _3ASystem.Application.UseCases.Modules.Commands.EnableDisableModule;
-using _3ASystem.Application.UseCases.Modules.Queries.GetModules;
+using _3ASystem.Application.UseCases.Modules.Queries.GetModulesPaged;
 using _3ASystem.Application.UseCases.Modules.Responses;
+using _3ASystem.WebUI.Server.Components._Shared;
 using MediatR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using MudBlazor;
 
 namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 {
@@ -21,18 +23,26 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 		[Inject]
 		public NavigationManager Navigation { get; set; } = default!;
 
+		[Inject]
+		public IDialogService DialogService { get; set; } = default!;
+
+		[Inject]
+		public ISnackbar Snackbar { get; set; } = default!;
+
 
 		private List<ApplicationCResponse>? _applications = new List<ApplicationCResponse>();
 
-		private ModuleCreateForm moduleCreateForm = default!;
-		private ModuleUpdateForm moduleUpdateForm = default!;
+		private List<ModuleCResponse>? _records = [];
 
-		private List<ModuleCResponse>? _records = null;
 		private string _error = string.Empty;
+		private bool isLoading = true;
 
-		private Guid deleteId = Guid.Empty;
+		private int _totalOfRecords = 0;
+		private int _selectedPage = 1;
+		private int _pageSize = 10;
+		private int _totalOfPages = 1;
 
-
+		private IDialogReference dlg = default!;
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -55,110 +65,175 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 		private async Task FetchData()
 		{
 			// Send an event to MediatR
-			var result = await Mediator.Send(new GetModulesQuery());
+			isLoading = true;
+			var result = await Mediator.Send(new GetModulesPagedQuery() { Page = _selectedPage, PageSize = _pageSize });
 			if (result.IsSuccess)
 			{
-				_records = result.Value;
+				_totalOfRecords = result.Value.TotalOfRecords;
+				_totalOfPages = result.Value.TotalOfPages;
+
+				_records = result.Value.Records;
 			}
 			else
 			{
 				_error = result.Error.Description;
 			}
+			isLoading = false;
+
 		}
 
-		private async Task CreateModule()
+		private async Task PageChanged(int pageNumber)
 		{
-			await moduleCreateForm.Start();
-			await ShowCreateModal();
-			//Navigation.NavigateTo("/applications/create");
-		}
-
-		private async Task ShowCreateModal()
-		{
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.getOrCreateInstance", "#createApplicationModal").AsTask().Wait();
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.show", "#createApplicationModal").AsTask().Wait();
-
-			// Using the Bootstrap 5 Modal API with options to disable closing when clicking outside or pressing ESC
-			await JSRuntime.InvokeVoidAsync("eval", "new bootstrap.Modal(document.getElementById('createModuleModal'), { backdrop: 'static', keyboard: true }).show();");
-		}
-
-		private async Task HideModalCreateModal()
-		{
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.hide", "#deleteConfirmationModal");
-			await JSRuntime.InvokeVoidAsync("eval", "bootstrap.Modal.getOrCreateInstance(document.getElementById('createModuleModal')).hide()");
-		}
-
-		private async Task ModuleCreateForm_CancelClick()
-		{
-			await HideModalCreateModal();
-		}
-
-		private async Task ModuleCreateForm_SaveClickSuccess()
-		{
-			await HideModalCreateModal();
+			_selectedPage = pageNumber;
 			await FetchData();
 			StateHasChanged();
 		}
 
+		private async Task CreateModule()
+		{
+			var parameters = new DialogParameters
+			{
+				{ nameof(ModalComponent.Icon), Icons.Material.Filled.AppRegistration},
+				{ nameof(ModalComponent.Title), "Create New Module" },
+				{ nameof(ModalComponent.Body), true },
+				{ nameof(ModalComponent.SubmitText), "Save"},
+				{ nameof(ModalComponent.ShowActionButtons), false }
+
+				/*{ nameof(ModalComponent.OnSubmit), EventCallback.Factory.Create(this, () => {
+					Console.WriteLine(3);
+					DialogService.Close(dlg, DialogResult.Cancel());
+				})}*/
+			};
+
+			parameters.Add(nameof(ModalComponent.Body), (RenderFragment)(builder =>
+			{
+				builder.OpenComponent<ModuleCreateForm>(0);
+				builder.AddComponentParameter(1,
+					nameof(ModuleCreateForm.ListOfApplications),
+					_applications
+				);
+
+				builder.AddComponentParameter(2,
+					nameof(ModuleCreateForm.OnSaveClickSuccess),
+					EventCallback.Factory.Create(this, async (string successMessage) =>
+					{
+						DialogService.Close(dlg, DialogResult.Cancel());
+
+						Snackbar.Clear();
+						Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopRight;
+						Snackbar.Add(successMessage, Severity.Success);
+
+						await FetchData();
+						StateHasChanged();
+					})
+				);
+
+				builder.AddComponentParameter(3,
+					nameof(ModuleCreateForm.OnCancelClick),
+					EventCallback.Factory.Create(this, () =>
+					{
+						DialogService.Close(dlg, DialogResult.Cancel());
+					})
+				);
+
+				builder.CloseComponent();
+			}));
+
+			var options = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseButton = false, CloseOnEscapeKey = false, BackdropClick = false };
+			dlg = await DialogService.ShowAsync<ModalComponent>("Create New Module", parameters, options);
+
+		}
 
 
 		private async Task EditModule(Guid id)
 		{
 
-			await moduleUpdateForm.Start(id);
-			await ShowUpdateModal();
-			//Navigation.NavigateTo("/applications/edit/" + id);
+			var parameters = new DialogParameters
+			{
+				{ nameof(ModalComponent.Icon), Icons.Material.Filled.AppRegistration},
+				{ nameof(ModalComponent.Title), "Edit Module" },
+				{ nameof(ModalComponent.Body), true },
+				{ nameof(ModalComponent.SubmitText), "Save"},
+				{ nameof(ModalComponent.ShowActionButtons), false }
+
+				/*{ nameof(ModalComponent.OnSubmit), EventCallback.Factory.Create(this, () => {
+					Console.WriteLine(3);
+					DialogService.Close(dlg, DialogResult.Cancel());
+				})}*/
+			};
+
+			parameters.Add(nameof(ModalComponent.Body), (RenderFragment)(builder =>
+			{
+				builder.OpenComponent<ModuleUpdateForm>(0);
+				
+				builder.AddComponentParameter(1,
+					nameof(ModuleCreateForm.ListOfApplications),
+					_applications
+				);
+				
+				builder.AddComponentParameter(2, nameof(ModuleUpdateForm.Id), id);
+
+				builder.AddComponentParameter(3,
+					nameof(ModuleUpdateForm.OnSaveClickSuccess),
+					EventCallback.Factory.Create(this, async (string successMessage) =>
+					{
+						DialogService.Close(dlg, DialogResult.Cancel());
+
+						Snackbar.Clear();
+						Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopRight;
+						Snackbar.Add(successMessage, Severity.Success);
+
+						await FetchData();
+						StateHasChanged();
+
+					})
+				);
+
+				builder.AddComponentParameter(4,
+					nameof(ModuleUpdateForm.OnCancelClick),
+					EventCallback.Factory.Create(this, () =>
+					{
+						DialogService.Close(dlg, DialogResult.Cancel());
+					})
+				);
+
+				builder.CloseComponent();
+			}));
+
+			var options = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseButton = false, CloseOnEscapeKey = false, BackdropClick = false };
+			dlg = await DialogService.ShowAsync<ModalComponent>("Edit Module", parameters, options);
 		}
-
-		private async Task ShowUpdateModal()
-		{
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.getOrCreateInstance", "#updateModuleModal").AsTask().Wait();
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.show", "#updateModuleModal").AsTask().Wait();
-
-			// Using the Bootstrap 5 Modal API with options to disable closing when clicking outside or pressing ESC
-			await JSRuntime.InvokeVoidAsync("eval", "new bootstrap.Modal(document.getElementById('updateModuleModal'), { backdrop: 'static', keyboard: true }).show();");
-		}
-
-		private async Task HideModalUpdateModal()
-		{
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.hide", "#deleteConfirmationModal");
-			await JSRuntime.InvokeVoidAsync("eval", "bootstrap.Modal.getOrCreateInstance(document.getElementById('updateModuleModal')).hide()");
-		}
-
-		private async Task ModuleUpdateForm_CancelClick()
-		{
-			await HideModalUpdateModal();
-		}
-
-		private async Task ModuleUpdateForm_SaveClickSuccess()
-		{
-			await HideModalUpdateModal();
-			await FetchData();
-			StateHasChanged();
-		}
-
-
 
 
 		private async Task AskConfirmDelete(Guid id)
 		{
-			deleteId = id;
-			await ShowModalAskConfirm();
+			var parameters = new DialogParameters<ConfirmDialogComponent>
+			{
+				{ x => x.ContentText, "Do you really want to delete this record? This process cannot be undone." },
+				{ x => x.ButtonText, "Delete" },
+				{ x => x.Color, Color.Error }
+			};
+
+			var options = new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall, CloseButton = true, CloseOnEscapeKey = true, BackdropClick = false };
+
+			var dialog = await DialogService.ShowAsync<ConfirmDialogComponent>("Delete", parameters, options);
+			var result = await dialog.Result;
+			if (result is not null && result.Canceled is false)
+			{
+				var data = (bool)result.Data!;
+				if (data)
+				{
+					await ConfirmDelete(id);
+				}
+			}
 		}
 
-		private async Task ShowModalAskConfirm()
+		private async Task ConfirmDelete(Guid id)
 		{
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.getOrCreateInstance", "#deleteConfirmationModal").AsTask().Wait();
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.show", "#deleteConfirmationModal");
-			await JSRuntime.InvokeVoidAsync("eval", "new bootstrap.Modal(document.getElementById('deleteConfirmationModal'), { backdrop: 'static', keyboard: true }).show();");
-		}
-
-		private async Task ConfirmDelete()
-		{
-			if (deleteId == Guid.Empty) return;
+			if (id == Guid.Empty) return;
 
 			// Send an event to MediatR
-			var result = await Mediator.Send(new DeleteModuleCommand(deleteId));
+			var result = await Mediator.Send(new DeleteModuleCommand(id));
 			if (result.IsSuccess)
 			{
 				await FetchData();
@@ -169,16 +244,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 				_error = result.Error.Description;
 			}
 
-			deleteId = Guid.Empty;
-			await HideModalAskConfirmDelete();
 		}
-
-		private async Task HideModalAskConfirmDelete()
-		{
-			//JSRuntime.InvokeVoidAsync("bootstrap.Modal.hide", "#deleteConfirmationModal");
-			await JSRuntime.InvokeVoidAsync("eval", "bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteConfirmationModal')).hide()");
-		}
-
 
 		private async void EnableDisable(Guid id)
 		{
