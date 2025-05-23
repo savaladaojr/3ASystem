@@ -37,8 +37,6 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 		private int _pageSize = 10;
 		private int _totalOfPages = 1;
 
-		private Guid deleteId = Guid.Empty;
-
 		private IDialogReference dlg = default!;
 
 		protected override async Task OnInitializedAsync()
@@ -167,7 +165,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 			}));
 
 			var options = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseButton = false, CloseOnEscapeKey = false, BackdropClick = false };
-			dlg = await DialogService.ShowAsync<ModalComponent>("Create New Application", parameters, options);
+			dlg = await DialogService.ShowAsync<ModalComponent>("Edit Application", parameters, options);
 
 		}
 
@@ -218,7 +216,6 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 			if (result.IsSuccess)
 			{
 				await FetchData();
-				//await grid.RefreshDataAsync();
 				StateHasChanged();
 			}
 			else

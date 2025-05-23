@@ -1,124 +1,78 @@
 ﻿@page "/Modules"
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
-<h3>Modules</h3>
+<MudText Typo="Typo.h3" GutterBottom="true">Modules</MudText>
 
+<MudButton Variant="Variant.Filled" Color="Color.Primary" class="btn btn-success mb-3" OnClick="() => CreateModule()">
+	<MudIcon Icon="@Icons.Material.Filled.Add" Color="Color.Info" Class="mr-3"></MudIcon> New
+</MudButton>
+									
+<MudTable Items="@_records" FixedHeader="true" Dense="true" Hover="true" Bordered="false" Striped="true" Loading="@isLoading" LoadingProgressColor="Color.Info" Style="width: 100%">
+	<ToolBarContent>
+		<MudText Typo="Typo.h6">List of Applications</MudText>
+	</ToolBarContent>
+	<HeaderContent>
+		<MudTh Style="width: 8%; font-weight:bold;text-align:left;">Icon</MudTh>
+		<MudTh Style="width: 50%; font-weight:bold;text-align:left;">Name</MudTh>
+		<MudTh Style="width: 10%; font-weight:bold;text-align:left;">Abbreviation</MudTh>
+		<MudTh Style="width: 10%; font-weight:bold;text-align:center;">Is Active</MudTh>
+		<MudTh Style="width: 22%; font-weight:bold;text-align:left;">Actions</MudTh>
+	</HeaderContent>
+	<RowTemplate>
+		<MudTd DataLabel="Icon">
+			@if (!string.IsNullOrEmpty(@context.IconUrl))
+			{
+				<img src="@context.IconUrl" alt="@context.Name" width="32" height="32" />
+			}
+		</MudTd>
+		<MudTd DataLabel="Name">@context.Name</MudTd>
+		<MudTd DataLabel="Abbreviation">@context.Abbreviation</MudTd>
+		<MudTd DataLabel="Is Active" Style="text-align:center;">@context.IsActive</MudTd>
+		<MudTd>
+			@if (!context.IsActive)
+			{
+				<MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" @onclick="() => EnableDisable(context.Id)" Class="mr-1">
+					<MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Tertiary" Title="Enable"></MudIcon>
+				</MudButton>
+			}
+			else
+			{
+				<MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="() => EnableDisable(context.Id)" Class="mr-1">
+					<MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Warning" Title="Disable"></MudIcon>
+				</MudButton>
+			}
+			<MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="() => EditModule(context.Id)">
+				<MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Info" Title="Edit"></MudIcon>
+			</MudButton>
+			<MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="() => AskConfirmDelete(context.Id)">
+				<MudIcon Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Title="Delete"></MudIcon>
+			</MudButton>
+		</MudTd>
+	</RowTemplate>
+</MudTable>
 
-<button class="btn btn-success mb-3" @onclick="() => CreateModule()">
-	<i class="bi bi-plus-lg"></i> New
-</button>
-
-@if (_records == null)
+<MudGrid Class="mt-1">
+@if (_records!.Any() && isLoading is false)
 {
-	<p><em>Loading...</em></p>
-}
-else
-{
-	<div class="table-responsive">
-		<table class="table table-sm table-striped table-hover caption-top">
-			<caption>List of Modules</caption>
-			<thead class="table-dark">
-				<tr>
-					<th>Icon</th>
-					<th>Name</th>
-					<th>Abbreviation</th>
-					<th>Is Active</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
-			<tbody class="table-group-divider">
-				@foreach (var record in _records)
-				{
-					<tr>
-						<td>
-							@if (!string.IsNullOrEmpty(record.IconUrl))
-							{
-								<img src="@record.IconUrl" alt="@record.Name" width="32" height="32" />
-							}
-						</td>
-						<td>@record.Name</td>
-						<td>@record.Abbreviation</td>
-						<td>@record.IsActive</td>
-						<td>
-							<div style="display: flex">
-								@if (!record.IsActive)
-								{
-									<button class="btn btn-secondary btn-sm me-sm-1" @onclick="() => EnableDisable(record.Id)">
-										<i class="bi bi-check-circle" title="Enable"></i>
-									</button>
-								}
-								else
-								{
-									<button class="btn btn-secondary btn-sm me-sm-1" @onclick="() => EnableDisable(record.Id)">
-										<i class="bi bi-x-circle" title="Disable"></i>
-									</button>
-								}
-								<button class="btn btn-primary btn-sm me-sm-1" @onclick="() => EditModule(record.Id)">
-									<i class="bi bi-pencil"></i>
-								</button>
-								<button class="btn btn-danger btn-sm me-sm-1" @onclick="() => AskConfirmDelete(record.Id)">
-									<i class="bi bi-trash"></i>
-								</button>
-							</div>
-						</td>
-					</tr>
-				}
-			</tbody>
-		</table>
-	</div>
-}
+	
+	<MudItem md="4" Class="d-flex pl-md-8">
+		<MudText Typo="Typo.body2" GutterBottom="true" Style="font-weight:bold">Total Of Records:</MudText>
+		<MudText Typo="Typo.body2" GutterBottom="true">@_totalOfRecords</MudText>
+	</MudItem>
 
-<!-- Bootstrap Modal for Create New Module -->
-<div class="modal fade" id="createModuleModal" tabindex="-1" aria-labelledby="createModuleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="createModuleModalLabel">Create New Module</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				<ModuleCreateForm @ref="moduleCreateForm"
-								  ListOfApplications="@_applications"
-								  OnCancelClick="ModuleCreateForm_CancelClick"
-								  OnSaveClickSuccess="ModuleCreateForm_SaveClickSuccess" />
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Bootstrap Modal for Create New Module -->
-<div class="modal fade" id="updateModuleModal" tabindex="-1" aria-labelledby="updateModuleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="updateModuleModalLabel">Update an Module</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				<ModuleUpdateForm @ref="moduleUpdateForm"
-								  ListOfApplications="@_applications"
-								  OnCancelClick="ModuleUpdateForm_CancelClick"
-								  OnSaveClickSuccess="ModuleUpdateForm_SaveClickSuccess" />
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Bootstrap Modal for Delete Confirmation -->
-<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-top-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Delete</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				Are you sure you want to delete this item?
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-danger" @onclick="ConfirmDelete">Delete</button>
-			</div>
-		</div>
-	</div>
-</div>
+	<MudItem md="8" Style="text-align:right" Class="pr-1">
+		<MudPagination Color="Color.Primary"
+						ShowFirstButton="@(_totalOfPages >= 10)"
+						ShowLastButton="@(_totalOfPages >= 10)"
+						Selected="_selectedPage"
+						Count="@_totalOfPages"
+						SelectedChanged="PageChanged" />
+		</MudItem>
+	}
+	else if (isLoading is false)
+	{
+		<MudItem md="4" Class="d-flex pl-md-8">
+			<MudText Typo="Typo.body2" GutterBottom="true" Style="font-weight:bold">No records found.</MudText>
+		</MudItem>
+	}
+</MudGrid>

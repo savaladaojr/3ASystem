@@ -1,7 +1,28 @@
-﻿.table-row-white {
+﻿/*.table-row-white {
 	background-color: #ffffff;
 }
 
 .table-row-light {
-	background-color: #f8f9fa; /* Very light gray */
+	background-color: #f8f9fa;*/ /* Very light gray */
+/*}
+
+
+::deep tr {
+	height: 2em;
 }
+
+	::deep tr:has(> td:not(:empty)) > td {
+		display: table-cell;
+	}
+
+::deep td:empty {
+	display: none;
+}
+
+::deep .icon_column {
+	width: 40px;
+}
+
+::deep .name_column {
+	width: *;
+}*/

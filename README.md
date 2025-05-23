@@ -20,9 +20,10 @@ This project aims to provide a robust and scalable system using modern web devel
 <br><br>
 
 ## About It
-3A System is a web application developed to manage applications, its modules, functionalities,  and its functionalities, user groups (roles), its users and users' respective privileges.
+3A System is a web application developed to manage applications, its modules, functionalities, operations, user groups (roles), users and users' respective privileges.
 
-The 3A System is a comprehensive web application with several key features designed to manage various aspects of applications and user interactions. Here are the main features:
+The 3A System is a comprehensive web application with several key features designed to manage various aspects of applications and user interactions. 
+Here are the main features:
 
 1. **Application Management**:
 - *Modules, Functionalities*: Organize and manage different modules and functionalities within each application.
@@ -64,11 +65,10 @@ The project adheres to the following principles:
 
 ## Used Libraries
 The following libraries and frameworks are used in the 3ASystem project:
-- **Blazor**: For building interactive web UIs using C#.
+- **Blazor with MudBlazor Components**: For building interactive and responsive web UIs using Razor and C#.
 - **Entity Framework Core**: For data access and ORM capabilities.
 - **MediatR**: For implementing the mediator pattern.
-- **FluentValidation**: For validating business rules and data models.
-- **AutoMapper**: For object-to-object mapping.
+- **FluentValidation**: For validating some business rules and data models.
 - **Serilog**: For logging and diagnostics.
 - **FluentAssertions**: For writing unit tests with clear and readable assertions.
 - **xUnit**: For writing unit tests.
