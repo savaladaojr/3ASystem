@@ -14,46 +14,44 @@
 						<MudTextField Label="Name"
 									  Variant="Variant.Text"
 									  InputType="InputType.Text"
+									  For="@(() => createApplication.Name)"
 									  @bind-Value="createApplication.Name"
 									  TextChanged="() => ClearValidationMessage(nameof(createApplication.Name))" />
-						<ValidationMessage For="@(() => createApplication.Name)" />
 					</MudItem>
 
 					<MudItem md="12" Style="width:100%">
 						<MudTextField T="string" MaxLines=3 Lines=3 Label="Description"
 									  Variant="Variant.Text"
 									  InputType="InputType.Text"
+									  For="@(() => createApplication.Description)"
 									  @bind-Value="createApplication.Description"
 									  TextChanged="() => ClearValidationMessage(nameof(createApplication.Description))" />
-						<ValidationMessage For="@(() => createApplication.Description)" />
 					</MudItem>
 
 					<MudItem md="6" Style="width:100%">
 						<MudTextField Label="Abbreviation"
 									  Variant="Variant.Text"
 									  InputType="InputType.Text"
+									  For="@(() => createApplication.Abbreviation)"
 									  @bind-Value="createApplication.Abbreviation"
 									  TextChanged="() => ClearValidationMessage(nameof(createApplication.Abbreviation))" />
-
-						<ValidationMessage For="@(() => createApplication.Abbreviation)" />
 					</MudItem>
 					<MudItem md="6" Style="width:100%">
 						<MudTextField Label="Friendly Id"
 									  Variant="Variant.Text"
 									  InputType="InputType.Text"
+									  For="@(() => createApplication.FriendlyId)"
 									  @bind-Value="createApplication.FriendlyId"
 									  TextChanged="() => ClearValidationMessage(nameof(createApplication.FriendlyId))" />
-
-						<ValidationMessage For="@(() => createApplication.FriendlyId)" />
 					</MudItem>
 
 					<MudItem md="12" Style="width:100%">
 						<MudTextField Label="Icon Url"
 									  Variant="Variant.Text"
 									  InputType="InputType.Url"
+									  For="@(() => createApplication.IconUrl)"
 									  @bind-Value="createApplication.IconUrl"
 									  TextChanged="() => ClearValidationMessage(nameof(createApplication.IconUrl))" />
-						<ValidationMessage For="@(() => createApplication.IconUrl)" />
 					</MudItem>
 				</MudGrid>
 			</MudPaper>

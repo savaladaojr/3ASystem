@@ -38,13 +38,13 @@ public class ModuleConfiguration : IEntityTypeConfiguration<Module>
 		builder.HasIndex(a => a.FriendlyId).IsUnique();
 
 		//EF Relations
-		builder.HasOne<App>()
+		builder.HasOne(m => m.Application)
 			.WithMany(m => m.Modules)
 			.HasForeignKey(f => f.ApplicationId)
 			.HasPrincipalKey(a => a.Id)
 			.IsRequired();
 
-		builder.Ignore(p => p.Application);
+		//builder.Ignore(p => p.Application);
 
 		builder.ToTable("Modules");
 	}

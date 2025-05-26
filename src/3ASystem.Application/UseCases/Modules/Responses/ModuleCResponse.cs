@@ -1,4 +1,6 @@
-﻿namespace _3ASystem.Application.UseCases.Modules.Responses;
+﻿using _3ASystem.Application.UseCases.Applications.Responses;
+
+namespace _3ASystem.Application.UseCases.Modules.Responses;
 
 public sealed record ModuleCResponse
 {
@@ -9,5 +11,7 @@ public sealed record ModuleCResponse
 	public string IconUrl { get; init; } = string.Empty;
 	public string FriendlyId { get; init; } = string.Empty;
 	public bool IsActive { get; init; } = true;
+
+	public ApplicationCResponse? Application { get; init; }
 
 }

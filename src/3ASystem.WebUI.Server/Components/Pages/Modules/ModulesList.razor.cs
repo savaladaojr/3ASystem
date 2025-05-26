@@ -167,7 +167,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 				builder.OpenComponent<ModuleUpdateForm>(0);
 				
 				builder.AddComponentParameter(1,
-					nameof(ModuleCreateForm.ListOfApplications),
+					nameof(ModuleUpdateForm.ListOfApplications),
 					_applications
 				);
 				

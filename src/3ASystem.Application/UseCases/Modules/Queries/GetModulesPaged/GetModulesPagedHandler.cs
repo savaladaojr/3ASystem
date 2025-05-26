@@ -31,15 +31,25 @@ public class GetModulesPagedHandler : IQueryHandler<GetModulesPagedQuery, PagedL
 			TotalOfRecordsPerPage = request.PageSize,
 			TotalOfRecords = result.TotalOfRecords,
 
-			Records = [.. modules.Select(app =>
+			Records = [.. modules.Select(module =>
 			new ModuleCResponse
 			{
-				Id = app.Id.Value,
-				Name = app.Name,
-				Abbreviation = app.Abbreviation,
-				IconUrl = app.IconUrl,
-				FriendlyId = app.FriendlyId,
-				IsActive = app.IsActive
+				Id = module.Id.Value,
+				Name = module.Name,
+				Abbreviation = module.Abbreviation,
+				IconUrl = module.IconUrl,
+				FriendlyId = module.FriendlyId,
+				IsActive = module.IsActive,
+
+				Application = new ApplicationCResponse
+				{
+					Id = module.Application!.Id.Value,
+					Name = module.Application.Name,
+					Abbreviation = module.Application.Abbreviation,
+					IconUrl = module.Application.IconUrl,
+					FriendlyId = module.Application.FriendlyId,
+					IsActive = module.Application.IsActive
+				}
 			})]
 		};
 

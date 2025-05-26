@@ -8,65 +8,114 @@
 else
 {
 	<EditForm EditContext="@_editContext">
-		@*         <DataAnnotationsValidator />
-        <ValidationSummary /> *@
+		<MudGrid>
+			<MudItem md="12">
+				<MudPaper Class="pa-4 pb-8 " Outlined="true">
+					<MudGrid>
+						<MudItem md="12" Style="width:100%">
+							<MudSelect T="Guid"
+									   @bind-Value="updateModule.ApplicationId"
+									   For="@(() => updateModule.ApplicationId)"
+									   Label="Application"
+									   Placeholder="Please Select an Application"
+									   Dense="true"
+									   Modal="true"
+									   Disabled="true"
+									   SelectedValuesChanged="() => ClearValidationMessage(nameof(updateModule.ApplicationId))">
 
-		<div class="mb-3">
-			<label for="name" class="form-label">Application</label>
-			<InputSelect id="applicationId" class="form-select" @bind-Value="updateModule.ApplicationId" @oninput="() => ClearValidationMessage(nameof(updateModule.ApplicationId))">
-				<option value="">Select an Application</option>
-				@foreach (var application in ListOfApplications)
-				{
-					<option value="@application.Id">@application.Name</option>
-				}
-			</InputSelect>
-			<ValidationMessage For="@(() => updateModule.ApplicationId)" />
-		</div>
+								<MudSelectItem Value="Guid.Empty">&nbsp;</MudSelectItem>
+								@foreach (var application in ListOfApplications.OrderBy(s => s.Name))
+								{
+									<MudSelectItem Value="@application.Id">@application.Name</MudSelectItem>
+								}
+							</MudSelect>
+						</MudItem>
 
-		<div class="mb-3">
-			<label for="name" class="form-label">Name</label>
-			<InputText id="name" class="form-control" @bind-Value="updateModule.Name" @oninput="() => ClearValidationMessage(nameof(updateModule.Name))" />
-			<ValidationMessage For="@(() => updateModule.Name)" />
-		</div>
-		<div class="mb-3">
-			<label for="abbreviation" class="form-label">Abbreviation</label>
-			<InputText id="abbreviation" class="form-control" @bind-Value="updateModule.Abbreviation" @oninput="() => ClearValidationMessage(nameof(updateModule.Abbreviation))" />
-			<ValidationMessage For="@(() => updateModule.Abbreviation)" />
-		</div>
-		<div class="mb-3">
-			<label for="description" class="form-label">Description</label>
-			<InputTextArea id="description" class="form-control" @bind-Value="updateModule.Description" @oninput="() => ClearValidationMessage(nameof(updateModule.Description))" />
-			<ValidationMessage For="@(() => updateModule.Description)" />
-		</div>
-		<div class="mb-3">
-			<label for="iconUrl" class="form-label">Icon URL</label>
-			<InputText id="iconUrl" class="form-control" @bind-Value="updateModule.IconUrl" @oninput="() => ClearValidationMessage(nameof(updateModule.IconUrl))" />
-			<ValidationMessage For="@(() => updateModule.IconUrl)" />
-		</div>
+						<MudItem md="12" Style="width:100%">
+							<MudTextField Label="Name"
+										  Variant="Variant.Text"
+										  InputType="InputType.Text"
+										  For="@(() => updateModule.Name)"
+										  @bind-Value="updateModule.Name"
+										  TextChanged="() => ClearValidationMessage(nameof(updateModule.Name))" />
+						</MudItem>
 
-		<div class="mb-3">
-			<label for="abbreviation" class="form-label">Friendly Id</label>
-			<InputText id="abbreviation" class="form-control" @bind-Value="updateModule.FriendlyId" @oninput="() => ClearValidationMessage(nameof(updateModule.FriendlyId))" />
-			<ValidationMessage For="@(() => updateModule.FriendlyId)" />
-		</div>
+						<MudItem md="12" Style="width:100%">
+							<MudTextField T="string" MaxLines=3 Lines=3 Label="Description"
+										  Variant="Variant.Text"
+										  InputType="InputType.Text"
+										  For="@(() => updateModule.Description)"
+										  @bind-Value="updateModule.Description"
+										  TextChanged="() => ClearValidationMessage(nameof(updateModule.Description))" />
+						</MudItem>
 
-		<div class="row g-3">
-			<div class="col">
-				<div class="mb-3 form-check form-switch">
-					<InputCheckbox id="IsPartOfMenu" class="form-check-input" role="switch" @bind-Value="updateModule.IsPartOfMenu" @onchange="() => ClearValidationMessage(nameof(updateModule.IsPartOfMenu))" />
-					<label for="IsPartOfMenu" class="form-label form-check-label">Show in Main Menu</label>
-				</div>
-			</div>
-			<div class="col">
-				<div class="mb-3 form-check form-switch">
-					<InputCheckbox id="isActive" class="form-check-input" role="switch" disabled @bind-Value="updateModule.IsActive" @onchange="() => ClearValidationMessage(nameof(updateModule.IsActive))" />
-					<label for="isActive" class="form-label form-check-label">Is Active</label>
-				</div>
-			</div>
-		</div>
+						<MudItem md="6" Style="width:100%">
+							<MudTextField Label="Abbreviation"
+										  Variant="Variant.Text"
+										  InputType="InputType.Text"
+										  For="@(() => updateModule.Abbreviation)"
+										  @bind-Value="updateModule.Abbreviation"
+										  TextChanged="() => ClearValidationMessage(nameof(updateModule.Abbreviation))" />
+						</MudItem>
+						<MudItem md="6" Style="width:100%">
+							<MudTextField Label="Friendly Id"
+										  Variant="Variant.Text"
+										  InputType="InputType.Text"
+										  For="@(() => updateModule.FriendlyId)"
+										  @bind-Value="updateModule.FriendlyId"
+										  TextChanged="() => ClearValidationMessage(nameof(updateModule.FriendlyId))" />
+						</MudItem>
 
-		<button type="button" class="btn btn-primary" @onclick="() => HandleSubmit()">Save</button>
-		<button type="button" class="btn btn-secondary" @onclick="() => CancelUpdateAsync()">Cancel</button>
+						<MudItem md="12" Style="width:100%">
+							<MudTextField Label="Icon Url"
+										  Variant="Variant.Text"
+										  InputType="InputType.Url"
+										  For="@(() => updateModule.IconUrl)"
+										  @bind-Value="updateModule.IconUrl"
+										  TextChanged="() => ClearValidationMessage(nameof(updateModule.IconUrl))" />
+						</MudItem>
+
+						<MudItem md="6" Style="width:100%">
+							<MudSwitch Label="Is Part of Menu"
+									   Color="Color.Info"
+									   UncheckedColor="Color.Warning"
+									   @bind-Value="updateModule.IsPartOfMenu" />
+						</MudItem>
+
+						<MudItem md="6" Style="width:100%">
+							<MudSwitch Label="Is Active"
+									   Disabled="true"
+									   Color="Color.Info"
+									   UncheckedColor="Color.Warning"
+									   @bind-Value="updateModule.IsActive" />
+						</MudItem>
+
+					</MudGrid>
+				</MudPaper>
+			</MudItem>
+			<MudItem md="12" Style="text-align:right">
+
+				<MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="HandleCancelAsync">Cancel</MudButton>
+
+				<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" OnClick="HandleSubmitAsync">Update</MudButton>
+
+			</MudItem>
+
+
+			@if (!string.IsNullOrEmpty(_error))
+			{
+				<MudItem md="12">
+					<div class="alert alert-danger alert-dismissible fade show mt-2 mb-0" role="alert">
+						<strong>Hey, an error happened!</strong>
+						@_error
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				</MudItem>
+			}
+
+
+		</MudGrid>
+
 	</EditForm>
 
 }

@@ -14,8 +14,7 @@ public class CreateModuleCommandValidator : AbstractValidator<CreateModuleComman
 		RuleFor(p => p.Name).NotEmpty().MaximumLength(100);
 		RuleFor(p => p.Abbreviation).NotEmpty().MaximumLength(25);
 		RuleFor(p => p.Description).NotEmpty();
-		RuleFor(p => p.IconUrl).NotEmpty();
-		RuleFor(p => p.FriendlyId).NotEmpty().NotEmpty().MaximumLength(25);
+		RuleFor(p => p.FriendlyId).NotEmpty().MaximumLength(25);
 	}
 
 }
