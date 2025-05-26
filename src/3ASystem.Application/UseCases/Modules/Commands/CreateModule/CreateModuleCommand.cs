@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace _3ASystem.Application.UseCases.Modules.Commands.CreateModule;
-public sealed class CreateModuleCommand : ICommand<ModuleResponse>
+public sealed class CreateModuleCommand : ICommand<ModuleDetailedResponse>
 {
 	public Guid ApplicationId { get; set; } = Guid.Empty;
 	public string Name { get; set; } = string.Empty;

@@ -6,16 +6,13 @@ using System.Threading.Tasks;
 
 namespace _3ASystem.Application.UseCases.Applications.Responses;
 
-public sealed class ApplicationResponse
+public sealed record ApplicationResponse //Application Compact Response
 {
 	public Guid Id { get; init; }
 	public string Name { get; init; } = string.Empty;
 	public string Abbreviation { get; init; } = string.Empty;
-	public string Description { get; init; } = string.Empty;
 	public string IconUrl { get; init; } = string.Empty;
-	public Guid Hash { get; init; }
 	public bool IsActive { get; init; } = true;
 	public string FriendlyId { get; init; } = string.Empty;
-	public DateTime CreatedAt { get; init; } = default!;
-	public DateTime LastUpdatedAt { get; init; } = default!;
+
 }

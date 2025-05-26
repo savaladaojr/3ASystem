@@ -6,7 +6,7 @@ using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.UseCases.Modules.Queries.GetModules;
 
-public class GetModulesHandler : IQueryHandler<GetModulesQuery, List<ModuleCResponse>>
+public class GetModulesHandler : IQueryHandler<GetModulesQuery, List<ModuleResponse>>
 {
 	private readonly IModuleRepository _moduleRepository;
 
@@ -15,12 +15,12 @@ public class GetModulesHandler : IQueryHandler<GetModulesQuery, List<ModuleCResp
 		_moduleRepository = moduleRepository;
 	}
 
-	public async Task<Result<List<ModuleCResponse>>> Handle(GetModulesQuery request, CancellationToken cancellationToken)
+	public async Task<Result<List<ModuleResponse>>> Handle(GetModulesQuery request, CancellationToken cancellationToken)
 	{
 		var modules = await _moduleRepository.GetAllAsync();
 
 		var finalResult = modules.Select(app =>
-			new ModuleCResponse
+			new ModuleResponse
 			{
 				Id = app.Id.Value,
 				Name = app.Name,

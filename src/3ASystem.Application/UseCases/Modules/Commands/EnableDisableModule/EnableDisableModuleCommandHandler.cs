@@ -9,7 +9,7 @@ using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.UseCases.Modules.Commands.EnableDisableModule;
 
-public sealed class EnableDisableModuleCommandHandler : ICommandHandler<EnableDisableModuleCommand, ModuleResponse>
+public sealed class EnableDisableModuleCommandHandler : ICommandHandler<EnableDisableModuleCommand, ModuleDetailedResponse>
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IModuleRepository _moduleRepository;
@@ -20,7 +20,7 @@ public sealed class EnableDisableModuleCommandHandler : ICommandHandler<EnableDi
 		_moduleRepository = moduleRepository;
 	}
 
-	public async Task<Result<ModuleResponse>> Handle(EnableDisableModuleCommand request, CancellationToken cancellationToken)
+	public async Task<Result<ModuleDetailedResponse>> Handle(EnableDisableModuleCommand request, CancellationToken cancellationToken)
 	{
 		var moduleId = new ModuleId(request.Id);
 
@@ -28,7 +28,7 @@ public sealed class EnableDisableModuleCommandHandler : ICommandHandler<EnableDi
 
 
 		if (module is null)
-			return Result.Failure<ModuleResponse>(ModuleErrors.NotFound(moduleId));
+			return Result.Failure<ModuleDetailedResponse>(ModuleErrors.NotFound(moduleId));
 
 		//handle disable/enable
 		if (module.IsActive)
@@ -48,7 +48,7 @@ public sealed class EnableDisableModuleCommandHandler : ICommandHandler<EnableDi
 
 
 		//Return updated module
-		var finalResult = new ModuleResponse
+		var finalResult = new ModuleDetailedResponse
 		{
 			Id = module.Id.Value,
 			ApplicationId = module.ApplicationId.Value,

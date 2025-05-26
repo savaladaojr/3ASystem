@@ -7,7 +7,7 @@ using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.UseCases.Applications.Commands.EnableDisableApplication;
 
-public sealed class EnableDisableApplicationCommandHandler : ICommandHandler<EnableDisableApplicationCommand, ApplicationResponse>
+public sealed class EnableDisableApplicationCommandHandler : ICommandHandler<EnableDisableApplicationCommand, ApplicationDetailedResponse>
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IAppRepository _appRepository;
@@ -18,7 +18,7 @@ public sealed class EnableDisableApplicationCommandHandler : ICommandHandler<Ena
 		_appRepository = appRepository;
 	}
 
-	public async Task<Result<ApplicationResponse>> Handle(EnableDisableApplicationCommand request, CancellationToken cancellationToken)
+	public async Task<Result<ApplicationDetailedResponse>> Handle(EnableDisableApplicationCommand request, CancellationToken cancellationToken)
 	{
 		var appId = new AppId(request.Id);
 
@@ -26,7 +26,7 @@ public sealed class EnableDisableApplicationCommandHandler : ICommandHandler<Ena
 
 
 		if (app is null)
-			return Result.Failure<ApplicationResponse>(AppErrors.NotFound(appId));
+			return Result.Failure<ApplicationDetailedResponse>(AppErrors.NotFound(appId));
 
 		//handle disable/enable
 		if (app.IsActive)
@@ -46,7 +46,7 @@ public sealed class EnableDisableApplicationCommandHandler : ICommandHandler<Ena
 
 
 		//Return updated app
-		var finalResult = new ApplicationResponse()
+		var finalResult = new ApplicationDetailedResponse()
 		{
 			Id = app.Id.Value,
 			Name = app.Name,

@@ -27,7 +27,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 		[Inject]
 		public ISnackbar Snackbar { get; set; } = default!;
 
-		private List<ApplicationCResponse>? _records = [];
+		private List<ApplicationResponse>? _records = [];
 
 		private string _error = string.Empty;
 		private bool isLoading = true;

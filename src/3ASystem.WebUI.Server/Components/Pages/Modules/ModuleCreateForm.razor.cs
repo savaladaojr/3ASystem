@@ -15,7 +15,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 		[Parameter] public EventCallback OnCancelClick { get; set; }
 
 		[Parameter]
-		public List<ApplicationCResponse> ListOfApplications { get; set; } = default!;
+		public List<ApplicationResponse> ListOfApplications { get; set; } = default!;
 
 		[Inject]
 		public IMediator Mediator { get; set; } = default!;

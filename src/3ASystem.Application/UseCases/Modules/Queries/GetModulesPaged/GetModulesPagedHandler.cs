@@ -6,7 +6,7 @@ using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.UseCases.Modules.Queries.GetModulesPaged;
 
-public class GetModulesPagedHandler : IQueryHandler<GetModulesPagedQuery, PagedList<ModuleCResponse>>
+public class GetModulesPagedHandler : IQueryHandler<GetModulesPagedQuery, PagedList<ModuleResponse>>
 {
 	private readonly IModuleRepository _moduleRepository;
 
@@ -15,7 +15,7 @@ public class GetModulesPagedHandler : IQueryHandler<GetModulesPagedQuery, PagedL
 		_moduleRepository = moduleRepository;
 	}
 
-	public async Task<Result<PagedList<ModuleCResponse>>> Handle(GetModulesPagedQuery request, CancellationToken cancellationToken)
+	public async Task<Result<PagedList<ModuleResponse>>> Handle(GetModulesPagedQuery request, CancellationToken cancellationToken)
 	{
 
 		var skip = (request.Page - 1) * request.PageSize;
@@ -25,14 +25,14 @@ public class GetModulesPagedHandler : IQueryHandler<GetModulesPagedQuery, PagedL
 
 		var modules = result.Records;
 
-		var finalResult = new PagedList<ModuleCResponse>()
+		var finalResult = new PagedList<ModuleResponse>()
 		{
 			ActualPage = request.Page,
 			TotalOfRecordsPerPage = request.PageSize,
 			TotalOfRecords = result.TotalOfRecords,
 
 			Records = [.. modules.Select(module =>
-			new ModuleCResponse
+			new ModuleResponse
 			{
 				Id = module.Id.Value,
 				Name = module.Name,
@@ -41,7 +41,7 @@ public class GetModulesPagedHandler : IQueryHandler<GetModulesPagedQuery, PagedL
 				FriendlyId = module.FriendlyId,
 				IsActive = module.IsActive,
 
-				Application = new ApplicationCResponse
+				Application = new ApplicationResponse
 				{
 					Id = module.Application!.Id.Value,
 					Name = module.Application.Name,

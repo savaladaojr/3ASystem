@@ -54,7 +54,7 @@ public class UpdateApplicationCommandHandlerTests
 		
 
 		// Act
-		Result<ApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
+		Result<ApplicationDetailedResponse> result = await handler.Handle(command, CancellationToken.None);
 
 		// Assert
 		result.IsFailure.Should().BeTrue();
@@ -101,7 +101,7 @@ public class UpdateApplicationCommandHandlerTests
 		_appRepository.GetByAbbreviationAsync(command.Abbreviation).Returns(existentApp);
 
 		// Act
-		Result<ApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
+		Result<ApplicationDetailedResponse> result = await handler.Handle(command, CancellationToken.None);
 
 		// Assert
 		await _unitOfWork.Received(0).SaveChangesAsync(Arg.Any<CancellationToken>());
@@ -152,7 +152,7 @@ public class UpdateApplicationCommandHandlerTests
 		_unitOfWork.SaveChangesAsync(Arg.Any<CancellationToken>()).Returns(1);
 
 		// Act
-		Result<ApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
+		Result<ApplicationDetailedResponse> result = await handler.Handle(command, CancellationToken.None);
 
 
 		// Assert
@@ -196,7 +196,7 @@ public class UpdateApplicationCommandHandlerTests
 		_unitOfWork.SaveChangesAsync(Arg.Any<CancellationToken>()).Returns(1);
 
 		// Act
-		Result<ApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
+		Result<ApplicationDetailedResponse> result = await handler.Handle(command, CancellationToken.None);
 
 
 		// Assert

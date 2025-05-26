@@ -2,7 +2,7 @@
 
 namespace _3ASystem.Application.UseCases.Modules.Responses;
 
-public sealed record ModuleCResponse
+public sealed record ModuleResponse
 {
 	public Guid Id { get; init; } = default!;
 	public Guid ApplicationId { get; init; } = default!;
@@ -12,6 +12,6 @@ public sealed record ModuleCResponse
 	public string FriendlyId { get; init; } = string.Empty;
 	public bool IsActive { get; init; } = true;
 
-	public ApplicationCResponse? Application { get; init; }
+	public ApplicationResponse? Application { get; init; }
 
 }

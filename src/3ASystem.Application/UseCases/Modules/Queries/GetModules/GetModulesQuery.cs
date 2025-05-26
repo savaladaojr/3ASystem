@@ -4,7 +4,7 @@ using _3ASystem.Application.UseCases.Modules.Responses;
 
 namespace _3ASystem.Application.UseCases.Modules.Queries.GetModules;
 
-public sealed class GetModulesQuery : IQuery<List<ModuleCResponse>>
+public sealed class GetModulesQuery : IQuery<List<ModuleResponse>>
 { 
 
 }
