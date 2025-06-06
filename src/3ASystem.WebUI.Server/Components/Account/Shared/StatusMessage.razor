@@ -18,9 +18,9 @@
 
     protected override void OnInitialized()
     {
-        messageFromCookie = HttpContext.Request.Cookies[IdentityRedirectManager.StatusCookieName];
+        messageFromCookie = HttpContext?.Request.Cookies[IdentityRedirectManager.StatusCookieName] ?? string.Empty;
 
-        if (messageFromCookie is not null)
+        if (!string.IsNullOrEmpty(messageFromCookie))
         {
             HttpContext.Response.Cookies.Delete(IdentityRedirectManager.StatusCookieName);
         }

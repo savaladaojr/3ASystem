@@ -1,0 +1,58 @@
+﻿@using _3ASystem.WebUI.Server.Components.Account.Shared  
+@rendermode @(new InteractiveServerRenderMode(prerender: false))  
+
+<EditForm @ref="_frm" Model="Input" method="post" OnValidSubmit="UpdateUser">  
+	<DataAnnotationsValidator />  
+
+	<MudGrid>  
+		<MudItem md="12">  
+			<MudPaper Class="pa-4 pb-8 " Outlined="true">  
+				@* <StatusMessage Message="@Message" /> *@  
+
+				<MudGrid>  
+					<MudItem md="12">  
+						<MudStaticTextField For="@(() => Input.FullName)" @bind-Value="Input.FullName" Disabled="readoOnly"  
+											Label="Full Name" Placeholder="John Doe"  
+											UserAttributes="@(new() { { "autocomplete", "full-name" }, { "aria-required", "true" } })" />  
+					</MudItem>  
+					<MudItem md="7">  
+						<MudStaticTextField For="@(() => Input.Email)" @bind-Value="Input.Email" Disabled="IsEmailFieldDisabled"  
+											Label="Email" Placeholder="name@example.com"  
+											UserAttributes="@(new() { { "autocomplete", "username" }, { "aria-required", "true" } })" />  
+					</MudItem>  
+
+					<MudItem md="5">  
+						<MudStaticTextField @bind-Value="Input.PhoneNumber"  
+											For="@(() => Input.PhoneNumber)"  
+											Label="Phone Number"  
+											UserAttributes="@(new() { { "autocomplete", "tel-national" }, { "aria-required", "false" } })" />  
+					</MudItem>  
+
+					<MudItem md="6">  
+						<MudList T="string" ReadOnly="readoOnly"  
+							@bind-SelectedValues="Input.SelectedRoles"  
+							SelectionMode="SelectionMode.MultiSelection"  
+							CheckBoxColor="Color.Tertiary">  
+							<MudListSubheader>  
+								User roles  
+							</MudListSubheader>
+
+							<MudListItem Text="@USER_ROLE" Value="USER_ROLE" />  
+							<MudListItem Text="@ADMINISTRATION_ROLE" Value="ADMINISTRATION_ROLE" />  
+						</MudList>  
+					</MudItem>  
+				</MudGrid>  
+			</MudPaper>  
+
+		</MudItem>  
+
+		<MudItem md="12" Style="text-align:right">  
+			<MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="HandleCancelAsync">Cancel</MudButton>  
+
+			<MudStaticButton FormAction="FormAction.Submit" Variant="Variant.Filled" Color="Color.Primary">Update</MudStaticButton>  
+		</MudItem>  
+
+	</MudGrid>  
+
+</EditForm>  
+

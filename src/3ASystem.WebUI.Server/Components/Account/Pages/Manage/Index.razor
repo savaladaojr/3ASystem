@@ -5,6 +5,7 @@
 @using _3ASystem.WebUI.Server.Data
 
 @inject UserManager<ApplicationUser> UserManager
+@inject IUserStore<ApplicationUser> UserStore
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IdentityUserAccessor UserAccessor
 @inject IdentityRedirectManager RedirectManager
@@ -16,62 +17,90 @@
 <StatusMessage />
 
 <EditForm Model="Input" FormName="profile" OnValidSubmit="OnValidSubmitAsync" method="post">
-    <DataAnnotationsValidator />
+	<DataAnnotationsValidator />
 
-    <MudGrid>
-        <MudItem md="12">
-            <MudStaticTextField Value="@username" Label="Username" Disabled="true" Placeholder="Please choose your username." />
-        </MudItem>
-        <MudItem md="12">
-            <MudStaticTextField For="@(() => Input.PhoneNumber)" @bind-Value="Input.PhoneNumber"
-                                Label="Phone Number" HelperText="Please enter your phone number."
-                                UserAttributes="@(new() { { "autocomplete", "tel-national" } } )" />
-        </MudItem>
-        <MudItem md="12">
-            <MudStaticButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" FormAction="FormAction.Submit">Save</MudStaticButton>
-        </MudItem>
-    </MudGrid>
+	<MudGrid>
+		<MudItem md="12">
+			<MudStaticTextField Value="@userName" Label="Username" Disabled="true" Placeholder="Please choose your username." />
+		</MudItem>
+
+		<MudItem md="12">
+			<MudStaticTextField @bind-Value="Input.FullName"
+			For="@(() => Input.FullName)" 
+								Label="Full Name" Placeholder="John Doe"
+								UserAttributes="@(new() { { "autocomplete", "full-name" }, { "aria-required", "true" } })" />
+		</MudItem>
+
+		<MudItem md="12">
+			<MudStaticTextField @bind-Value="Input.PhoneNumber"
+								For="@(() => Input.PhoneNumber)"
+								Label="Phone Number" HelperText="Please enter your phone number."
+								UserAttributes="@(new() { { "autocomplete", "tel-national" }, { "aria-required", "false" } })" />
+		</MudItem>
+
+		<MudItem md="12">
+			<MudStaticButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" FormAction="FormAction.Submit">Save</MudStaticButton>
+		</MudItem>
+	</MudGrid>
 </EditForm>
 
 @code {
-    private ApplicationUser user = default!;
-    private string? username;
-    private string? phoneNumber;
 
-    [CascadingParameter]
-    private HttpContext HttpContext { get; set; } = default!;
+	private ApplicationUser user = default!;
 
-    [SupplyParameterFromForm]
-    private InputModel Input { get; set; } = new();
+	private string? fullName;
+	private string? userName;
+	private string? phoneNumber;
 
-    protected override async Task OnInitializedAsync()
-    {
-        user = await UserAccessor.GetRequiredUserAsync(HttpContext);
-        username = await UserManager.GetUserNameAsync(user);
-        phoneNumber = await UserManager.GetPhoneNumberAsync(user);
+	[CascadingParameter]
+	private HttpContext HttpContext { get; set; } = default!;
 
-        Input.PhoneNumber ??= phoneNumber;
-    }
+	[SupplyParameterFromForm]
+	private InputModel Input { get; set; } = new();
 
-    private async Task OnValidSubmitAsync()
-    {
-        if (Input.PhoneNumber != phoneNumber)
-        {
-            var setPhoneResult = await UserManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-            if (!setPhoneResult.Succeeded)
-            {
-                RedirectManager.RedirectToCurrentPageWithStatus("Error: Failed to set phone number.", HttpContext);
-            }
-        }
+	protected override async Task OnInitializedAsync()
+	{
+		user = await UserAccessor.GetRequiredUserAsync(HttpContext);
+		userName = await UserManager.GetUserNameAsync(user);
+		phoneNumber = await UserManager.GetPhoneNumberAsync(user);
 
-        await SignInManager.RefreshSignInAsync(user);
-        RedirectManager.RedirectToCurrentPageWithStatus("Your profile has been updated", HttpContext);
-    }
+		fullName = user.FullName;
 
-    private sealed class InputModel
-    {
-        [Phone]
-        [Display(Name = "Phone number")]
-        public string? PhoneNumber { get; set; }
-    }
+		Input.FullName ??= fullName;
+		Input.PhoneNumber ??= phoneNumber;
+	}
+
+	private async Task OnValidSubmitAsync()
+	{
+		if (Input.FullName == fullName && Input.PhoneNumber == phoneNumber)
+		{
+			RedirectManager.RedirectToCurrentPageWithStatus("No changes were made.", HttpContext);
+			return;
+		}
+
+		user.FullName = Input.FullName!;
+		user.PhoneNumber = Input.PhoneNumber;
+
+		var result = await UserStore.UpdateAsync(user, default);
+		if (!result.Succeeded)
+		{
+			RedirectManager.RedirectToCurrentPageWithStatus("Error: Failed to save the data.", HttpContext);
+		}
+
+		await SignInManager.RefreshSignInAsync(user);
+		RedirectManager.RedirectToCurrentPageWithStatus("Your profile has been updated", HttpContext);
+	}
+
+	private sealed class InputModel
+	{
+		[Display(Name = "Full name")]
+		[Required(ErrorMessage = "Full name is required.")]
+		public string? FullName { get; set; }
+
+
+		
+		[Display(Name = "Phone number")]
+		[RegularExpression("^(?!0+$)\\+(\\d{1,2})\\s?\\(?\\d{1,3}\\)?\\s?\\d{1,5}[\\s\\.\\-]?\\d{1,4}$", ErrorMessage = "Please enter valid phone number. Ex: +01 999 9999-9999")]
+		public string? PhoneNumber { get; set; }
+	}
 }

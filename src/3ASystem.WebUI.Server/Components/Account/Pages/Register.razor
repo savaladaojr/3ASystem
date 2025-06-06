@@ -1,5 +1,4 @@
-﻿@page "/Account/Register"
-@attribute [AllowAnonymous]
+﻿@* @page "/Account/Register" *@
 
 @using System.ComponentModel.DataAnnotations
 @using System.Text
@@ -30,6 +29,11 @@
 
             <MudGrid>
                 <MudItem md="12">
+                    <MudStaticTextField For="@(() => Input.FullName)" @bind-Value="Input.FullName"
+                                        Label="Full Name" Placeholder="John Doe"
+                                        UserAttributes="@(new() { { "autocomplete", "full-name" }, { "aria-required", "true" } })" />
+                </MudItem>
+                <MudItem md="12">
                     <MudStaticTextField For="@(() => Input.Email)" @bind-Value="Input.Email"
                                         Label="Email" Placeholder="name@example.com"
                                         UserAttributes="@(new() { { "autocomplete", "username" }, { "aria-required", "true" } } )" />
@@ -50,10 +54,6 @@
             </MudGrid>
         </EditForm>
     </MudItem>
-    <MudItem md="6">
-        <MudText Typo="Typo.body1" GutterBottom="true">Use another service to register.</MudText>
-        <ExternalLoginPicker />
-    </MudItem>
 </MudGrid>
 
 @code {
@@ -71,6 +71,7 @@
     {
         var user = CreateUser();
 
+        user.FullName = Input.FullName;
         await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
         var emailStore = GetEmailStore();
         await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -87,9 +88,13 @@
         var userId = await UserManager.GetUserIdAsync(user);
         var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
         var callbackUrl = NavigationManager.GetUriWithQueryParameters(
             NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
-            new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
+            new Dictionary<string, object?> { 
+                ["userId"] = userId, ["code"] = code,
+                ["returnUrl"] = ReturnUrl 
+            });
 
         await EmailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
 
@@ -126,15 +131,21 @@
         return (IUserEmailStore<ApplicationUser>)UserStore;
     }
 
+
     private sealed class InputModel
     {
+        [Required]
+        [Display(Name = "Full Name")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
+        public string FullName { get; set; } = "";
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; } = "";
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 8)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; } = "";

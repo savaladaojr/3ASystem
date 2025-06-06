@@ -80,10 +80,6 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 				{ nameof(ModalComponent.SubmitText), "Save"},
 				{ nameof(ModalComponent.ShowActionButtons), false }
 
-				/*{ nameof(ModalComponent.OnSubmit), EventCallback.Factory.Create(this, () => {
-					Console.WriteLine(3);
-					DialogService.Close(dlg, DialogResult.Cancel());
-				})}*/
 			};
 
 			parameters.Add(nameof(ModalComponent.Body), (RenderFragment)(builder =>

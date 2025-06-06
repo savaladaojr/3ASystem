@@ -1,0 +1,77 @@
+﻿@page "/Account/Users"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<PageTitle>Users</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Users</MudText>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" class="btn btn-success mb-3" OnClick="() => CreateUser()">
+	<MudIcon Icon="@Icons.Material.Filled.Add" Color="Color.Info" Class="mr-3"></MudIcon> New
+</MudButton>
+
+<MudTable Items="@_records" FixedHeader="true" Dense="true" Hover="true" Bordered="false" Striped="true" Loading="@isLoading" LoadingProgressColor="Color.Info" Style="width: 100%">
+	<ToolBarContent>
+		<MudText Typo="Typo.h6">List of Users</MudText>
+	</ToolBarContent>
+	<HeaderContent>
+		<MudTh Style="width: 8%; font-weight:bold;text-align:left;">Icon</MudTh>
+		<MudTh Style="width: 40%; font-weight:bold;text-align:left;">Full Name</MudTh>
+		<MudTh Style="width: 20%; font-weight:bold;text-align:left;">E-mail</MudTh>
+		<MudTh Style="width: 10%; font-weight:bold;text-align:center;">Confirmed</MudTh>
+		<MudTh Style="width: 22%; font-weight:bold;text-align:left;">Actions</MudTh>
+	</HeaderContent>
+	<RowTemplate>
+		<MudTd DataLabel="Icon">
+			<MudIcon Icon="@Icons.Material.Filled.Person" Color="Color.Default"></MudIcon>
+		</MudTd>
+		<MudTd DataLabel="Name">@context.FullName</MudTd>
+		<MudTd DataLabel="Abbreviation">@context.Email</MudTd>
+		<MudTd DataLabel="Email Confirmed" Style="text-align:center;">@context.EmailConfirmed</MudTd>
+		<MudTd>
+			@if (!context.EmailConfirmed)
+			{
+				<MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" @onclick="() => ResendConfirmationEmail(context.Id)" Class="mr-1">
+					<MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Tertiary" Title="Re-send Confirmation Email"></MudIcon>
+				</MudButton>
+			}
+
+			<MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="() => EditUser(context.Id)">
+				<MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Info" Title="Edit"></MudIcon>
+			</MudButton>
+
+			@if ((context.UserName != ADMIN_EMAIL) && (context.UserName != CurrentUser.Identity!.Name))
+			{
+				<MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="() => AskConfirmDelete(context.Id)">
+					<MudIcon Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Title="Delete"></MudIcon>
+				</MudButton>
+			}
+		</MudTd>
+	</RowTemplate>
+</MudTable>
+
+<MudGrid Class="mt-1">
+	@if (_records!.Any() && isLoading is false)
+	{
+
+		<MudItem md="4" Class="d-flex pl-md-8">
+			<MudText Typo="Typo.body2" GutterBottom="true" Style="font-weight:bold">Total Of Records:</MudText>&nbsp;
+			<MudText Typo="Typo.body2" GutterBottom="true">@_totalOfRecords</MudText>
+		</MudItem>
+
+		@* 	<MudItem md="8" Style="text-align:right" Class="pr-1">
+		<MudPagination Color="Color.Primary"
+						ShowFirstButton="@(_totalOfPages >= 10)"
+						ShowLastButton="@(_totalOfPages >= 10)"
+						Selected="_selectedPage"
+						Count="@_totalOfPages"
+						SelectedChanged="PageChanged" />
+		</MudItem> *@
+	}
+
+	else if (isLoading is false)
+	{
+		<MudItem md="4" Class="d-flex pl-md-8">
+			<MudText Typo="Typo.body2" GutterBottom="true" Style="font-weight:bold">No records found.</MudText>
+		</MudItem>
+	}
+</MudGrid>
