@@ -1,7 +1,15 @@
 ﻿@page "/Account/InvalidUser"
+@layout Layout.BlankLayout
+@attribute [AllowAnonymous]
 
 <PageTitle>Invalid user</PageTitle>
 
 <h3>Invalid user</h3>
 
-<StatusMessage />
+
+
+<MudContainer Class="mt-0">
+	<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Invalid user</MudText>
+
+	<StatusMessage />
+</MudContainer>

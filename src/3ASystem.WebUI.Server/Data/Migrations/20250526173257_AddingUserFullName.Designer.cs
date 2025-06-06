@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _3ASystem.WebUI.Server.Data;
 
@@ -11,9 +12,11 @@ using _3ASystem.WebUI.Server.Data;
 namespace _3ASystem.WebUI.Server.Migrations
 {
     [DbContext(typeof(BlazorAppDbContext))]
-    partial class BlazorAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250526173257_AddingUserFullName")]
+    partial class AddingUserFullName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

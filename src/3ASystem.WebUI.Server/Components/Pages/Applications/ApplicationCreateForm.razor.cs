@@ -8,7 +8,6 @@ using Microsoft.JSInterop;
 namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 {
 
-
 	public partial class ApplicationCreateForm : ComponentBase
 	{
 		// Define an EventCallback to notify the parent component

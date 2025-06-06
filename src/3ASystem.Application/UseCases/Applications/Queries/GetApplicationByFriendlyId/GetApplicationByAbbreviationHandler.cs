@@ -6,7 +6,7 @@ using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.UseCases.Applications.Queries.GetApplicationByFriendlyId;
 
-public class GetApplicationByFriendlyIdHandler : IQueryHandler<GetApplicationByFriendlyIdQuery, ApplicationResponse>
+public class GetApplicationByFriendlyIdHandler : IQueryHandler<GetApplicationByFriendlyIdQuery, ApplicationDetailedResponse>
 {
 	private readonly IAppRepository _appRepository;
 
@@ -15,15 +15,15 @@ public class GetApplicationByFriendlyIdHandler : IQueryHandler<GetApplicationByF
 		_appRepository = appRepository;
 	}
 
-	public async Task<Result<ApplicationResponse>> Handle(GetApplicationByFriendlyIdQuery request, CancellationToken cancellationToken)
+	public async Task<Result<ApplicationDetailedResponse>> Handle(GetApplicationByFriendlyIdQuery request, CancellationToken cancellationToken)
 	{
 		var application = await _appRepository.GetByFriendlyIdAsync(request.FriendlyId);
 
 		if (application is null)
-			return Result.Failure<ApplicationResponse>(AppErrors.NotFoundByAbbreviation);
+			return Result.Failure<ApplicationDetailedResponse>(AppErrors.NotFoundByAbbreviation);
 
 
-		var finalResult = new ApplicationResponse() { 
+		var finalResult = new ApplicationDetailedResponse() { 
 			Abbreviation = application.Abbreviation, 
 			Description = application.Description,
 			Hash = application.Hash, 

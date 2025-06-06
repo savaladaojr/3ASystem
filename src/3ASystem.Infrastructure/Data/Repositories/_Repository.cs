@@ -146,7 +146,10 @@ public abstract class _Repository<TEntity, TEntityId> : IRepository<TEntity, TEn
 	{
 		var count = await Entity.AsNoTracking().CountAsync();
 
-		var records = await Entity.AsNoTracking().OrderBy(ord => ord.CreatedAt).Skip(skip).Take(take).ToListAsync();
+		var records = await Entity.AsNoTracking()
+			.OrderBy(ord => ord.CreatedAt)
+			.Skip(skip).Take(take)
+			.ToListAsync();
 
 		var finalResult = new PagedResult<TEntity>
 		{

@@ -30,9 +30,9 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 		public ISnackbar Snackbar { get; set; } = default!;
 
 
-		private List<ApplicationCResponse>? _applications = new List<ApplicationCResponse>();
+		private List<ApplicationResponse>? _applications = new List<ApplicationResponse>();
 
-		private List<ModuleCResponse>? _records = [];
+		private List<ModuleResponse>? _records = [];
 
 		private string _error = string.Empty;
 		private bool isLoading = true;
@@ -167,7 +167,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 				builder.OpenComponent<ModuleUpdateForm>(0);
 				
 				builder.AddComponentParameter(1,
-					nameof(ModuleCreateForm.ListOfApplications),
+					nameof(ModuleUpdateForm.ListOfApplications),
 					_applications
 				);
 				

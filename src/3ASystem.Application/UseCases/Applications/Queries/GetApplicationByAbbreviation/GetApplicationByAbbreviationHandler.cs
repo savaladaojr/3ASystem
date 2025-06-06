@@ -6,7 +6,7 @@ using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.UseCases.Applications.Queries.GetApplicationByAbbreviation;
 
-public class GetApplicationByAbbreviationHandler : IQueryHandler<GetApplicationByAbbreviationQuery, ApplicationResponse>
+public class GetApplicationByAbbreviationHandler : IQueryHandler<GetApplicationByAbbreviationQuery, ApplicationDetailedResponse>
 {
 	private readonly IAppRepository _appRepository;
 
@@ -15,15 +15,15 @@ public class GetApplicationByAbbreviationHandler : IQueryHandler<GetApplicationB
 		_appRepository = appRepository;
 	}
 
-	public async Task<Result<ApplicationResponse>> Handle(GetApplicationByAbbreviationQuery request, CancellationToken cancellationToken)
+	public async Task<Result<ApplicationDetailedResponse>> Handle(GetApplicationByAbbreviationQuery request, CancellationToken cancellationToken)
 	{
 		var application = await _appRepository.GetByAbbreviationAsync(request.Abbreviation);
 
 		if (application is null)
-			return Result.Failure<ApplicationResponse>(AppErrors.NotFoundByAbbreviation);
+			return Result.Failure<ApplicationDetailedResponse>(AppErrors.NotFoundByAbbreviation);
 
 
-		var finalResult = new ApplicationResponse() { 
+		var finalResult = new ApplicationDetailedResponse() { 
 			Abbreviation = application.Abbreviation, 
 			Description = application.Description,
 			Hash = application.Hash, 

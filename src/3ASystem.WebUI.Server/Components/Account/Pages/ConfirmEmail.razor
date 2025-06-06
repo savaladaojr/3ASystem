@@ -1,4 +1,6 @@
 ﻿@page "/Account/ConfirmEmail"
+@layout Layout.BlankLayout
+@attribute [AllowAnonymous]
 
 @using System.Text
 @using Microsoft.AspNetCore.Identity
@@ -10,8 +12,12 @@
 
 <PageTitle>Confirm email</PageTitle>
 
-<h1>Confirm email</h1>
-<StatusMessage Message="@statusMessage" />
+<MudContainer Class="mt-0">
+    <MudText Typo="Typo.h1" Align="Align.Center" GutterBottom="true">Confirm email</MudText>
+
+    <StatusMessage Message="@statusMessage" />
+</MudContainer>
+
 
 @code {
     private string? statusMessage;

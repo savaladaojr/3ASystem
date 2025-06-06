@@ -1,6 +1,8 @@
-﻿namespace _3ASystem.Application.UseCases.Modules.Responses;
+﻿using _3ASystem.Application.UseCases.Applications.Responses;
 
-public sealed record ModuleCResponse
+namespace _3ASystem.Application.UseCases.Modules.Responses;
+
+public sealed record ModuleResponse
 {
 	public Guid Id { get; init; } = default!;
 	public Guid ApplicationId { get; init; } = default!;
@@ -9,5 +11,7 @@ public sealed record ModuleCResponse
 	public string IconUrl { get; init; } = string.Empty;
 	public string FriendlyId { get; init; } = string.Empty;
 	public bool IsActive { get; init; } = true;
+
+	public ApplicationResponse? Application { get; init; }
 
 }

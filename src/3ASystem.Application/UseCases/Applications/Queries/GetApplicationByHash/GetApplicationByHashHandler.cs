@@ -6,7 +6,7 @@ using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.UseCases.Applications.Queries.GetApplicationByHash;
 
-public class GetApplicationByHashHandler : IQueryHandler<GetApplicationByHashQuery, ApplicationResponse>
+public class GetApplicationByHashHandler : IQueryHandler<GetApplicationByHashQuery, ApplicationDetailedResponse>
 {
 	private readonly IAppRepository _appRepository;
 
@@ -15,15 +15,15 @@ public class GetApplicationByHashHandler : IQueryHandler<GetApplicationByHashQue
 		_appRepository = appRepository;
 	}
 
-	public async Task<Result<ApplicationResponse>> Handle(GetApplicationByHashQuery request, CancellationToken cancellationToken)
+	public async Task<Result<ApplicationDetailedResponse>> Handle(GetApplicationByHashQuery request, CancellationToken cancellationToken)
 	{
 		var application = await _appRepository.GetByHashAsync(request.Hash);
 
 		if (application is null)
-			return Result.Failure<ApplicationResponse>(AppErrors.NotFoundByHash);
+			return Result.Failure<ApplicationDetailedResponse>(AppErrors.NotFoundByHash);
 
 
-		var finalResult = new ApplicationResponse() { 
+		var finalResult = new ApplicationDetailedResponse() { 
 			Abbreviation = application.Abbreviation, 
 			Description = application.Description,
 			Hash = application.Hash, 

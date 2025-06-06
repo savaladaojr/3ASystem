@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace _3ASystem.Application.UseCases.Applications.Commands.UpdateApplication
 {
-	public sealed class UpdateApplicationCommand : ICommand<ApplicationResponse>
+	public sealed class UpdateApplicationCommand : ICommand<ApplicationDetailedResponse>
 	{
 		public Guid Id { get; set; } = default!;
 		public string Name { get; set; } = string.Empty;

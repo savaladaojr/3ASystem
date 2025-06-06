@@ -26,12 +26,21 @@ public static class BlazorAppDependenciesResolver
 			options.UseSqlServer(connectionString));
 		builder.AddDatabaseDeveloperPageExceptionFilter();
 
-		builder.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-			.AddEntityFrameworkStores<BlazorAppDbContext>()
-			.AddSignInManager()
-			.AddDefaultTokenProviders();
+		builder.AddIdentityCore<ApplicationUser>(options =>
+		{
+			options.SignIn.RequireConfirmedAccount = true;
 
-		builder.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+			options.Password.RequireDigit = true;
+			options.Password.RequireLowercase = true;
+			options.Password.RequireUppercase = true;
+			options.Password.RequireNonAlphanumeric = false;
+			options.Password.RequiredLength = 8;
+		}).AddRoles<IdentityRole>()
+		.AddEntityFrameworkStores<BlazorAppDbContext>()
+		.AddSignInManager()
+		.AddDefaultTokenProviders();
+
+		builder.AddSingleton<IEmailSender<ApplicationUser>, IdentityEmailSender>();
 
 
 		//Cookies

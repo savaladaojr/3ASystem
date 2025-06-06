@@ -33,7 +33,7 @@ public static class DependenciesResolver
 
 
 		//Email Service
-		services.AddScoped<IEmailService, EmailService>();
+		services.AddSingleton<IEmailService, EmailService>();
 
 
 

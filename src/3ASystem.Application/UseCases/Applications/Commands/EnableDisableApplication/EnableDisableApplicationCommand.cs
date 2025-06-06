@@ -3,7 +3,7 @@ using _3ASystem.Application.UseCases.Applications.Responses;
 
 namespace _3ASystem.Application.UseCases.Applications.Commands.EnableDisableApplication;
 
-public sealed class EnableDisableApplicationCommand : ICommand<ApplicationResponse>
+public sealed class EnableDisableApplicationCommand : ICommand<ApplicationDetailedResponse>
 {
 	public Guid Id { get; set; } = Guid.Empty;
 

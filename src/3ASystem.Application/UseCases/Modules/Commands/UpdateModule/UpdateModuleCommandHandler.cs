@@ -9,7 +9,7 @@ using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.UseCases.Modules.Commands.UpdateModule;
 
-public sealed class UpdateModuleCommandHandler : ICommandHandler<UpdateModuleCommand, ModuleResponse>
+public sealed class UpdateModuleCommandHandler : ICommandHandler<UpdateModuleCommand, ModuleDetailedResponse>
 {
 	private readonly IModuleRepository _moduleRepository;
 	private readonly IUnitOfWork _unitOfWork;
@@ -20,23 +20,23 @@ public sealed class UpdateModuleCommandHandler : ICommandHandler<UpdateModuleCom
 		_unitOfWork = unitOfWork;
 	}
 
-	public async Task<Result<ModuleResponse>> Handle(UpdateModuleCommand request, CancellationToken cancellationToken)
+	public async Task<Result<ModuleDetailedResponse>> Handle(UpdateModuleCommand request, CancellationToken cancellationToken)
 	{
 		var moduleId = new ModuleId(request.Id);
 		var module = await _moduleRepository.GetByIdAsync(moduleId);
 
 		if (module is null)
-			return Result.Failure<ModuleResponse>(ModuleErrors.NotFound(moduleId));
+			return Result.Failure<ModuleDetailedResponse>(ModuleErrors.NotFound(moduleId));
 
 		//Check if the Abbreviation is unique
 		var appAbbreviation = await _moduleRepository.GetByAbbreviationAsync(request.Abbreviation);
 		if ( appAbbreviation is not null && appAbbreviation.Id != module.Id)
-			return Result.Failure<ModuleResponse>(ModuleErrors.AbbreviationNotUnique);
+			return Result.Failure<ModuleDetailedResponse>(ModuleErrors.AbbreviationNotUnique);
 
 		//Check if the FriendlyID is unique
 		var appFriendlyId = await _moduleRepository.GetByFriendlyIdAsync(request.FriendlyId);
 		if (appFriendlyId is not null && appFriendlyId.Id != module.Id)
-			return Result.Failure<ModuleResponse>(ModuleErrors.FriendlyIdNotUnique);
+			return Result.Failure<ModuleDetailedResponse>(ModuleErrors.FriendlyIdNotUnique);
 
 		module.Update(request.Name, request.Abbreviation, request.Description, request.IconUrl, request.FriendlyId, request.IsPartOfMenu);
 
@@ -45,7 +45,7 @@ public sealed class UpdateModuleCommandHandler : ICommandHandler<UpdateModuleCom
 		_moduleRepository.Update(module);
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-		var finalResult = new ModuleResponse
+		var finalResult = new ModuleDetailedResponse
 		{
 			Id = module.Id.Value,
 			ApplicationId = module.ApplicationId.Value,

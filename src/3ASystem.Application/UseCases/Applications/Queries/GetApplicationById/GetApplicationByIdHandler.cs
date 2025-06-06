@@ -6,7 +6,7 @@ using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.UseCases.Applications.Queries.GetApplicationById;
 
-public class GetApplicationByIdHandler : IQueryHandler<GetApplicationByIdQuery, ApplicationResponse>
+public class GetApplicationByIdHandler : IQueryHandler<GetApplicationByIdQuery, ApplicationDetailedResponse>
 {
 	private readonly IAppRepository _appRepository;
 
@@ -15,7 +15,7 @@ public class GetApplicationByIdHandler : IQueryHandler<GetApplicationByIdQuery, 
 		_appRepository = appRepository;
 	}
 
-	public async Task<Result<ApplicationResponse>> Handle(GetApplicationByIdQuery request, CancellationToken cancellationToken)
+	public async Task<Result<ApplicationDetailedResponse>> Handle(GetApplicationByIdQuery request, CancellationToken cancellationToken)
 	{
 		var appId = new AppId(request.Id);
 
@@ -24,10 +24,10 @@ public class GetApplicationByIdHandler : IQueryHandler<GetApplicationByIdQuery, 
 
 		if (application is null)
 		{
-			return Result.Failure<ApplicationResponse>(AppErrors.NotFound(appId));
+			return Result.Failure<ApplicationDetailedResponse>(AppErrors.NotFound(appId));
 		}
 
-		var finalResult = new ApplicationResponse() { 
+		var finalResult = new ApplicationDetailedResponse() { 
 			Abbreviation = application.Abbreviation, 
 			Description = application.Description,
 			Hash = application.Hash, 

@@ -6,7 +6,7 @@ using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.UseCases.Modules.Queries.GetModuleById;
 
-public class GetModuleByIdHandler : IQueryHandler<GetModuleByIdQuery, ModuleResponse>
+public class GetModuleByIdHandler : IQueryHandler<GetModuleByIdQuery, ModuleDetailedResponse>
 {
 	private readonly IModuleRepository _moduleRepository;
 
@@ -15,7 +15,7 @@ public class GetModuleByIdHandler : IQueryHandler<GetModuleByIdQuery, ModuleResp
 		_moduleRepository = moduleRepository;
 	}
 
-	public async Task<Result<ModuleResponse>> Handle(GetModuleByIdQuery request, CancellationToken cancellationToken)
+	public async Task<Result<ModuleDetailedResponse>> Handle(GetModuleByIdQuery request, CancellationToken cancellationToken)
 	{
 		var moduleId = new ModuleId(request.Id);
 
@@ -24,10 +24,10 @@ public class GetModuleByIdHandler : IQueryHandler<GetModuleByIdQuery, ModuleResp
 
 		if (module is null)
 		{
-			return Result.Failure<ModuleResponse>(ModuleErrors.NotFound(moduleId));
+			return Result.Failure<ModuleDetailedResponse>(ModuleErrors.NotFound(moduleId));
 		}
 
-		var finalResult = new ModuleResponse()
+		var finalResult = new ModuleDetailedResponse()
 		{
 			Id = module.Id.Value,
 			ApplicationId = module.ApplicationId.Value,

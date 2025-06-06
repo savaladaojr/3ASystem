@@ -66,7 +66,7 @@ public class EnableDisableApplicationCommandHandlerTests
 		_appRepository.GetByIdAsync(Arg.Any<AppId>()).Returns(existentApp); //record found
 
 		// Act
-		Result<ApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
+		Result<ApplicationDetailedResponse> result = await handler.Handle(command, CancellationToken.None);
 
 		// Assert
 		result.IsFailure.Should().BeFalse(); //Assert.False(result.IsFailure);

@@ -5,7 +5,7 @@ using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.UseCases.Applications.Queries.GetApplicationsPaged;
 
-public class GetApplicationsPagedHandler : IQueryHandler<GetApplicationsPagedQuery, PagedList<ApplicationCResponse>>
+public class GetApplicationsPagedHandler : IQueryHandler<GetApplicationsPagedQuery, PagedList<ApplicationResponse>>
 {
 	private readonly IAppRepository _appRepository;
 
@@ -14,7 +14,7 @@ public class GetApplicationsPagedHandler : IQueryHandler<GetApplicationsPagedQue
 		_appRepository = appRepository;
 	}
 
-	public async Task<Result<PagedList<ApplicationCResponse>>> Handle(GetApplicationsPagedQuery request, CancellationToken cancellationToken)
+	public async Task<Result<PagedList<ApplicationResponse>>> Handle(GetApplicationsPagedQuery request, CancellationToken cancellationToken)
 	{
 
 		var skip = (request.Page - 1) * request.PageSize;
@@ -24,14 +24,14 @@ public class GetApplicationsPagedHandler : IQueryHandler<GetApplicationsPagedQue
 
 		var applications = result.Records;
 
-		var finalResult = new PagedList<ApplicationCResponse>()
+		var finalResult = new PagedList<ApplicationResponse>()
 		{
 			ActualPage = request.Page,
 			TotalOfRecordsPerPage = request.PageSize,
 			TotalOfRecords = result.TotalOfRecords,
 
 			Records = [.. applications.Select(app =>
-				new ApplicationCResponse
+				new ApplicationResponse
 				{
 					Id = app.Id.Value,
 					Name = app.Name,

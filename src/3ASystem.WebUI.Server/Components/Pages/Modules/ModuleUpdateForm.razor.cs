@@ -1,7 +1,4 @@
-﻿using _3ASystem.Application.UseCases.Applications.Commands.UpdateApplication;
-using _3ASystem.Application.UseCases.Applications.Queries.GetApplicationById;
-using _3ASystem.Application.UseCases.Applications.Responses;
-using _3ASystem.Application.UseCases.Modules.Commands.CreateModule;
+﻿using _3ASystem.Application.UseCases.Applications.Responses;
 using _3ASystem.Application.UseCases.Modules.Commands.UpdateModule;
 using _3ASystem.Application.UseCases.Modules.Queries.GetModuleById;
 using _3ASystem.Domain.Shared;
@@ -12,15 +9,14 @@ using Microsoft.JSInterop;
 
 namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 {
-
-
 	public partial class ModuleUpdateForm : ComponentBase
-	{       // Define an EventCallback to notify the parent component
-		[Parameter] public EventCallback OnSaveClickSuccess { get; set; }
+	{
+		// Define an EventCallback to notify the parent component
+		[Parameter] public EventCallback<string> OnSaveClickSuccess { get; set; }
 		[Parameter] public EventCallback OnCancelClick { get; set; }
 
 		[Parameter]
-		public List<ApplicationCResponse> ListOfApplications { get; set; } = default!;
+		public List<ApplicationResponse> ListOfApplications { get; set; } = default!;
 
 		[Inject]
 		public IMediator Mediator { get; set; } = default!;
@@ -45,16 +41,9 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 		protected override async Task OnInitializedAsync()
 		{
 			await Start();
-
 		}
 
-		public async Task Start(Guid id)
-		{
-			Id = id;
-			await Start();
-		}
-
-		private async Task Start()
+		public async Task<bool> Start()
 		{
 			// Send an event to MediatR
 			if (Id != Guid.Empty)
@@ -84,10 +73,20 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 				}
 			}
 
+			var task = await Task.FromResult(true);
+			return task;
 		}
 
-		private async Task HandleSubmit()
+		private async Task HandleCancelAsync()
 		{
+			// Call the parent method via the EventCallback
+			await OnCancelClick.InvokeAsync(null);
+		}
+
+		private async Task HandleSubmitAsync()
+		{
+			if (!IsValidSubmit()) return;
+
 			_isSubmitting = true;
 			_error = string.Empty;
 			_messageStore!.Clear();
@@ -96,10 +95,8 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 
 			if (result.IsSuccess)
 			{
-				//Navigation.NavigateTo("/applications");
-
 				// Call the parent method via the EventCallback
-				await OnSaveClickSuccess.InvokeAsync(null);
+				await OnSaveClickSuccess.InvokeAsync($"Module [{result.Value.Name}] successfully updated.");
 			}
 			else
 			{
@@ -122,12 +119,10 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Modules
 			_isSubmitting = false;
 		}
 
-		private async Task CancelUpdateAsync()
+		private bool IsValidSubmit()
 		{
-			//Navigation.NavigateTo("/applications");
-
-			// Call the parent method via the EventCallback
-			await OnCancelClick.InvokeAsync(null);
+			var valid = _editContext!.Validate();
+			return valid;
 		}
 
 		private void ClearValidationMessage(string fieldName)

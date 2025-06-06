@@ -27,7 +27,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 		[Inject]
 		public ISnackbar Snackbar { get; set; } = default!;
 
-		private List<ApplicationCResponse>? _records = [];
+		private List<ApplicationResponse>? _records = [];
 
 		private string _error = string.Empty;
 		private bool isLoading = true;
@@ -80,10 +80,6 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 				{ nameof(ModalComponent.SubmitText), "Save"},
 				{ nameof(ModalComponent.ShowActionButtons), false }
 
-				/*{ nameof(ModalComponent.OnSubmit), EventCallback.Factory.Create(this, () => {
-					Console.WriteLine(3);
-					DialogService.Close(dlg, DialogResult.Cancel());
-				})}*/
 			};
 
 			parameters.Add(nameof(ModalComponent.Body), (RenderFragment)(builder =>

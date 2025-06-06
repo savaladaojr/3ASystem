@@ -3,7 +3,7 @@ using _3ASystem.Application.UseCases.Modules.Responses;
 
 namespace _3ASystem.Application.UseCases.Modules.Commands.EnableDisableModule;
 
-public sealed class EnableDisableModuleCommand : ICommand<ModuleResponse>
+public sealed class EnableDisableModuleCommand : ICommand<ModuleDetailedResponse>
 {
 	public Guid Id { get; set; } = Guid.Empty;
 

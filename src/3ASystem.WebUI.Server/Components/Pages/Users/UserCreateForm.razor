@@ -1,0 +1,65 @@
+﻿@using _3ASystem.WebUI.Server.Components.Account.Shared
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<EditForm @ref="_frm" Model="Input" method="post" OnValidSubmit="RegisterUser" >
+	<DataAnnotationsValidator /> 
+
+	<MudGrid>
+		<MudItem md="12">
+			<MudPaper Class="pa-4 pb-8 " Outlined="true">
+				@* <StatusMessage Message="@Message" /> *@
+
+				<MudGrid>
+					<MudItem md="12">
+						<MudStaticTextField For="@(() => Input.FullName)" @bind-Value="Input.FullName"
+											Label="Full Name" Placeholder="John Doe"
+											UserAttributes="@(new() { { "autocomplete", "full-name" }, { "aria-required", "true" } })" />
+					</MudItem>
+					<MudItem md="8">
+						<MudStaticTextField For="@(() => Input.Email)" @bind-Value="Input.Email"
+											Label="Email" Placeholder="name@example.com"
+											UserAttributes="@(new() { { "autocomplete", "username" }, { "aria-required", "true" } })" />
+					</MudItem>
+
+					<MudItem md="4">
+						<MudStaticTextField @bind-Value="Input.PhoneNumber"
+											For="@(() => Input.PhoneNumber)"
+											Label="Phone Number"
+											UserAttributes="@(new() { { "autocomplete", "tel-national" }, { "aria-required", "false" } })" />
+					</MudItem>
+
+					<MudItem md="6">
+						<MudStaticTextField For="@(() => Input.Password)" @bind-Value="Input.Password"
+											Label="Initial Password" InputType="InputType.Password" Placeholder="password"
+											UserAttributes="@(new() { { "autocomplete", "new-password" }, { "aria-required", "true" } })" />
+					</MudItem>
+					<MudItem md="6">
+						<MudStaticTextField For="@(() => Input.ConfirmPassword)" @bind-Value="Input.ConfirmPassword"
+											Label="Confirm Initial Password" InputType="InputType.Password" Placeholder="confirm password"
+											UserAttributes="@(new() { { "autocomplete", "new-password" }, { "aria-required", "true" } })" />
+					</MudItem>
+				</MudGrid>
+			</MudPaper>
+
+		</MudItem>
+
+@* 		<MudItem md="9">
+			@if (!string.IsNullOrEmpty(Message))
+			{
+				var severity = Message.StartsWith("Error") ? Severity.Error : Severity.Success;
+
+				<MudAlert Variant="Variant.Outlined" Severity="@severity">@Message</MudAlert>
+			}
+		</MudItem> *@
+
+		<MudItem md="12" Style="text-align:right">
+
+			<MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="HandleCancelAsync">Cancel</MudButton>
+
+			<MudStaticButton FormAction="FormAction.Submit" Variant="Variant.Filled" Color="Color.Primary">Register</MudStaticButton>
+		</MudItem>
+
+	</MudGrid>
+
+</EditForm>
+

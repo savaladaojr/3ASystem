@@ -49,7 +49,7 @@ public class QueriesApplicationTests
 
 		var command = new GetApplicationsQuery();
 		// Act
-		Result<List<ApplicationCResponse>> result = await handler.Handle(command, CancellationToken.None);
+		Result<List<ApplicationResponse>> result = await handler.Handle(command, CancellationToken.None);
 
 		// Assert
 		result.IsFailure.Should().BeFalse(); //Assert.False(result.IsFailure);
@@ -71,13 +71,13 @@ public class QueriesApplicationTests
 
 		var command = new GetApplicationByIdQuery() { Id = Guid.NewGuid() };
 		// Act
-		Result<ApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
+		Result<ApplicationDetailedResponse> result = await handler.Handle(command, CancellationToken.None);
 
 		// Assert
 		result.IsFailure.Should().BeFalse(); //Assert.False(result.IsFailure);
 		result.IsSuccess.Should().BeTrue(); //Assert.True(result.IsSuccess);
 		result.Value.Should().NotBeNull(); //Assert.NotNull(result.Value);
-		result.Value.Should().BeOfType<ApplicationResponse>(); //Assert.IsType<List<ApplicationResponse>>(result.Value);
+		result.Value.Should().BeOfType<ApplicationDetailedResponse>(); //Assert.IsType<List<ApplicationResponse>>(result.Value);
 
 		//check for repository create method & unit of work save changes async method
 		await _appRepository.Received(1).GetByIdAsync(Arg.Any<AppId>());
@@ -93,13 +93,13 @@ public class QueriesApplicationTests
 
 		var command = new GetApplicationByHashQuery() { Hash = Guid.NewGuid() };
 		// Act
-		Result<ApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
+		Result<ApplicationDetailedResponse> result = await handler.Handle(command, CancellationToken.None);
 
 		// Assert
 		result.IsFailure.Should().BeFalse(); //Assert.False(result.IsFailure);
 		result.IsSuccess.Should().BeTrue(); //Assert.True(result.IsSuccess);
 		result.Value.Should().NotBeNull(); //Assert.NotNull(result.Value);
-		result.Value.Should().BeOfType<ApplicationResponse>(); //Assert.IsType<List<ApplicationResponse>>(result.Value);
+		result.Value.Should().BeOfType<ApplicationDetailedResponse>(); //Assert.IsType<List<ApplicationResponse>>(result.Value);
 
 		//check for repository create method & unit of work save changes async method
 		await _appRepository.Received(1).GetByHashAsync(Arg.Any<Guid>());
@@ -115,13 +115,13 @@ public class QueriesApplicationTests
 
 		var command = new GetApplicationByFriendlyIdQuery() { FriendlyId = "AnyFriendlyId" };
 		// Act
-		Result<ApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
+		Result<ApplicationDetailedResponse> result = await handler.Handle(command, CancellationToken.None);
 
 		// Assert
 		result.IsFailure.Should().BeFalse(); //Assert.False(result.IsFailure);
 		result.IsSuccess.Should().BeTrue(); //Assert.True(result.IsSuccess);
 		result.Value.Should().NotBeNull(); //Assert.NotNull(result.Value);
-		result.Value.Should().BeOfType<ApplicationResponse>(); //Assert.IsType<List<ApplicationResponse>>(result.Value);
+		result.Value.Should().BeOfType<ApplicationDetailedResponse>(); //Assert.IsType<List<ApplicationResponse>>(result.Value);
 
 		//check for repository create method & unit of work save changes async method
 		await _appRepository.Received(1).GetByFriendlyIdAsync(Arg.Any<string>());
@@ -137,13 +137,13 @@ public class QueriesApplicationTests
 
 		var command = new GetApplicationByAbbreviationQuery() { Abbreviation = "AnyAbbreviation" };
 		// Act
-		Result<ApplicationResponse> result = await handler.Handle(command, CancellationToken.None);
+		Result<ApplicationDetailedResponse> result = await handler.Handle(command, CancellationToken.None);
 
 		// Assert
 		result.IsFailure.Should().BeFalse(); //Assert.False(result.IsFailure);
 		result.IsSuccess.Should().BeTrue(); //Assert.True(result.IsSuccess);
 		result.Value.Should().NotBeNull(); //Assert.NotNull(result.Value);
-		result.Value.Should().BeOfType<ApplicationResponse>(); //Assert.IsType<List<ApplicationResponse>>(result.Value);
+		result.Value.Should().BeOfType<ApplicationDetailedResponse>(); //Assert.IsType<List<ApplicationResponse>>(result.Value);
 
 		//check for repository create method & unit of work save changes async method
 		await _appRepository.Received(1).GetByAbbreviationAsync(Arg.Any<string>());

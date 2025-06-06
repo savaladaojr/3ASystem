@@ -7,7 +7,7 @@ using _3ASystem.Domain.Entities.Modules;
 using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.UseCases.Modules.Commands.CreateModule;
-public class CreateModuleCommandHandler : ICommandHandler<CreateModuleCommand, ModuleResponse>
+public class CreateModuleCommandHandler : ICommandHandler<CreateModuleCommand, ModuleDetailedResponse>
 {
 	private readonly IModuleRepository _moduleRepository;
 	private readonly IUnitOfWork _unitOfWork;
@@ -18,17 +18,17 @@ public class CreateModuleCommandHandler : ICommandHandler<CreateModuleCommand, M
 		_unitOfWork = unitOfWork;
 	}
 
-	public async Task<Result<ModuleResponse>> Handle(CreateModuleCommand request, CancellationToken cancellationToken)
+	public async Task<Result<ModuleDetailedResponse>> Handle(CreateModuleCommand request, CancellationToken cancellationToken)
 	{
 		//Check if the Abbreviation is unique
 		var appAbbreviation = await _moduleRepository.GetByAbbreviationAsync(request.Abbreviation);
 		if (appAbbreviation is not null)
-			return Result.Failure<ModuleResponse>(AppErrors.AbbreviationNotUnique);
+			return Result.Failure<ModuleDetailedResponse>(AppErrors.AbbreviationNotUnique);
 
 		//Check if the FriendlyID is unique
 		var appFriendlyId = await _moduleRepository.GetByFriendlyIdAsync(request.FriendlyId);
 		if (appFriendlyId is not null)
-			return Result.Failure<ModuleResponse>(AppErrors.FriendlyIdNotUnique);
+			return Result.Failure<ModuleDetailedResponse>(AppErrors.FriendlyIdNotUnique);
 
 		var appId = new AppId(request.ApplicationId);
 
@@ -39,7 +39,7 @@ public class CreateModuleCommandHandler : ICommandHandler<CreateModuleCommand, M
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
 
-		var finalResult = new ModuleResponse
+		var finalResult = new ModuleDetailedResponse
 		{
 			Id = module.Id.Value,
 			ApplicationId = module.ApplicationId.Value,

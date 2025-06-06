@@ -3,7 +3,7 @@ using _3ASystem.Application.UseCases.Modules.Responses;
 
 namespace _3ASystem.Application.UseCases.Modules.Commands.UpdateModule;
 
-public sealed class UpdateModuleCommand : ICommand<ModuleResponse>
+public sealed class UpdateModuleCommand : ICommand<ModuleDetailedResponse>
 {
 	public Guid Id { get; set; } = Guid.Empty;
 	public Guid ApplicationId { get; set; } = Guid.Empty;

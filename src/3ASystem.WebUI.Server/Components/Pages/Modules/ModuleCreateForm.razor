@@ -10,59 +10,65 @@
 			<MudPaper Class="pa-4 pb-8 " Outlined="true">
 				<MudGrid>
 					<MudItem md="12" Style="width:100%">
-						<MudSelect T="Guid" @bind-Value="createModule.ApplicationId" Label="Select an Application" Placeholder="Please Select an Application" Dense="true" Modal="true">
-							@foreach (var application in ListOfApplications
+						<MudSelect T="Guid"
+								   @bind-Value="createModule.ApplicationId"
+								   For="@(() => createModule.ApplicationId)"
+								   Label="Application"
+								   Placeholder="Please Select an Application"
+								   Dense="true"
+								   Modal="true"
+								   SelectedValuesChanged="() => ClearValidationMessage(nameof(createModule.ApplicationId))">
+
+							<MudSelectItem Value="Guid.Empty">&nbsp;</MudSelectItem>
+							@foreach (var application in ListOfApplications.OrderBy(s => s.Name))
 							{
 								<MudSelectItem Value="@application.Id">@application.Name</MudSelectItem>
 							}
 						</MudSelect>
-						<ValidationMessage For="@(() => createModule.ApplicationId)" />
 					</MudItem>
 
 					<MudItem md="12" Style="width:100%">
 						<MudTextField Label="Name"
 									  Variant="Variant.Text"
 									  InputType="InputType.Text"
+									  For="@(() => createModule.Name)"
 									  @bind-Value="createModule.Name"
 									  TextChanged="() => ClearValidationMessage(nameof(createModule.Name))" />
-						<ValidationMessage For="@(() => createModule.Name)" />
 					</MudItem>
 
 					<MudItem md="12" Style="width:100%">
 						<MudTextField T="string" MaxLines=3 Lines=3 Label="Description"
 									  Variant="Variant.Text"
 									  InputType="InputType.Text"
+									  For="@(() => createModule.Description)"
 									  @bind-Value="createModule.Description"
 									  TextChanged="() => ClearValidationMessage(nameof(createModule.Description))" />
-						<ValidationMessage For="@(() => createModule.Description)" />
 					</MudItem>
 
 					<MudItem md="6" Style="width:100%">
 						<MudTextField Label="Abbreviation"
 									  Variant="Variant.Text"
 									  InputType="InputType.Text"
+									  For="@(() => createModule.Abbreviation)"
 									  @bind-Value="createModule.Abbreviation"
 									  TextChanged="() => ClearValidationMessage(nameof(createModule.Abbreviation))" />
-
-						<ValidationMessage For="@(() => createModule.Abbreviation)" />
 					</MudItem>
 					<MudItem md="6" Style="width:100%">
 						<MudTextField Label="Friendly Id"
 									  Variant="Variant.Text"
 									  InputType="InputType.Text"
+									  For="@(() => createModule.FriendlyId)"
 									  @bind-Value="createModule.FriendlyId"
 									  TextChanged="() => ClearValidationMessage(nameof(createModule.FriendlyId))" />
-
-						<ValidationMessage For="@(() => createModule.FriendlyId)" />
 					</MudItem>
 
 					<MudItem md="12" Style="width:100%">
 						<MudTextField Label="Icon Url"
 									  Variant="Variant.Text"
 									  InputType="InputType.Url"
+									  For="@(() => createModule.IconUrl)"
 									  @bind-Value="createModule.IconUrl"
 									  TextChanged="() => ClearValidationMessage(nameof(createModule.IconUrl))" />
-						<ValidationMessage For="@(() => createModule.IconUrl)" />
 					</MudItem>
 				</MudGrid>
 			</MudPaper>

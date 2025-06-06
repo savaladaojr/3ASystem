@@ -3,16 +3,30 @@
 @inject NavigationManager NavigationManager
 
 <MudNavMenu>
-	<MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-
-	<MudNavLink Href="applications" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ViewList">Applications</MudNavLink>
-	<MudNavLink Href="modules" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.FormatListBulleted">Modules</MudNavLink>
-	<MudNavLink Href="Account/Register" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person">New User</MudNavLink>
-
-	<MudDivider Class="my-3" />
 
 	<AuthorizeView>
 		<Authorized>
+
+			<MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+
+			<MudNavGroup Title="Basic" Expanded="true">
+				<MudNavLink Href="applications" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Apps">Applications</MudNavLink>
+				<MudNavLink Href="modules" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ViewModule">Modules</MudNavLink>
+				<MudNavLink Href="funcionalities" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Functions">Funcionalities</MudNavLink>
+			</MudNavGroup>
+
+			<MudNavGroup Title="Security" Expanded="true">
+				<MudNavLink Href="applications" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ViewList">Apps' Roles</MudNavLink>
+				<MudNavLink Href="modules" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.FormatListBulleted">Roles' Permissions</MudNavLink>
+			</MudNavGroup>
+
+			<MudNavGroup Title="Configuration" Expanded="true">
+				<MudNavLink Href="Account/Users" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People">Users</MudNavLink>
+				<MudNavLink Href="parameters" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Settings">Parameters</MudNavLink>
+			</MudNavGroup>
+
+			<MudDivider Class="my-3" />
+
 			<MudNavLink Href="Account/Manage" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person">@context.User.Identity?.Name</MudNavLink>
 			<MudDivider Class="my-3" />
 			<form action="Account/Logout" method="post">
