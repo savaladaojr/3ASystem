@@ -44,21 +44,8 @@ public sealed class EnableDisableApplicationCommandHandler : ICommandHandler<Ena
 		_appRepository.Update(app);
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-
 		//Return updated app
-		var finalResult = new ApplicationDetailedResponse()
-		{
-			Id = app.Id.Value,
-			Name = app.Name,
-			Abbreviation = app.Abbreviation,
-			Description = app.Description,
-			Hash = app.Hash,
-			IconUrl = app.IconUrl,
-			IsActive = app.IsActive,
-			FriendlyId = app.FriendlyId
-		};
-
-		return finalResult;
+		return app.ToApplicationDetailedResponse(); ;
 	}
 
 }

@@ -34,27 +34,13 @@ public class CreateModuleCommandHandler : ICommandHandler<CreateModuleCommand, M
 
 		var record = Module.Create(appId, request.Name, request.Abbreviation, request.Description, request.IconUrl, request.FriendlyId, request.IsPartOfMenu);
 
+		record.Raise(new ModuleCreatedDomainEvent(record.Id));
+
 		var module = _moduleRepository.Create(record);
 
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-
-		var finalResult = new ModuleDetailedResponse
-		{
-			Id = module.Id.Value,
-			ApplicationId = module.ApplicationId.Value,
-			Name = module.Name,
-			Abbreviation = module.Abbreviation,
-			Description = module.Description,
-			IconUrl = module.IconUrl,
-			IsActive = module.IsActive,
-			FriendlyId = module.FriendlyId,
-			IsPartOfMenu = module.IsPartOfMenu,
-			CreatedAt = module.CreatedAt,
-			LastUpdatedAt = module.LastUpdatedAt
-		};
-
-		return finalResult;
-
+		// Return created module
+		return module.ToModuleDetailedResponse();
 	}
 }

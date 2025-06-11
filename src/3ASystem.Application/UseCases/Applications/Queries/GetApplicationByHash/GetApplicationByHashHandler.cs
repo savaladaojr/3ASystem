@@ -22,20 +22,7 @@ public class GetApplicationByHashHandler : IQueryHandler<GetApplicationByHashQue
 		if (application is null)
 			return Result.Failure<ApplicationDetailedResponse>(AppErrors.NotFoundByHash);
 
-
-		var finalResult = new ApplicationDetailedResponse() { 
-			Abbreviation = application.Abbreviation, 
-			Description = application.Description,
-			Hash = application.Hash, 
-			IconUrl = application.IconUrl,
-			Id = application.Id.Value, 
-			IsActive = application.IsActive, 
-			Name = application.Name,
-			FriendlyId = application.FriendlyId,
-			CreatedAt = application.CreatedAt,
-			LastUpdatedAt = application.LastUpdatedAt
-		};
-
-		return finalResult;
+		//return application as ApplicationDetailedResponse
+		return application.ToApplicationDetailedResponse();
 	}
 }

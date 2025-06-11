@@ -12,6 +12,7 @@ public sealed class Functionality : Entity<FunctionalityId>
 	public string Abbreviation { get; private set; } = default!;
 	public string Route { get; private set; } = default!;
 	public string FriendlyId { get; private set; } = default!;
+	public string IconUrl { get; private set; } = string.Empty;
 	public bool IsActive { get; set; } = true;
 	public bool IsPartOfMenu { get; set; } = true;
 
@@ -25,18 +26,19 @@ public sealed class Functionality : Entity<FunctionalityId>
 
 	private Functionality() { }
 
-	private Functionality(FunctionalityId id, ModuleId moduleId, string name, string abbreviation, string route, string friendlyId, bool isActive, bool isPartOfMenu) : base(id)
+	private Functionality(FunctionalityId id, ModuleId moduleId, string name, string abbreviation, string route, string iconUrl, string friendlyId, bool isActive, bool isPartOfMenu) : base(id)
 	{
 		ModuleId = moduleId;
 		Name = name;
 		Abbreviation = abbreviation;
 		Route = route;
+		IconUrl = iconUrl;
 		FriendlyId = friendlyId;
 		IsActive = isActive;
 		IsPartOfMenu = isPartOfMenu;
 	}
 
-	public static Functionality Create(ModuleId moduleId, string name, string abbreviation, string route, string friendlyId, bool isPartOfMenu)
+	public static Functionality Create(ModuleId moduleId, string name, string abbreviation, string route, string iconUrl, string friendlyId, bool isPartOfMenu)
 	{
 		var function = new Functionality(
 			new FunctionalityId(Guid.NewGuid()),
@@ -44,6 +46,7 @@ public sealed class Functionality : Entity<FunctionalityId>
 			name,
 			abbreviation,
 			route,
+			iconUrl,
 			friendlyId,
 			true,
 			isPartOfMenu
@@ -52,11 +55,12 @@ public sealed class Functionality : Entity<FunctionalityId>
 		return function;
 	}
 
-	public void Update(string name, string abbreviation, string route, string friendlyId, bool isPartOfMenu)
+	public void Update(string name, string abbreviation, string route, string iconUrl, string friendlyId, bool isPartOfMenu)
 	{
 		Name = name;
 		Abbreviation = abbreviation;
 		Route = route;
+		IconUrl = iconUrl;
 		FriendlyId = friendlyId;
 		IsPartOfMenu = isPartOfMenu;
 		LastUpdatedAt = DateTime.Now;

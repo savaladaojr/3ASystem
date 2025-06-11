@@ -1,6 +1,5 @@
 ﻿using _3ASystem.Domain.Abstractions;
-using _3ASystem.Domain.Entities.Functionalities;
 
-namespace _3ASystem.Domain.Entities.Applications;
+namespace _3ASystem.Domain.Entities.Functionalities;
 
-public sealed record FunctionalityCreatedDomainEvent(FunctionalityId AppId) : IDomainEvent;
+public sealed record FunctionalityCreatedDomainEvent(FunctionalityId FunctionalityId) : IDomainEvent;

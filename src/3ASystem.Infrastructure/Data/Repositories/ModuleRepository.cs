@@ -33,6 +33,7 @@ public sealed class ModuleRepository : _Repository<Module, ModuleId>, IModuleRep
 		var records = await Entity.AsNoTracking().OrderBy(ord => ord.CreatedAt)
 					.Skip(skip).Take(take)
 					.Include(m => m.Application)
+					.AsSplitQuery() // Use AsSplitQuery to avoid Cartesian product issues with multiple includes
 					.ToListAsync();
 
 		var finalResult = new PagedResult<Module>
