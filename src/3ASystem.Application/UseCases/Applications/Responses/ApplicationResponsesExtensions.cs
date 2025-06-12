@@ -2,7 +2,7 @@
 
 namespace _3ASystem.Application.UseCases.Applications.Responses;
 
-public static class ApplicationResponsesExtentions
+public static class ApplicationResponsesExtensions
 {
 	public static ApplicationDetailedResponse ToApplicationDetailedResponse(this App app)
 	{

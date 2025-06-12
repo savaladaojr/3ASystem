@@ -3,7 +3,7 @@ using _3ASystem.Domain.Entities.Applications;
 using _3ASystem.Domain.Entities.Modules;
 
 namespace _3ASystem.Application.UseCases.Modules.Responses;
-public static class ModuleResponsesExtentions
+public static class ModuleResponsesExtensions
 {
 	public static ModuleDetailedResponse ToModuleDetailedResponse(this Module module)
 	{
