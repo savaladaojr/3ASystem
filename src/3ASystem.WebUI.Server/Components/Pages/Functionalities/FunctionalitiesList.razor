@@ -1,0 +1,86 @@
+﻿@page "/Functionalities"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<PageTitle>Functionalities</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Functionalities</MudText>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" class="btn btn-success mb-3" OnClick="() => CreateModule()">
+	<MudIcon Icon="@Icons.Material.Filled.Add" Color="Color.Info" Class="mr-3"></MudIcon> New
+</MudButton>
+									
+<MudTable Items="@_records" FixedHeader="true" Dense="true" Hover="true" Bordered="false" Striped="true" Loading="@isLoading" LoadingProgressColor="Color.Info" Style="width: 100%">
+	<ToolBarContent>
+		<MudText Typo="Typo.h6">List of Modules</MudText>
+	</ToolBarContent>
+	<HeaderContent>
+		<MudTh Style="width: 10%; font-weight:bold;text-align:left;">Application</MudTh>
+		<MudTh Style="width: 10%; font-weight:bold;text-align:left;">Module</MudTh>
+		<MudTh Style="width: 8%; font-weight:bold;text-align:left;">Icon</MudTh>
+		<MudTh Style="width: 25%; font-weight:bold;text-align:left;">Name</MudTh>
+		<MudTh Style="width: 15%; font-weight:bold;text-align:left;">Abbreviation</MudTh>
+		
+		<MudTh Style="width: 10%; font-weight:bold;text-align:center;">Is Active</MudTh>
+		<MudTh Style="width: 22%; font-weight:bold;text-align:left;">Actions</MudTh>
+	</HeaderContent>
+	<RowTemplate>
+		<MudTd DataLabel="Application">@context.Module?.Application?.Abbreviation</MudTd>
+		<MudTd DataLabel="Application">@context.Module?.Abbreviation</MudTd>
+		<MudTd DataLabel="Icon">
+			@if (!string.IsNullOrEmpty(@context.IconUrl))
+			{
+				<img src="@context.IconUrl" alt="@context.Name" width="32" height="32" />
+			}
+		</MudTd>
+		<MudTd DataLabel="Name">@context.Name</MudTd>
+		<MudTd DataLabel="Abbreviation">@context.Abbreviation</MudTd>
+		
+		<MudTd DataLabel="Is Active" Style="text-align:center;">@context.IsActive</MudTd>
+		<MudTd>
+			@if (!context.IsActive)
+			{
+				<MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" @onclick="() => EnableDisable(context.Id)" Class="mr-1">
+					<MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Tertiary" Title="Enable"></MudIcon>
+				</MudButton>
+			}
+			else
+			{
+				<MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="() => EnableDisable(context.Id)" Class="mr-1">
+					<MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Warning" Title="Disable"></MudIcon>
+				</MudButton>
+			}
+			<MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="() => EditModule(context.Id)">
+				<MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Info" Title="Edit"></MudIcon>
+			</MudButton>
+			<MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="() => AskConfirmDelete(context.Id)">
+				<MudIcon Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Title="Delete"></MudIcon>
+			</MudButton>
+		</MudTd>
+	</RowTemplate>
+</MudTable>
+
+<MudGrid Class="mt-1">
+@if (_records!.Any() && isLoading is false)
+{
+	
+	<MudItem md="4" Class="d-flex pl-md-8">
+		<MudText Typo="Typo.body2" GutterBottom="true" Style="font-weight:bold">Total Of Records:</MudText>&nbsp;
+		<MudText Typo="Typo.body2" GutterBottom="true">@_totalOfRecords</MudText>
+	</MudItem>
+
+	<MudItem md="8" Style="text-align:right" Class="pr-1">
+		<MudPagination Color="Color.Primary"
+						ShowFirstButton="@(_totalOfPages >= 10)"
+						ShowLastButton="@(_totalOfPages >= 10)"
+						Selected="_selectedPage"
+						Count="@_totalOfPages"
+						SelectedChanged="PageChanged" />
+	</MudItem>
+}
+else if (isLoading is false)
+{
+	<MudItem md="4" Class="d-flex pl-md-8">
+		<MudText Typo="Typo.body2" GutterBottom="true" Style="font-weight:bold">No records found.</MudText>
+	</MudItem>
+}
+</MudGrid>

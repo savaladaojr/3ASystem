@@ -46,24 +46,8 @@ public sealed class EnableDisableFunctionalityCommandHandler : ICommandHandler<E
 		_functionalityRepository.Update(functionality);
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-
-		//Return updated app
-		var finalResult = new FunctionalityDetailedResponse()
-		{
-			Id = functionality.Id.Value,
-			ModuleId = functionality.ModuleId.Value,
-			Name = functionality.Name,
-			Abbreviation = functionality.Abbreviation,
-			Route = functionality.Route,
-			IconUrl = functionality.IconUrl,
-			FriendlyId = functionality.FriendlyId,
-			IsActive = functionality.IsActive,
-			IsPartOfMenu = functionality.IsPartOfMenu,
-			CreatedAt = functionality.CreatedAt,
-			LastUpdatedAt = functionality.LastUpdatedAt
-		};
-
-		return finalResult;
+		///Return created functionality as response
+		return functionality.ToFunctionalityDetailedResponse();
 	}
 
 }

@@ -32,37 +32,7 @@ public class GetFunctionalitiesPagedHandler : IQueryHandler<GetFunctionalitiesPa
 			TotalOfRecordsPerPage = request.PageSize,
 			TotalOfRecords = result.TotalOfRecords,
 
-			Records = [.. functionalities.Select(functionality =>
-			new FunctionalityResponse
-			{
-				Id = functionality.Id.Value,
-				ModuleId = functionality.ModuleId.Value,
-				Name = functionality.Name,
-				Abbreviation = functionality.Abbreviation,
-				IconUrl = functionality.IconUrl,
-				FriendlyId = functionality.FriendlyId,
-				IsActive = functionality.IsActive,
-
-				Module = new ModuleResponse
-				{
-					Id = functionality.Module!.Id.Value,
-					Name = functionality.Module.Name,
-					Abbreviation = functionality.Module.Abbreviation,
-					IconUrl = functionality.Module.IconUrl,
-					FriendlyId = functionality.Module.FriendlyId,
-					IsActive =  functionality.Module.IsActive,
-
-					Application =  new ApplicationResponse
-					{
-						Id = functionality.Module.Application!.Id.Value,
-						Name = functionality.Module.Application.Name,
-						Abbreviation = functionality.Module.Application.Abbreviation,
-						IconUrl = functionality.Module.Application.IconUrl,
-						FriendlyId = functionality.Module.Application.FriendlyId,
-						IsActive = functionality.Module.Application.IsActive
-					}
-				}
-			})]
+			Records = [.. functionalities.ToIEnumerableOfFunctionalityResponseWithModule()]
 		};
 
 		return finalResult;

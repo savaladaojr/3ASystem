@@ -16,25 +16,10 @@ public class GetFunctionalitiesHandler : IQueryHandler<GetFunctionalitiesQuery, 
 
 	public async Task<Result<List<FunctionalityResponse>>> Handle(GetFunctionalitiesQuery request, CancellationToken cancellationToken)
 	{
+		var results = await _functionalityRepository.GetAllAsync();
 
-		var result = await _functionalityRepository.GetAllAsync();
+		return results.ToIEnumerableOfFunctionalityResponse().ToList();
 
-		var finalResult = result.Select(functionality =>
-			new FunctionalityResponse
-			{
-				Id = functionality.Id.Value,
-				ModuleId = functionality.ModuleId.Value,
-				Name = functionality.Name,
-				Abbreviation = functionality.Abbreviation,
-				IconUrl = functionality.IconUrl,
-				FriendlyId = functionality.FriendlyId,
-				IsActive = functionality.IsActive
-
-			}
-		).ToList();
-
-
-		return finalResult;
 	}
 
 }

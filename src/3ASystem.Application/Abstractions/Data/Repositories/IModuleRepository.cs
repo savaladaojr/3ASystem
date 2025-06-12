@@ -1,4 +1,5 @@
-﻿using _3ASystem.Domain.Entities.Modules;
+﻿using _3ASystem.Domain.Entities.Applications;
+using _3ASystem.Domain.Entities.Modules;
 
 namespace _3ASystem.Application.Abstractions.Data.Repositories
 {
@@ -7,6 +8,8 @@ namespace _3ASystem.Application.Abstractions.Data.Repositories
 		Task<Module?> GetByFriendlyIdAsync(string friendlyId);
 
 		Task<Module?> GetByAbbreviationAsync(string abbreviation);
+
+		Task<List<Module>> GetByApplicationIdAsync(AppId appId);
 
 	}
 }

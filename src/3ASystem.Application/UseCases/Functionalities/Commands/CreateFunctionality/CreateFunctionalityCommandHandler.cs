@@ -40,7 +40,7 @@ public class CreateFunctionalityCommandHandler : ICommandHandler<CreateFunctiona
 		if (module is null)
 			return Result.Failure<FunctionalityDetailedResponse>(ModuleErrors.NotFound(moduleId));
 
-
+		//Create the Functionality
 		var record = Functionality.Create(moduleId, request.Name, request.Abbreviation, request.Route, request.IconUrl, request.FriendlyId, request.IsPartOfMenu);
 
 		record.Raise(new FunctionalityCreatedDomainEvent(record.Id));
@@ -49,23 +49,8 @@ public class CreateFunctionalityCommandHandler : ICommandHandler<CreateFunctiona
 
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-
-		var finalResult = new FunctionalityDetailedResponse
-		{
-			Id = functionality.Id.Value,
-			ModuleId = functionality.ModuleId.Value,
-			Name = functionality.Name,
-			Abbreviation = functionality.Abbreviation,
-			Route = functionality.Route,
-			IconUrl = functionality.IconUrl,
-			IsActive = functionality.IsActive,
-			FriendlyId = functionality.FriendlyId,
-			IsPartOfMenu = functionality.IsPartOfMenu,
-			CreatedAt = functionality.CreatedAt,
-			LastUpdatedAt = functionality.LastUpdatedAt
-		};
-
-		return finalResult;
+		//Return created functionality as response
+		return functionality.ToFunctionalityDetailedResponse();
 
 	}
 }

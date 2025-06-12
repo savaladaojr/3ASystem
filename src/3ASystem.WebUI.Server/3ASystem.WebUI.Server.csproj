@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Pages\Functionalities\" />
     <Folder Include="wwwroot\js\" />
     <Folder Include="wwwroot\libs\" />
   </ItemGroup>

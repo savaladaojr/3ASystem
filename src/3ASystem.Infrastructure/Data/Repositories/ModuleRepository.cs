@@ -44,4 +44,13 @@ public sealed class ModuleRepository : _Repository<Module, ModuleId>, IModuleRep
 
 		return finalResult;
 	}
+
+	public async Task<List<Module>> GetByApplicationIdAsync(AppId appId)
+	{
+		return await Entity.AsNoTracking().Where(w => w.ApplicationId == appId)	
+					.OrderBy(ord => ord.CreatedAt)
+					.Include(m => m.Application)
+					.AsSplitQuery()
+					.ToListAsync();
+	}
 }

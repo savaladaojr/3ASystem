@@ -1,0 +1,121 @@
+﻿@* @page "/Modules/Edit/{id:guid}" *@
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+@if (updateModule == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<EditForm EditContext="@_editContext">
+		<MudGrid>
+			<MudItem md="12">
+				<MudPaper Class="pa-4 pb-8 " Outlined="true">
+					<MudGrid>
+						<MudItem md="12" Style="width:100%">
+							<MudSelect T="Guid"
+									   @bind-Value="updateModule.ApplicationId"
+									   For="@(() => updateModule.ApplicationId)"
+									   Label="Application"
+									   Placeholder="Please Select an Application"
+									   Dense="true"
+									   Modal="true"
+									   Disabled="true"
+									   SelectedValuesChanged="() => ClearValidationMessage(nameof(updateModule.ApplicationId))">
+
+								<MudSelectItem Value="Guid.Empty">&nbsp;</MudSelectItem>
+								@foreach (var application in ListOfApplications.OrderBy(s => s.Name))
+								{
+									<MudSelectItem Value="@application.Id">@application.Name</MudSelectItem>
+								}
+							</MudSelect>
+						</MudItem>
+
+						<MudItem md="12" Style="width:100%">
+							<MudTextField Label="Name"
+										  Variant="Variant.Text"
+										  InputType="InputType.Text"
+										  For="@(() => updateModule.Name)"
+										  @bind-Value="updateModule.Name"
+										  TextChanged="() => ClearValidationMessage(nameof(updateModule.Name))" />
+						</MudItem>
+
+						<MudItem md="12" Style="width:100%">
+							<MudTextField T="string" MaxLines=3 Lines=3 Label="Description"
+										  Variant="Variant.Text"
+										  InputType="InputType.Text"
+										  For="@(() => updateModule.Description)"
+										  @bind-Value="updateModule.Description"
+										  TextChanged="() => ClearValidationMessage(nameof(updateModule.Description))" />
+						</MudItem>
+
+						<MudItem md="6" Style="width:100%">
+							<MudTextField Label="Abbreviation"
+										  Variant="Variant.Text"
+										  InputType="InputType.Text"
+										  For="@(() => updateModule.Abbreviation)"
+										  @bind-Value="updateModule.Abbreviation"
+										  TextChanged="() => ClearValidationMessage(nameof(updateModule.Abbreviation))" />
+						</MudItem>
+						<MudItem md="6" Style="width:100%">
+							<MudTextField Label="Friendly Id"
+										  Variant="Variant.Text"
+										  InputType="InputType.Text"
+										  For="@(() => updateModule.FriendlyId)"
+										  @bind-Value="updateModule.FriendlyId"
+										  TextChanged="() => ClearValidationMessage(nameof(updateModule.FriendlyId))" />
+						</MudItem>
+
+						<MudItem md="12" Style="width:100%">
+							<MudTextField Label="Icon Url"
+										  Variant="Variant.Text"
+										  InputType="InputType.Url"
+										  For="@(() => updateModule.IconUrl)"
+										  @bind-Value="updateModule.IconUrl"
+										  TextChanged="() => ClearValidationMessage(nameof(updateModule.IconUrl))" />
+						</MudItem>
+
+						<MudItem md="6" Style="width:100%">
+							<MudSwitch Label="Is Part of Menu"
+									   Color="Color.Info"
+									   UncheckedColor="Color.Warning"
+									   @bind-Value="updateModule.IsPartOfMenu" />
+						</MudItem>
+
+						<MudItem md="6" Style="width:100%">
+							<MudSwitch Label="Is Active"
+									   Disabled="true"
+									   Color="Color.Info"
+									   UncheckedColor="Color.Warning"
+									   @bind-Value="updateModule.IsActive" />
+						</MudItem>
+
+					</MudGrid>
+				</MudPaper>
+			</MudItem>
+			<MudItem md="12" Style="text-align:right">
+
+				<MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="() => HandleCancelAsync()">Cancel</MudButton>
+
+				<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" OnClick="HandleSubmitAsync">Update</MudButton>
+
+			</MudItem>
+
+
+			@if (!string.IsNullOrEmpty(_error))
+			{
+				<MudItem md="12">
+					<div class="alert alert-danger alert-dismissible fade show mt-2 mb-0" role="alert">
+						<strong>Hey, an error happened!</strong>
+						@_error
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				</MudItem>
+			}
+
+
+		</MudGrid>
+
+	</EditForm>
+
+}

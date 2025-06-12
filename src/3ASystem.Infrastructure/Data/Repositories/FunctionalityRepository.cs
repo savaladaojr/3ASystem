@@ -31,7 +31,7 @@ public sealed class FunctionalityRepository : _Repository<Functionality, Functio
 
 		var records = await Entity.AsNoTracking().OrderBy(ord => ord.CreatedAt)
 					.Skip(skip).Take(take)
-					.Include(m => m.Module).ThenInclude(m => m!.Application)
+					.Include(m => m.Module).ThenInclude(m => m.Application)
 					.AsSplitQuery() // Use AsSplitQuery to avoid Cartesian product issues with multiple includes
 					.ToListAsync();
 

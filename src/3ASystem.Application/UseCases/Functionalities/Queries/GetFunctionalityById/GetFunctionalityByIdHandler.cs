@@ -24,26 +24,12 @@ public class GetFunctionalityByIdHandler : IQueryHandler<GetFunctionalityByIdQue
 
 		var functionality = await _functionalityRepository.GetByIdAsync(functionalityId);
 
-
 		if (functionality is null)
 		{
 			return Result.Failure<FunctionalityDetailedResponse>(FunctionalityErrors.NotFound(functionalityId));
 		}
 
-		var finalResult = new FunctionalityDetailedResponse()
-		{
-			Id = functionality.Id.Value,
-			ModuleId = functionality.ModuleId.Value,
-			Name = functionality.Name,
-			Abbreviation = functionality.Abbreviation,
-			FriendlyId = functionality.FriendlyId,
-			IconUrl = functionality.IconUrl,
-			IsActive = functionality.IsActive,
-			IsPartOfMenu = functionality.IsPartOfMenu,
-			CreatedAt = functionality.CreatedAt,
-			LastUpdatedAt = functionality.LastUpdatedAt,
-		};
+		return functionality.ToFunctionalityDetailedResponse();
 
-		return finalResult;
 	}
 }
