@@ -45,21 +45,8 @@ public sealed class UpdateApplicationCommandHandler : ICommandHandler<UpdateAppl
 		_appRepository.Update(app);
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-		var finalResult = new ApplicationDetailedResponse
-		{
-			Id = app.Id.Value,
-			Name = app.Name,
-			Abbreviation = app.Abbreviation,
-			Description = app.Description,
-			IconUrl = app.IconUrl,
-			Hash = app.Hash,
-			IsActive = app.IsActive,
-			FriendlyId = app.FriendlyId,
-			CreatedAt = app.CreatedAt,
-			LastUpdatedAt = app.LastUpdatedAt
-		};
-
-		return finalResult;
+		//return updated app
+		return app.ToApplicationDetailedResponse();
 	}
 
 }

@@ -45,22 +45,8 @@ public sealed class UpdateModuleCommandHandler : ICommandHandler<UpdateModuleCom
 		_moduleRepository.Update(module);
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-		var finalResult = new ModuleDetailedResponse
-		{
-			Id = module.Id.Value,
-			ApplicationId = module.ApplicationId.Value,
-			Name = module.Name,
-			Abbreviation = module.Abbreviation,
-			Description = module.Description,
-			IconUrl = module.IconUrl,
-			IsActive = module.IsActive,
-			FriendlyId = module.FriendlyId,
-			IsPartOfMenu = module.IsPartOfMenu,
-			CreatedAt = module.CreatedAt,
-			LastUpdatedAt = module.LastUpdatedAt
-		};
-
-		return finalResult;
+		//Return updated module
+		return module.ToModuleDetailedResponse();
 	}
 
 }

@@ -17,7 +17,7 @@ namespace _3ASystem.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -94,6 +94,10 @@ namespace _3ASystem.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
+
+                    b.Property<string>("IconUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -319,11 +323,13 @@ namespace _3ASystem.Infrastructure.Migrations
 
             modelBuilder.Entity("_3ASystem.Domain.Entities.Modules.Module", b =>
                 {
-                    b.HasOne("_3ASystem.Domain.Entities.Applications.App", null)
+                    b.HasOne("_3ASystem.Domain.Entities.Applications.App", "Application")
                         .WithMany("Modules")
                         .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
+
+                    b.Navigation("Application");
                 });
 
             modelBuilder.Entity("_3ASystem.Domain.Entities.Operations.Operation", b =>

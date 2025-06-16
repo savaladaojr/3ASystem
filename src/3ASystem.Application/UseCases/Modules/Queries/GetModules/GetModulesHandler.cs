@@ -19,17 +19,7 @@ public class GetModulesHandler : IQueryHandler<GetModulesQuery, List<ModuleRespo
 	{
 		var modules = await _moduleRepository.GetAllAsync();
 
-		var finalResult = modules.Select(app =>
-			new ModuleResponse
-			{
-				Id = app.Id.Value,
-				Name = app.Name,
-				Abbreviation = app.Abbreviation,
-				IconUrl = app.IconUrl,
-				FriendlyId = app.FriendlyId,
-				IsActive = app.IsActive
-			}
-		).ToList();
+		var finalResult = modules.ToIEnumerableOfModuleResponse().ToList();
 
 		return finalResult;
 	}

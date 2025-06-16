@@ -27,21 +27,7 @@ public class GetModuleByIdHandler : IQueryHandler<GetModuleByIdQuery, ModuleDeta
 			return Result.Failure<ModuleDetailedResponse>(ModuleErrors.NotFound(moduleId));
 		}
 
-		var finalResult = new ModuleDetailedResponse()
-		{
-			Id = module.Id.Value,
-			ApplicationId = module.ApplicationId.Value,
-			Name = module.Name,
-			Abbreviation = module.Abbreviation,
-			Description = module.Description,
-			FriendlyId = module.FriendlyId,
-			IconUrl = module.IconUrl,
-			IsActive = module.IsActive,
-			IsPartOfMenu = module.IsPartOfMenu,
-			CreatedAt = module.CreatedAt,
-			LastUpdatedAt = module.LastUpdatedAt,
-		};
+		return module.ToModuleDetailedResponse();
 
-		return finalResult;
 	}
 }

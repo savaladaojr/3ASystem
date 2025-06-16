@@ -30,15 +30,7 @@ public class GetApplicationsPagedHandler : IQueryHandler<GetApplicationsPagedQue
 			TotalOfRecordsPerPage = request.PageSize,
 			TotalOfRecords = result.TotalOfRecords,
 
-			Records = [.. applications.Select(app =>
-				new ApplicationResponse
-				{
-					Id = app.Id.Value,
-					Name = app.Name,
-					Abbreviation = app.Abbreviation,
-					IconUrl = app.IconUrl,
-					IsActive = app.IsActive
-				})]
+			Records = [.. applications.ToIEnumerableOfApplicationResponse()]
 		};
 
 		return finalResult;

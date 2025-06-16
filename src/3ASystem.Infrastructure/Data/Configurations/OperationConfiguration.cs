@@ -36,10 +36,6 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
 			.HasPrincipalKey(p => p.Id)
 			.IsRequired();
 
-
-		builder.Ignore(p => p.Functionality);
-
-
 		builder.ToTable("Operations");
 	}
 }

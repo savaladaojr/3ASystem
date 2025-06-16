@@ -33,6 +33,7 @@ public sealed class ModuleRepository : _Repository<Module, ModuleId>, IModuleRep
 		var records = await Entity.AsNoTracking().OrderBy(ord => ord.CreatedAt)
 					.Skip(skip).Take(take)
 					.Include(m => m.Application)
+					.AsSplitQuery() // Use AsSplitQuery to avoid Cartesian product issues with multiple includes
 					.ToListAsync();
 
 		var finalResult = new PagedResult<Module>
@@ -42,5 +43,14 @@ public sealed class ModuleRepository : _Repository<Module, ModuleId>, IModuleRep
 		};
 
 		return finalResult;
+	}
+
+	public async Task<List<Module>> GetByApplicationIdAsync(AppId appId)
+	{
+		return await Entity.AsNoTracking().Where(w => w.ApplicationId == appId)	
+					.OrderBy(ord => ord.CreatedAt)
+					.Include(m => m.Application)
+					.AsSplitQuery()
+					.ToListAsync();
 	}
 }

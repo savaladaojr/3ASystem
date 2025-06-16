@@ -14,7 +14,10 @@ public sealed class UnitOfWork : DbContext, IUnitOfWork
 
 	public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 	{
-		return await _dbContext.SaveChangesAsync(cancellationToken);
+		var result = await _dbContext.SaveChangesAsync(cancellationToken);
+		_dbContext.ChangeTracker.Clear(); // Clear the change tracker to avoid memory leaks and stale data
+
+		return result;
 	}
 
 	//This way it is not necessary include the async in the method signature and also the return of the SaveChangesAsync

@@ -37,13 +37,11 @@ public class FunctionalityConfiguration : IEntityTypeConfiguration<Functionality
 		builder.HasIndex(f => f.FriendlyId).IsUnique();
 
 		//EF Relations
-		builder.HasOne<Module>()
+		builder.HasOne(m => m.Module)
 			.WithMany(m => m.Functionalities)
 			.HasForeignKey(f => f.ModuleId)
 			.HasPrincipalKey(a => a.Id)
 			.IsRequired();
-
-		builder.Ignore(p => p.Module);
 
 		builder.ToTable("Functionalities");
 	}

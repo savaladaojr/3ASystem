@@ -18,18 +18,7 @@ public class GetApplicationsHandler : IQueryHandler<GetApplicationsQuery, List<A
 	{
 		var applications = await _appRepository.GetAllAsync();
 
-		var finalResult = applications.Select(app =>
-			new ApplicationResponse
-			{
-				Id = app.Id.Value,
-				Name = app.Name,
-				Abbreviation = app.Abbreviation,
-				IconUrl = app.IconUrl,
-				IsActive = app.IsActive
-			}
-		).ToList();
-
-		return finalResult;
+		return applications.ToIEnumerableOfApplicationResponse().ToList();
 	}
 
 }

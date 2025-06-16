@@ -44,8 +44,6 @@ public class ModuleConfiguration : IEntityTypeConfiguration<Module>
 			.HasPrincipalKey(a => a.Id)
 			.IsRequired();
 
-		//builder.Ignore(p => p.Application);
-
 		builder.ToTable("Modules");
 	}
 }
