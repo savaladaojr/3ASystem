@@ -22,4 +22,5 @@ public sealed class FunctionalityDetailedResponse
 	public DateTime CreatedAt { get; init; } = default!;
 	public DateTime LastUpdatedAt { get; init; } = default!;
 
+	public ModuleResponse? Module { get; init; }
 }

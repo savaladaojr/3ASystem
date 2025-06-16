@@ -1,22 +1,58 @@
-﻿using _3ASystem.Application.UseCases.Applications.Responses;
+﻿using _3ASystem.Application.UseCases.Applications.Queries.GetApplications;
+using _3ASystem.Application.UseCases.Applications.Responses;
+using _3ASystem.Application.UseCases.Functionalities.Commands.CreateFunctionality;
+using _3ASystem.Application.UseCases.Functionalities.Commands.UpdateFunctionality;
+using _3ASystem.Application.UseCases.Functionalities.Queries.GetFunctionalityById;
 using _3ASystem.Application.UseCases.Modules.Commands.UpdateModule;
 using _3ASystem.Application.UseCases.Modules.Queries.GetModuleById;
+using _3ASystem.Application.UseCases.Modules.Responses;
 using _3ASystem.Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities
 {
+	public record UpdateFunctionalityModel
+	{
+		[Key]
+		public Guid Id { get; set; } = Guid.Empty;
+
+		[Required(ErrorMessage = "Select an Application")]
+		public Guid ApplicationId { get; set; } = Guid.Empty;
+
+		[Required(ErrorMessage = "Select a Module")]
+		public Guid ModuleId { get; set; } = Guid.Empty;
+
+		[Required(ErrorMessage = "Name is required")]
+		public string Name { get; set; } = string.Empty;
+
+		[Required(ErrorMessage = "Abbreviation is required")]
+		public string Abbreviation { get; set; } = string.Empty;
+
+		[Required(ErrorMessage = "Route is required")]
+		public string Route { get; set; } = string.Empty;
+		public string IconUrl { get; set; } = string.Empty;
+
+		[Required(ErrorMessage = "Friendly ID is required")]
+		public string FriendlyId { get; set; } = string.Empty;
+
+		public bool IsPartOfMenu { get; set; } = true;
+
+		public bool IsActive { get; set; } = true;
+	}
+
 	public partial class FunctionalityUpdateForm : ComponentBase
 	{
 		// Define an EventCallback to notify the parent component
 		[Parameter] public EventCallback<string> OnSaveClickSuccess { get; set; }
 		[Parameter] public EventCallback OnCancelClick { get; set; }
 
-		[Parameter]
-		public List<ApplicationResponse> ListOfApplications { get; set; } = default!;
+		public List<ApplicationResponse> ListOfApplications { get; set; } = [];
+		public List<ModuleResponse> ListOfModules { get; set; } = [];
 
 		[Inject]
 		public IMediator Mediator { get; set; } = default!;
@@ -30,7 +66,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities
 		[Parameter]
 		public Guid Id { get; set; }
 
-		private UpdateModuleCommand updateModule = default!;
+		private UpdateFunctionalityModel updateFunctionality = default!;
 
 		private string _error = string.Empty;
 		private bool _isSubmitting = false;
@@ -43,28 +79,55 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities
 			await Start();
 		}
 
+
+		private async Task LoadApplications()
+		{
+			// Send an event to MediatR
+			var result = await Mediator.Send(new GetApplicationsQuery());
+			if (result.IsSuccess)
+			{
+				ListOfApplications = result.Value;
+			}
+
+		}
+
+		private async Task LoadApplicationModules(Guid applicationId)
+		{
+			// Send an event to MediatR
+			var result = await Mediator.Send(new GetModulesByApplicationIdQuery() { AppId = applicationId });
+			if (result.IsSuccess)
+			{
+				ListOfModules = result.Value;
+			}
+		}
+
 		public async Task<bool> Start()
 		{
 			// Send an event to MediatR
 			if (Id != Guid.Empty)
 			{
-				var result = await Mediator.Send(new GetModuleByIdQuery() { Id = Id });
+				var result = await Mediator.Send(new GetFunctionalityByIdQuery() { Id = Id });
 				if (result.IsSuccess)
 				{
-					updateModule = new UpdateModuleCommand
+					// Load the list of applications and modules
+					await LoadApplications();
+					await LoadApplicationModules(result.Value.Module!.ApplicationId);
+
+					updateFunctionality = new UpdateFunctionalityModel
 					{
 						Id = result.Value.Id,
-						ApplicationId = result.Value.ApplicationId,
+						ApplicationId = result.Value.Module!.ApplicationId,
+						ModuleId = result.Value.ModuleId,
 						Name = result.Value.Name,
 						Abbreviation = result.Value.Abbreviation,
-						Description = result.Value.Description,
+						Route = result.Value.Route,
+						FriendlyId = result.Value.FriendlyId,
 						IconUrl = result.Value.IconUrl,
-						FriendlyId =  result.Value.FriendlyId,
 						IsPartOfMenu = result.Value.IsPartOfMenu,
 						IsActive = result.Value.IsActive,
 					};
 
-					_editContext = new EditContext(updateModule);
+					_editContext = new EditContext(updateFunctionality);
 					_messageStore = new ValidationMessageStore(_editContext);
 				}
 				else
@@ -89,14 +152,25 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities
 
 			_isSubmitting = true;
 			_error = string.Empty;
-			_messageStore!.Clear();
 
-			var result = await Mediator.Send(updateModule);
+			//Call the create command
+			var command = new UpdateFunctionalityCommand()
+			{
+				Id = updateFunctionality.Id,
+				ModuleId = updateFunctionality.ModuleId,
+				Name = updateFunctionality.Name,
+				Abbreviation = updateFunctionality.Abbreviation,
+				Route = updateFunctionality.Route,
+				FriendlyId = updateFunctionality.FriendlyId,
+				IconUrl = updateFunctionality.IconUrl,
+				IsPartOfMenu = updateFunctionality.IsPartOfMenu
+			};
+			var result = await Mediator.Send(command);
 
 			if (result.IsSuccess)
 			{
 				// Call the parent method via the EventCallback
-				await OnSaveClickSuccess.InvokeAsync($"Module [{result.Value.Name}] successfully updated.");
+				await OnSaveClickSuccess.InvokeAsync($"Functionality [{result.Value.Name}] successfully update.");
 			}
 			else
 			{
@@ -107,17 +181,21 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities
 						if (item.ErrorObject is not null && item.ErrorObject.GetType() == typeof(FluentValidation.Results.ValidationFailure))
 						{
 							var validationFailure = (FluentValidation.Results.ValidationFailure)item.ErrorObject;
-							_messageStore.Add(_editContext!.Field(validationFailure.PropertyName), validationFailure.ErrorMessage);
+							_messageStore!.Add(_editContext!.Field(validationFailure.PropertyName), validationFailure.ErrorMessage);
 						}
 					}
 
 					_editContext!.NotifyValidationStateChanged();
 				}
-				_error = result.Error.Description;
-				
+				else
+				{
+					_error = result.Error.Description;
+				}
+
 			}
 			_isSubmitting = false;
 		}
+
 
 		private bool IsValidSubmit()
 		{
@@ -130,8 +208,9 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities
 			if (_messageStore is null) return;
 
 			_messageStore.Clear(_editContext!.Field(fieldName));
-			_editContext!.NotifyValidationStateChanged();
+			_editContext.NotifyValidationStateChanged();
 		}
+
 	}
 
 }

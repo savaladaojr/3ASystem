@@ -42,11 +42,11 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Applications
 
 		}
 
-		public async Task Start(Guid id)
-		{
-			Id = id;
-			await Start();
-		}
+		//public async Task Start(Guid id)
+		//{
+		//	Id = id;
+		//	await Start();
+		//}
 
 		private async Task Start()
 		{

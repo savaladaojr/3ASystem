@@ -30,6 +30,7 @@ public static class ModuleResponsesExtensions
 		return new ModuleResponse
 		{
 			Id = module.Id.Value,
+			ApplicationId = module.ApplicationId.Value,
 			Name = module.Name,
 			Abbreviation = module.Abbreviation,
 			IconUrl = module.IconUrl,
@@ -46,6 +47,7 @@ public static class ModuleResponsesExtensions
 		{
 			Id = module.Id.Value,
 			Name = module.Name,
+			ApplicationId = module.ApplicationId.Value,
 			Abbreviation = module.Abbreviation,
 			IconUrl = module.IconUrl,
 			FriendlyId = module.FriendlyId,

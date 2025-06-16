@@ -1,27 +1,30 @@
-﻿@* @page "/Modules/Edit/{id:guid}" *@
+﻿@* @page "/Modules/Create" *@
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
-@if (updateModule == null)
+@if (updateFunctionality == null)
 {
 	<p><em>Loading...</em></p>
 }
 else
 {
 	<EditForm EditContext="@_editContext">
+		@* Model="createModule" *@
+		@*     <DataAnnotationsValidator />
+    <ValidationSummary /> *@
 		<MudGrid>
 			<MudItem md="12">
 				<MudPaper Class="pa-4 pb-8 " Outlined="true">
 					<MudGrid>
 						<MudItem md="12" Style="width:100%">
 							<MudSelect T="Guid"
-									   @bind-Value="updateModule.ApplicationId"
-									   For="@(() => updateModule.ApplicationId)"
+									   @bind-Value="updateFunctionality.ApplicationId"
+									   For="@(() => updateFunctionality.ApplicationId)"
 									   Label="Application"
 									   Placeholder="Please Select an Application"
 									   Dense="true"
 									   Modal="true"
-									   Disabled="true"
-									   SelectedValuesChanged="() => ClearValidationMessage(nameof(updateModule.ApplicationId))">
+									   ReadOnly="true"
+									   SelectedValuesChanged="() => LoadApplicationModules(updateFunctionality.ApplicationId)">
 
 								<MudSelectItem Value="Guid.Empty">&nbsp;</MudSelectItem>
 								@foreach (var application in ListOfApplications.OrderBy(s => s.Name))
@@ -32,54 +35,74 @@ else
 						</MudItem>
 
 						<MudItem md="12" Style="width:100%">
-							<MudTextField Label="Name"
-										  Variant="Variant.Text"
-										  InputType="InputType.Text"
-										  For="@(() => updateModule.Name)"
-										  @bind-Value="updateModule.Name"
-										  TextChanged="() => ClearValidationMessage(nameof(updateModule.Name))" />
+							<MudSelect T="Guid"
+									   @bind-Value="updateFunctionality.ModuleId"
+									   For="@(() => updateFunctionality.ModuleId)"
+									   Label="Module"
+									   Placeholder="Please Select a Module"
+									   Dense="true"
+									   Modal="true"
+									   ReadOnly="true"
+									   SelectedValuesChanged="() => ClearValidationMessage(nameof(updateFunctionality.ModuleId))">
+
+								<MudSelectItem Value="Guid.Empty">&nbsp;</MudSelectItem>
+								@foreach (var module in ListOfModules.OrderBy(s => s.Name))
+								{
+									<MudSelectItem Value="@module.Id">@module.Name</MudSelectItem>
+								}
+							</MudSelect>
 						</MudItem>
 
 						<MudItem md="12" Style="width:100%">
-							<MudTextField T="string" MaxLines=3 Lines=3 Label="Description"
+							<MudTextField Label="Name"
 										  Variant="Variant.Text"
 										  InputType="InputType.Text"
-										  For="@(() => updateModule.Description)"
-										  @bind-Value="updateModule.Description"
-										  TextChanged="() => ClearValidationMessage(nameof(updateModule.Description))" />
+										  For="@(() => updateFunctionality.Name)"
+										  @bind-Value="updateFunctionality.Name"
+										  TextChanged="() => ClearValidationMessage(nameof(updateFunctionality.Name))" />
+						</MudItem>
+
+						<MudItem md="12" Style="width:100%">
+							<MudTextField Label="Route"
+										  Variant="Variant.Text"
+										  InputType="InputType.Text"
+										  For="@(() => updateFunctionality.Route)"
+										  @bind-Value="updateFunctionality.Route"
+										  TextChanged="() => ClearValidationMessage(nameof(updateFunctionality.Route))" />
 						</MudItem>
 
 						<MudItem md="6" Style="width:100%">
 							<MudTextField Label="Abbreviation"
 										  Variant="Variant.Text"
 										  InputType="InputType.Text"
-										  For="@(() => updateModule.Abbreviation)"
-										  @bind-Value="updateModule.Abbreviation"
-										  TextChanged="() => ClearValidationMessage(nameof(updateModule.Abbreviation))" />
+										  For="@(() => updateFunctionality.Abbreviation)"
+										  @bind-Value="updateFunctionality.Abbreviation"
+										  TextChanged="() => ClearValidationMessage(nameof(updateFunctionality.Abbreviation))" />
 						</MudItem>
 						<MudItem md="6" Style="width:100%">
 							<MudTextField Label="Friendly Id"
 										  Variant="Variant.Text"
 										  InputType="InputType.Text"
-										  For="@(() => updateModule.FriendlyId)"
-										  @bind-Value="updateModule.FriendlyId"
-										  TextChanged="() => ClearValidationMessage(nameof(updateModule.FriendlyId))" />
+										  For="@(() => updateFunctionality.FriendlyId)"
+										  @bind-Value="updateFunctionality.FriendlyId"
+										  TextChanged="() => ClearValidationMessage(nameof(updateFunctionality.FriendlyId))" />
 						</MudItem>
 
 						<MudItem md="12" Style="width:100%">
 							<MudTextField Label="Icon Url"
 										  Variant="Variant.Text"
 										  InputType="InputType.Url"
-										  For="@(() => updateModule.IconUrl)"
-										  @bind-Value="updateModule.IconUrl"
-										  TextChanged="() => ClearValidationMessage(nameof(updateModule.IconUrl))" />
+										  For="@(() => updateFunctionality.IconUrl)"
+										  @bind-Value="updateFunctionality.IconUrl"
+										  TextChanged="() => ClearValidationMessage(nameof(updateFunctionality.IconUrl))" />
 						</MudItem>
+
 
 						<MudItem md="6" Style="width:100%">
 							<MudSwitch Label="Is Part of Menu"
 									   Color="Color.Info"
 									   UncheckedColor="Color.Warning"
-									   @bind-Value="updateModule.IsPartOfMenu" />
+									   @bind-Value="updateFunctionality.IsPartOfMenu" />
 						</MudItem>
 
 						<MudItem md="6" Style="width:100%">
@@ -87,7 +110,7 @@ else
 									   Disabled="true"
 									   Color="Color.Info"
 									   UncheckedColor="Color.Warning"
-									   @bind-Value="updateModule.IsActive" />
+									   @bind-Value="updateFunctionality.IsActive" />
 						</MudItem>
 
 					</MudGrid>
@@ -95,9 +118,9 @@ else
 			</MudItem>
 			<MudItem md="12" Style="text-align:right">
 
-				<MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="() => HandleCancelAsync()">Cancel</MudButton>
+				<MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="HandleCancelAsync">Cancel</MudButton>
 
-				<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" OnClick="HandleSubmitAsync">Update</MudButton>
+				<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" OnClick="HandleSubmitAsync">Save</MudButton>
 
 			</MudItem>
 
@@ -117,5 +140,4 @@ else
 		</MudGrid>
 
 	</EditForm>
-
 }

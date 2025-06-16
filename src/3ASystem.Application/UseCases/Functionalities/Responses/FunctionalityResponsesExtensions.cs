@@ -18,12 +18,33 @@ namespace _3ASystem.Application.UseCases.Functionalities.Responses
 				ModuleId = functionality.ModuleId.Value,
 				Name = functionality.Name,
 				Abbreviation = functionality.Abbreviation,
+				Route = functionality.Route,
 				FriendlyId = functionality.FriendlyId,
 				IconUrl = functionality.IconUrl,
 				IsActive = functionality.IsActive,
 				IsPartOfMenu = functionality.IsPartOfMenu,
 				CreatedAt = functionality.CreatedAt,
 				LastUpdatedAt = functionality.LastUpdatedAt,
+			};
+		}
+
+		public static FunctionalityDetailedResponse ToFunctionalityDetailedResponseWithModule(this Functionality functionality)
+		{
+			return new FunctionalityDetailedResponse()
+			{
+				Id = functionality.Id.Value,
+				ModuleId = functionality.ModuleId.Value,
+				Name = functionality.Name,
+				Abbreviation = functionality.Abbreviation,
+				Route = functionality.Route,
+				FriendlyId = functionality.FriendlyId,
+				IconUrl = functionality.IconUrl,
+				IsActive = functionality.IsActive,
+				IsPartOfMenu = functionality.IsPartOfMenu,
+				CreatedAt = functionality.CreatedAt,
+				LastUpdatedAt = functionality.LastUpdatedAt,
+
+				Module = functionality.Module!.ToModuleResponseWithApplication()
 			};
 		}
 

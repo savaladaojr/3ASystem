@@ -35,10 +35,14 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities
 		[Inject]
 		public ISnackbar Snackbar { get; set; } = default!;
 
+		//filter options
+		private Guid _filterApplicationId = Guid.Empty;
+		private Guid _filterModuleId = Guid.Empty;
 
 		private List<ApplicationResponse>? _applications = new List<ApplicationResponse>();
 		private List<ModuleResponse>? _modules = new List<ModuleResponse>();
 
+		//all records
 		private List<FunctionalityResponse>? _records = [];
 
 		private string _error = string.Empty;
@@ -65,7 +69,6 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities
 			{
 				_applications = result.Value!;
 			}
-
 		}
 
 		private async Task LoadApplicationModules(Guid applicationId)

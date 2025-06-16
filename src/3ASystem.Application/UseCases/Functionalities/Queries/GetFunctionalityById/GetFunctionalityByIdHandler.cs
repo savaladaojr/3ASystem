@@ -29,7 +29,7 @@ public class GetFunctionalityByIdHandler : IQueryHandler<GetFunctionalityByIdQue
 			return Result.Failure<FunctionalityDetailedResponse>(FunctionalityErrors.NotFound(functionalityId));
 		}
 
-		return functionality.ToFunctionalityDetailedResponse();
+		return functionality.ToFunctionalityDetailedResponseWithModule();
 
 	}
 }

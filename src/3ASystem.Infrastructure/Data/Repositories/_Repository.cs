@@ -63,7 +63,7 @@ public abstract partial class _Repository<TEntity> : IRepository<TEntity>
 
 	public virtual async Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includePaths)
 	{
-		var dbSet = Entity.AsQueryable();
+		var dbSet = Entity.AsNoTracking().AsQueryable();
 		var query = includePaths.Aggregate(dbSet, (current, item) => EvaluateInclude(current, item));
 
 		return await query.ToListAsync();
@@ -71,14 +71,19 @@ public abstract partial class _Repository<TEntity> : IRepository<TEntity>
 
 	public virtual async Task<TEntity?> GetByIdAsync(params object[] keyValues)
 	{
-		return await Entity.FindAsync(keyValues);
+		var result =  await Entity.FindAsync(keyValues);
+
+		if (result is not null) 
+			this.NoTrack(result);
+
+		return result;
 	}
 
 	public virtual async Task<TEntity?> GetByIdAsync(object[] keyValues, params Expression<Func<TEntity, object>>[] includePaths)
 	{
 		var entity = await GetByIdAsync(keyValues);
 
-		var dbSet = Entity.AsQueryable();
+		var dbSet = Entity.AsNoTracking().AsQueryable();
 		var query = includePaths.Aggregate(dbSet, (current, item) => EvaluateInclude(current, item));
 
 		return query.Where(item => item == entity).FirstOrDefault();
@@ -170,12 +175,12 @@ public abstract class _Repository<TEntity, TEntityId> : IRepository<TEntity, TEn
 
 	public virtual async Task<TEntity?> GetByIdAsync(TEntityId id)
 	{
-		return await Entity.FirstOrDefaultAsync(w => w.Id == id);
+		return await Entity.AsNoTracking().FirstOrDefaultAsync(w => w.Id == id);
 	}
 
 	public virtual async Task<TEntity?> GetByIdAsync(TEntityId id, params Expression<Func<TEntity, object>>[] includePaths)
 	{
-		var dbSet = Entity.AsQueryable();
+		var dbSet = Entity.AsNoTracking().AsQueryable();
 		var query = includePaths.Aggregate(dbSet, (current, item) => EvaluateInclude(current, item));
 		query.Where(w => w.Id == id);
 

@@ -12,7 +12,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities
 {
-	public record CreateFunctionality
+	public record CreateFunctionalityModel
 	{
 		[Required(ErrorMessage = "Select an Application")]
 		public Guid ApplicationId { get; set; } = Guid.Empty;
@@ -32,7 +32,6 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities
 
 		[Required(ErrorMessage = "Friendly ID is required")]
 		public string FriendlyId { get; set; } = string.Empty;
-
 	}
 
 	public partial class FunctionalityCreateForm : ComponentBase
@@ -55,7 +54,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities
 		[Inject]
 		public NavigationManager Navigation { get; set; } = default!;
 
-		private CreateFunctionality createFunctionality = default!;
+		private CreateFunctionalityModel createFunctionality = default!;
 
 		private string _error = string.Empty;
 		private bool _isSubmitting = false;
@@ -96,7 +95,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities
 
 		public async Task<bool> Start()
 		{
-			createFunctionality = new CreateFunctionality();
+			createFunctionality = new CreateFunctionalityModel();
 
 			_editContext = new EditContext(createFunctionality);
 			_messageStore = new ValidationMessageStore(_editContext);
