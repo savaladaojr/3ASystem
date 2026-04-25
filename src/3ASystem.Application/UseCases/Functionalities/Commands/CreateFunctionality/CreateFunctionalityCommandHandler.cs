@@ -41,7 +41,7 @@ public class CreateFunctionalityCommandHandler : ICommandHandler<CreateFunctiona
 			return Result.Failure<FunctionalityDetailedResponse>(ModuleErrors.NotFound(moduleId));
 
 		//Create the Functionality
-		var record = Functionality.Create(moduleId, request.Name, request.Abbreviation, request.Route, request.IconUrl, request.FriendlyId, request.IsPartOfMenu);
+		var record = Functionality.Create(moduleId, request.Name, request.Abbreviation, request.Route, request.IconUrl, request.Description, request.FriendlyId, request.IsPartOfMenu);
 
 		record.Raise(new FunctionalityCreatedDomainEvent(record.Id));
 

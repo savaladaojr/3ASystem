@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
 
 namespace _3ASystem.WebUI.Server.Components.Account;
+
 internal sealed class IdentityRedirectManager(NavigationManager navigationManager)
 {
 	public const string StatusCookieName = "Identity.StatusMessage";
@@ -17,7 +18,7 @@ internal sealed class IdentityRedirectManager(NavigationManager navigationManage
 	[DoesNotReturn]
 	public void RedirectTo(string? uri)
 	{
-		uri ??= "";
+		uri ??= "/";
 
 		// Prevent open redirects.
 		if (!Uri.IsWellFormedUriString(uri, UriKind.Relative))
@@ -25,10 +26,22 @@ internal sealed class IdentityRedirectManager(NavigationManager navigationManage
 			uri = navigationManager.ToBaseRelativePath(uri);
 		}
 
-		// During static rendering, NavigateTo throws a NavigationException which is handled by the framework as a redirect.
-		// So as long as this is called from a statically rendered Identity component, the InvalidOperationException is never thrown.
-		navigationManager.NavigateTo(uri);
-		throw new InvalidOperationException($"{nameof(IdentityRedirectManager)} can only be used during static rendering.");
+		// Redireciona para a Home se for vazio
+		if (string.IsNullOrEmpty(uri))
+			uri = "/";
+
+		try
+		{
+			if (!navigationManager.Uri.StartsWith("http://static-rendering", StringComparison.Ordinal) &&
+				!navigationManager.Uri.StartsWith("https://static-rendering", StringComparison.Ordinal))
+			{
+				navigationManager.NavigateTo(uri, forceLoad: true);
+			}
+		}
+		catch (NavigationException)
+		{
+			// Handle the exception or log it if necessary
+		}
 	}
 
 	[DoesNotReturn]

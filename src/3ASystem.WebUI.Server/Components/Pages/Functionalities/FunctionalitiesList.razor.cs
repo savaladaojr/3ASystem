@@ -270,6 +270,8 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities
 
 		}
 
+		// Adicione métodos e lógica para manipular Description se necessário
+		// Por exemplo, ao criar, editar ou exibir detalhes
 	}
 
 }

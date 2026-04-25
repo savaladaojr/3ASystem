@@ -17,7 +17,7 @@ namespace _3ASystem.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.5")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -89,6 +89,10 @@ namespace _3ASystem.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("ntext");
 
                     b.Property<string>("FriendlyId")
                         .IsRequired()
@@ -314,11 +318,13 @@ namespace _3ASystem.Infrastructure.Migrations
 
             modelBuilder.Entity("_3ASystem.Domain.Entities.Functionalities.Functionality", b =>
                 {
-                    b.HasOne("_3ASystem.Domain.Entities.Modules.Module", null)
+                    b.HasOne("_3ASystem.Domain.Entities.Modules.Module", "Module")
                         .WithMany("Functionalities")
                         .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
+
+                    b.Navigation("Module");
                 });
 
             modelBuilder.Entity("_3ASystem.Domain.Entities.Modules.Module", b =>
@@ -334,11 +340,13 @@ namespace _3ASystem.Infrastructure.Migrations
 
             modelBuilder.Entity("_3ASystem.Domain.Entities.Operations.Operation", b =>
                 {
-                    b.HasOne("_3ASystem.Domain.Entities.Functionalities.Functionality", null)
+                    b.HasOne("_3ASystem.Domain.Entities.Functionalities.Functionality", "Functionality")
                         .WithMany("Operations")
                         .HasForeignKey("FunctionalityId")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
+
+                    b.Navigation("Functionality");
                 });
 
             modelBuilder.Entity("_3ASystem.Domain.Entities.RoleOperations.RoleOperation", b =>

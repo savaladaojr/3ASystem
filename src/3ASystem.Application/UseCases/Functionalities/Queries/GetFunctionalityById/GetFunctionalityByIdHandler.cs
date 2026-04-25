@@ -22,7 +22,7 @@ public class GetFunctionalityByIdHandler : IQueryHandler<GetFunctionalityByIdQue
 	{
 		var functionalityId = new FunctionalityId(request.Id);
 
-		var functionality = await _functionalityRepository.GetByIdAsync(functionalityId);
+		var functionality = await _functionalityRepository.GetByIdWithDetailAsync(functionalityId);
 
 		if (functionality is null)
 		{

@@ -36,8 +36,11 @@ public class FunctionalityConfiguration : IEntityTypeConfiguration<Functionality
 			.HasMaxLength(25);
 		builder.HasIndex(f => f.FriendlyId).IsUnique();
 
-		//EF Relations
-		builder.HasOne(m => m.Module)
+		builder.Property(f => f.Description)
+            .HasColumnType("ntext");
+
+        //EF Relations
+        builder.HasOne(m => m.Module)
 			.WithMany(m => m.Functionalities)
 			.HasForeignKey(f => f.ModuleId)
 			.HasPrincipalKey(a => a.Id)

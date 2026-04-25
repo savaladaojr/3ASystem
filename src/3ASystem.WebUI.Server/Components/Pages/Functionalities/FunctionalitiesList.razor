@@ -8,30 +8,19 @@
 <MudButton Variant="Variant.Filled" Color="Color.Primary" class="btn btn-success mb-3" OnClick="() => CreateModule()">
 	<MudIcon Icon="@Icons.Material.Filled.Add" Color="Color.Info" Class="mr-3"></MudIcon> New
 </MudButton>
-
-
-	
+									
 <MudTable Items="@_records" FixedHeader="true" Dense="true" Hover="true" Bordered="false" Striped="true" Loading="@isLoading" LoadingProgressColor="Color.Info" Style="width: 100%">
 	<ToolBarContent>
-		<MudText Typo="Typo.h6">List of Functionalities</MudText>
+		<MudText Typo="Typo.h6">List of Modules</MudText>
 	</ToolBarContent>
-	<ColGroup>
-		<col Style="width: 10%; font-weight:bold;text-align:left;"/>
-		<col Style="width: 10%; font-weight:bold;text-align:left;"/>
-		<col Style="width: 8%; font-weight:bold;text-align:left;"/>
-		<col Style="width: 25%; font-weight:bold;text-align:left;"/> 
-		<col Style="width: 15%; font-weight:bold;text-align:left;"/>
-		<col Style="width: 10%; font-weight:bold;text-align:center;"/>
-		<col Style="width: 22%; font-weight:bold;text-align:left;"/>
-	</ColGroup>
 	<HeaderContent>
-		<MudTh>Application</MudTh>
-		<MudTh>Module</MudTh>
-		<MudTh>Icon</MudTh>
-		<MudTh>Name</MudTh>
-		<MudTh>Abbreviation</MudTh>
-		<MudTh>Is Active</MudTh>
-		<MudTh>Actions</MudTh>
+		<MudTh Style="width: 10%; font-weight:bold;text-align:left;">Application</MudTh>
+		<MudTh Style="width: 10%; font-weight:bold;text-align:left;">Module</MudTh>
+		<MudTh Style="width: 8%; font-weight:bold;text-align:left;">Icon</MudTh>
+		<MudTh Style="width: 25%; font-weight:bold;text-align:left;">Name</MudTh>
+		<MudTh Style="width: 15%; font-weight:bold;text-align:left;">Abbreviation</MudTh>
+		<MudTh Style="width: 10%; font-weight:bold;text-align:center;">Is Active</MudTh>
+		<MudTh Style="width: 22%; font-weight:bold;text-align:left;">Actions</MudTh>
 	</HeaderContent>
 	<RowTemplate>
 		<MudTd DataLabel="Application">@context.Module?.Application?.Abbreviation</MudTd>
@@ -44,7 +33,6 @@
 		</MudTd>
 		<MudTd DataLabel="Name">@context.Name</MudTd>
 		<MudTd DataLabel="Abbreviation">@context.Abbreviation</MudTd>
-		
 		<MudTd DataLabel="Is Active" Style="text-align:center;">@context.IsActive</MudTd>
 		<MudTd>
 			@if (!context.IsActive)

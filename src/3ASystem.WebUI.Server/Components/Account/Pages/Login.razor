@@ -95,6 +95,13 @@
 		if (result.Succeeded)
 		{
 			Logger.LogInformation("User logged in.");
+
+			// Ensure ReturnUrl is valid and defaults to home page
+			if (string.IsNullOrWhiteSpace(ReturnUrl) || !Uri.IsWellFormedUriString(ReturnUrl, UriKind.Relative))
+			{
+				ReturnUrl = "/";
+			}
+
 			RedirectManager.RedirectTo(ReturnUrl);
 		}
 		else if (result.RequiresTwoFactor)
