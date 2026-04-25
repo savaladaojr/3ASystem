@@ -48,12 +48,12 @@ public sealed class FunctionalityRepository : _Repository<Functionality, Functio
 
     public async Task<Functionality> GetByIdWithDetailAsync(FunctionalityId id)
     {
-        var module = await Entity.AsNoTrackingWithIdentityResolution()
+        var functionality = await Entity.AsNoTrackingWithIdentityResolution()
             .Include(m => m.Module).ThenInclude(m => m!.Application)
             .AsSplitQuery() // Use AsSplitQuery to avoid Cartesian product issues with multiple includes
             .FirstOrDefaultAsync(f => f.Id == id);
             
-        return module;
+        return functionality!;
     }
 
 }

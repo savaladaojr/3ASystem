@@ -50,7 +50,8 @@ public class CreateFunctionalityCommandHandler : ICommandHandler<CreateFunctiona
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
 		//Return created functionality as response
-		return functionality.ToFunctionalityDetailedResponse();
+		var createdFunctionality = await _functionalityRepository.GetByIdWithDetailAsync(functionality.Id);
+		return createdFunctionality.ToFunctionalityDetailedResponse();
 
 	}
 }

@@ -30,7 +30,30 @@ namespace _3ASystem.Application.UseCases.Functionalities.Responses
 			};
 		}
 
-		public static FunctionalityResponse ToFunctionalityResponse(this Functionality functionality)
+        public static FunctionalityDetailedResponse ToFunctionalityDetailedResponseWithModule(this Functionality functionality)
+        {
+            return new FunctionalityDetailedResponse()
+            {
+                Id = functionality.Id.Value,
+                ApplicationId = functionality.Module!.ApplicationId.Value,
+                ModuleId = functionality.ModuleId.Value,
+                Name = functionality.Name,
+                Abbreviation = functionality.Abbreviation,
+                Description = functionality.Description,
+                Route = functionality.Route,
+                FriendlyId = functionality.FriendlyId,
+                IconUrl = functionality.IconUrl,
+                IsActive = functionality.IsActive,
+                IsPartOfMenu = functionality.IsPartOfMenu,
+                CreatedAt = functionality.CreatedAt,
+                LastUpdatedAt = functionality.LastUpdatedAt,
+
+                Module = functionality.Module!.ToModuleResponse()
+            };
+        }
+
+
+        public static FunctionalityResponse ToFunctionalityResponse(this Functionality functionality)
 		{
 			return new FunctionalityResponse
 			{
@@ -43,8 +66,6 @@ namespace _3ASystem.Application.UseCases.Functionalities.Responses
                 IconUrl = functionality.IconUrl,
 				FriendlyId = functionality.FriendlyId,
 				IsActive = functionality.IsActive,
-
-				Module = functionality.Module!.ToModuleResponse()
 			};
 		}
 
