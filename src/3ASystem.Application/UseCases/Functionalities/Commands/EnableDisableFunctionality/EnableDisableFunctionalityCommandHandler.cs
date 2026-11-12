@@ -9,7 +9,7 @@ using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.UseCases.Functionalities.Commands.EnableDisableFunctionality;
 
-public sealed class EnableDisableFunctionalityCommandHandler : ICommandHandler<EnableDisableFunctionalityCommand, FunctionalityDetailedResponse>
+public sealed class EnableDisableFunctionalityCommandHandler : ICommandHandler<EnableDisableFunctionalityCommand, FunctionalityResponse>
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IFunctionalityRepository _functionalityRepository;
@@ -20,7 +20,7 @@ public sealed class EnableDisableFunctionalityCommandHandler : ICommandHandler<E
 		_functionalityRepository = functionalityRepository;
 	}
 
-	public async Task<Result<FunctionalityDetailedResponse>> Handle(EnableDisableFunctionalityCommand request, CancellationToken cancellationToken)
+	public async Task<Result<FunctionalityResponse>> Handle(EnableDisableFunctionalityCommand request, CancellationToken cancellationToken)
 	{
 		var functionalityId = new FunctionalityId(request.Id);
 
@@ -28,7 +28,7 @@ public sealed class EnableDisableFunctionalityCommandHandler : ICommandHandler<E
 
 
 		if (functionality is null)
-			return Result.Failure<FunctionalityDetailedResponse>(FunctionalityErrors.NotFound(functionalityId));
+			return Result.Failure<FunctionalityResponse>(FunctionalityErrors.NotFound(functionalityId));
 
 		//handle disable/enable
 		if (functionality.IsActive)
@@ -47,7 +47,7 @@ public sealed class EnableDisableFunctionalityCommandHandler : ICommandHandler<E
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
 		///Return created functionality as response
-		return functionality.ToFunctionalityDetailedResponse();
+		return functionality.ToFunctionalityResponse();
 	}
 
 }

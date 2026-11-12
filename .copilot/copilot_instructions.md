@@ -20,7 +20,7 @@
 
 ## Main Functionalities
 
-- Application management (CRUD, configuration, modules, functionalities)
+- Application management (CRUD, configuration, modules, functionalities, and functionalities' operations)
 - User and role management (CRUD, privileges, authentication, authorization)
 - Security and access control (role-based, privilege assignment)
 - Modular and extensible architecture for new features
