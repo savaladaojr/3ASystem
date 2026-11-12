@@ -1,0 +1,335 @@
+@using _3ASystem.Application.UseCases.Operations.Commands.CreateOperation
+@using _3ASystem.Application.UseCases.Operations.Commands.UpdateOperation
+@using _3ASystem.Domain.Shared
+@using MediatR
+@using Microsoft.AspNetCore.Components.Forms
+
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+@if (IsEditMode && _updateCommand != null)
+{
+    <EditForm EditContext="@_editContextUpdate">
+        <MudGrid>
+            <MudItem md="12">
+                <MudPaper Class="pa-4 pb-8 " Outlined="true">
+                    <MudGrid>
+                        <MudItem md="12" Style="width:100%">
+                            <MudTextField Label="Name"
+                                          Variant="Variant.Text"
+                                          InputType="InputType.Text"
+                                          For="@(() => _updateCommand.Name)"
+                                          @bind-Value="_updateCommand.Name"
+                                          TextChanged="() => ClearValidationMessage(nameof(_updateCommand.Name))" />
+                        </MudItem>
+
+                        <MudItem md="6" Style="width:100%">
+                            <MudTextField Label="Code"
+                                          Variant="Variant.Text"
+                                          InputType="InputType.Text"
+                                          For="@(() => _updateCommand.Code)"
+                                          @bind-Value="_updateCommand.Code"
+                                          TextChanged="() => ClearValidationMessage(nameof(_updateCommand.Code))" />
+                        </MudItem>
+
+                        <MudItem md="6" Style="width:100%">
+                            <MudTextField Label="Friendly Id"
+                                          Variant="Variant.Text"
+                                          InputType="InputType.Text"
+                                          For="@(() => _updateCommand.FriendlyId)"
+                                          @bind-Value="_updateCommand.FriendlyId"
+                                          TextChanged="() => ClearValidationMessage(nameof(_updateCommand.FriendlyId))" />
+                        </MudItem>
+
+                        @if (!string.IsNullOrEmpty(_error))
+                        {
+                            <MudItem md="12" Style="width:100%">
+                                <MudAlert Severity="Severity.Error">@_error</MudAlert>
+                            </MudItem>
+                        }
+
+                        <MudItem md="12" Style="width:100%; text-align:right">
+                            <MudButton OnClick="HandleCancel" Variant="Variant.Outlined" Color="Color.Secondary" Class="mr-3">
+                                Cancel
+                            </MudButton>
+                            <MudButton OnClick="HandleSubmitAsync" Variant="Variant.Filled" Color="Color.Primary" Disabled="@_isSubmitting">
+                                @if (_isSubmitting)
+                                {
+                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                    <MudText Class="ms-2">Processing</MudText>
+                                }
+                                else
+                                {
+                                    <MudText>Save</MudText>
+                                }
+                            </MudButton>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </EditForm>
+}
+else if (!IsEditMode && _createCommand != null)
+{
+    <EditForm EditContext="@_editContextCreate">
+        <MudGrid>
+            <MudItem md="12">
+                <MudPaper Class="pa-4 pb-8 " Outlined="true">
+                    <MudGrid>
+                        <MudItem md="12" Style="width:100%">
+                            <MudTextField Label="Name"
+                                          Variant="Variant.Text"
+                                          InputType="InputType.Text"
+                                          For="@(() => _createCommand.Name)"
+                                          @bind-Value="_createCommand.Name"
+                                          TextChanged="() => ClearValidationMessageCreate(nameof(_createCommand.Name))" />
+                        </MudItem>
+
+                        <MudItem md="6" Style="width:100%">
+                            <MudTextField Label="Code"
+                                          Variant="Variant.Text"
+                                          InputType="InputType.Text"
+                                          For="@(() => _createCommand.Code)"
+                                          @bind-Value="_createCommand.Code"
+                                          TextChanged="() => ClearValidationMessageCreate(nameof(_createCommand.Code))" />
+                        </MudItem>
+
+                        <MudItem md="6" Style="width:100%">
+                            <MudTextField Label="Friendly Id"
+                                          Variant="Variant.Text"
+                                          InputType="InputType.Text"
+                                          For="@(() => _createCommand.FriendlyId)"
+                                          @bind-Value="_createCommand.FriendlyId"
+                                          TextChanged="() => ClearValidationMessageCreate(nameof(_createCommand.FriendlyId))" />
+                        </MudItem>
+
+                        @if (!string.IsNullOrEmpty(_error))
+                        {
+                            <MudItem md="12" Style="width:100%">
+                                <MudAlert Severity="Severity.Error">@_error</MudAlert>
+                            </MudItem>
+                        }
+
+                        <MudItem md="12" Style="width:100%; text-align:right">
+                            <MudButton OnClick="HandleCancel" Variant="Variant.Outlined" Color="Color.Secondary" Class="mr-3">
+                                Cancel
+                            </MudButton>
+                            <MudButton OnClick="HandleSubmitAsync" Variant="Variant.Filled" Color="Color.Primary" Disabled="@_isSubmitting">
+                                @if (_isSubmitting)
+                                {
+                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                    <MudText Class="ms-2">Processing</MudText>
+                                }
+                                else
+                                {
+                                    <MudText>Save</MudText>
+                                }
+                            </MudButton>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </EditForm>
+}
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = default!;
+
+    [Parameter]
+    public bool IsEditMode { get; set; } = false;
+
+    [Parameter]
+    public Guid FunctionalityId { get; set; } = Guid.Empty;
+
+    [Parameter]
+    public Guid? OperationId { get; set; }
+
+    [Parameter]
+    public string? OperationName { get; set; }
+
+    [Parameter]
+    public string? OperationCode { get; set; }
+
+    [Parameter]
+    public string? OperationFriendlyId { get; set; }
+
+    [Inject]
+    public IMediator Mediator { get; set; } = default!;
+
+    private UpdateOperationCommand? _updateCommand = default!;
+    private CreateOperationCommand? _createCommand = default!;
+
+    private string _error = string.Empty;
+    private bool _isSubmitting = false;
+
+    private EditContext? _editContextUpdate = default!;
+    private EditContext? _editContextCreate = default!;
+    private ValidationMessageStore? _messageStoreUpdate = default!;
+    private ValidationMessageStore? _messageStoreCreate = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Start();
+    }
+
+    public async Task<bool> Start()
+    {
+        if (IsEditMode)
+        {
+            _updateCommand = new UpdateOperationCommand
+            {
+                Id = OperationId ?? Guid.Empty,
+                Name = OperationName ?? string.Empty,
+                Code = OperationCode ?? string.Empty,
+                FriendlyId = OperationFriendlyId ?? string.Empty
+            };
+
+            _editContextUpdate = new EditContext(_updateCommand);
+            _messageStoreUpdate = new ValidationMessageStore(_editContextUpdate);
+        }
+        else
+        {
+            _createCommand = new CreateOperationCommand();
+            _createCommand.FunctionalityId = this.FunctionalityId;
+            _editContextCreate = new EditContext(_createCommand);
+            _messageStoreCreate = new ValidationMessageStore(_editContextCreate);
+        }
+
+        return await Task.FromResult(true);
+    }
+
+    private void HandleCancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task HandleSubmitAsync()
+    {
+        if (IsEditMode)
+        {
+            if (!IsValidSubmitUpdate()) return;
+            await SubmitUpdate();
+        }
+        else
+        {
+            if (!IsValidSubmitCreate()) return;
+            await SubmitCreate();
+        }
+    }
+
+    private async Task SubmitUpdate()
+    {
+        if (_updateCommand == null) return;
+
+        _isSubmitting = true;
+        _error = string.Empty;
+
+        try
+        {
+            var result = await Mediator.Send(_updateCommand);
+
+            if (result.IsSuccess)
+            {
+                MudDialog.Close(DialogResult.Ok($"Operation [{result.Value.Name}] successfully updated."));
+            }
+            else
+            {
+                if (result.Error.Type is ErrorType.Validation)
+                {
+                    foreach (var item in ((ValidationError)result.Error).Errors)
+                    {
+                        if (item.ErrorObject is not null && item.ErrorObject.GetType() == typeof(FluentValidation.Results.ValidationFailure))
+                        {
+                            var validationFailure = (FluentValidation.Results.ValidationFailure)item.ErrorObject;
+                            _messageStoreUpdate!.Add(_editContextUpdate!.Field(validationFailure.PropertyName), validationFailure.ErrorMessage);
+                        }
+                    }
+
+                    _editContextUpdate!.NotifyValidationStateChanged();
+                }
+                else
+                {
+                    _error = result.Error.Description;
+                }
+            }
+        }
+        finally
+        {
+            _isSubmitting = false;
+        }
+    }
+
+    private async Task SubmitCreate()
+    {
+        if (_createCommand == null) return;
+
+        _isSubmitting = true;
+        _error = string.Empty;
+
+        try
+        {
+            var result = await Mediator.Send(_createCommand);
+
+            if (result.IsSuccess)
+            {
+                MudDialog.Close(DialogResult.Ok($"Operation [{result.Value.Name}] successfully created."));
+            }
+            else
+            {
+                if (result.Error.Type is ErrorType.Validation)
+                {
+                    foreach (var item in ((ValidationError)result.Error).Errors)
+                    {
+                        if (item.ErrorObject is not null && item.ErrorObject.GetType() == typeof(FluentValidation.Results.ValidationFailure))
+                        {
+                            var validationFailure = (FluentValidation.Results.ValidationFailure)item.ErrorObject;
+                            _messageStoreCreate!.Add(_editContextCreate!.Field(validationFailure.PropertyName), validationFailure.ErrorMessage);
+                        }
+                    }
+
+                    _editContextCreate!.NotifyValidationStateChanged();
+                }
+                else
+                {
+                    _error = result.Error.Description;
+                }
+            }
+        }
+        finally
+        {
+            _isSubmitting = false;
+        }
+    }
+
+    private bool IsValidSubmitUpdate()
+    {
+        if (_editContextUpdate == null) return false;
+        var valid = _editContextUpdate.Validate();
+        return valid;
+    }
+
+    private bool IsValidSubmitCreate()
+    {
+        if (_editContextCreate == null) return false;
+        var valid = _editContextCreate.Validate();
+        return valid;
+    }
+
+    private void ClearValidationMessage(string fieldName)
+    {
+        if (_messageStoreUpdate is null || _editContextUpdate is null) return;
+
+        _messageStoreUpdate.Clear(_editContextUpdate.Field(fieldName));
+        _editContextUpdate.NotifyValidationStateChanged();
+    }
+
+    private void ClearValidationMessageCreate(string fieldName)
+    {
+        if (_messageStoreCreate is null || _editContextCreate is null) return;
+
+        _messageStoreCreate.Clear(_editContextCreate.Field(fieldName));
+        _editContextCreate.NotifyValidationStateChanged();
+    }
+}

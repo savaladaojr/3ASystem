@@ -20,14 +20,14 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
 				.HasMaxLength(100);
 
 		builder.Property(a => a.Code)
-				.HasMaxLength(20);
+				.HasMaxLength(50);
 		builder.HasIndex(a => a.Code).IsUnique();
 
 		builder.Property(a => a.IsActive);
 		builder.HasIndex(a => a.IsActive);
 
 		builder.Property(a => a.FriendlyId)
-			.HasMaxLength(25);
+			.HasMaxLength(50);
 		builder.HasIndex(a => a.FriendlyId).IsUnique();
 
 		builder.HasOne(o => o.Functionality)

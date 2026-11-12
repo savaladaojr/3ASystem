@@ -4,12 +4,10 @@ using _3ASystem.Application.UseCases.Functionalities.Commands.DeleteFunctionalit
 using _3ASystem.Application.UseCases.Functionalities.Commands.EnableDisableFunctionality;
 using _3ASystem.Application.UseCases.Functionalities.Queries.GetFunctionalitiesPaged;
 using _3ASystem.Application.UseCases.Functionalities.Responses;
-using _3ASystem.Application.UseCases.Modules.Commands.DeleteModule;
-using _3ASystem.Application.UseCases.Modules.Commands.EnableDisableModule;
 using _3ASystem.Application.UseCases.Modules.Queries.GetModuleById;
-using _3ASystem.Application.UseCases.Modules.Queries.GetModulesPaged;
 using _3ASystem.Application.UseCases.Modules.Responses;
 using _3ASystem.WebUI.Server.Components._Shared;
+using _3ASystem.WebUI.Server.Components.Pages.Functionalities.Operations;
 using _3ASystem.WebUI.Server.Components.Pages.Modules;
 using MediatR;
 using Microsoft.AspNetCore.Components;
@@ -270,8 +268,19 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities
 
 		}
 
-		// Adicione métodos e lógica para manipular Description se necessário
-		// Por exemplo, ao criar, editar ou exibir detalhes
-	}
+		private async Task ManageOperations(Guid functionalityId)
+		{
+			var parameters = new DialogParameters
+			{
+				{ nameof(OperationsModal.FunctionalityId), functionalityId }
+			};
+
+			var options = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseButton = true, CloseOnEscapeKey = true };
+			await DialogService.ShowAsync<OperationsModal>("Manage Functionality Operations", parameters, options);
+        }
+
+        // Adicione métodos e lógica para manipular Description se necessário
+        // Por exemplo, ao criar, editar ou exibir detalhes
+    }
 
 }
