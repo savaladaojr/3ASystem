@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/docs/" />
+  <Folder Name="/docs/Feature_Operations/">
+    <File Path="docs/Feature_Operations/INDEX.md" />
+    <File Path="docs/Feature_Operations/MAPA_MENTAL.md" />
+    <File Path="docs/Feature_Operations/OPERATIONS_FEATURE_PLAN.md" />
+    <File Path="docs/Feature_Operations/OPERATIONS_SUMMARY.md" />
+    <File Path="docs/Feature_Operations/OPERATIONS_TECHNICAL_GUIDE.md" />
+    <File Path="docs/Feature_Operations/OPERATIONS_VISUAL_DESIGN.md" />
+    <File Path="docs/Feature_Operations/QUICK_START.md" />
+    <File Path="docs/Feature_Operations/README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/3ASystem.Application/3ASystem.Application.csproj" />
+    <Project Path="src/3ASystem.Domain/3ASystem.Domain.csproj" />
+    <Project Path="src/3ASystem.Infrastructure/3ASystem.Infrastructure.csproj" />
+    <Project Path="src/3ASystem.WebUI.Server/3ASystem.WebUI.Server.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/3ASystem.Tests.Application/3ASystem.Tests.Application.csproj" />
+    <Project Path="tests/3ASystem.Tests.Domain/3ASystem.Tests.Domain.csproj" />
+  </Folder>
+</Solution>

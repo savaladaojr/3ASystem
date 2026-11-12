@@ -12,7 +12,9 @@ public sealed class FunctionalityResponse
 	public Guid ModuleId { get; init; } = default!;
 	public string Name { get; init; } = default!;
 	public string Abbreviation { get; init; } = default!;
-	public string IconUrl { get; init; } = string.Empty;
+    public string Description { get; init; } = string.Empty;
+	public string Route { get; init; } = default!;
+    public string IconUrl { get; init; } = string.Empty;
 	public string FriendlyId { get; init; } = string.Empty;
 	public bool IsActive { get; init; } = true;
 

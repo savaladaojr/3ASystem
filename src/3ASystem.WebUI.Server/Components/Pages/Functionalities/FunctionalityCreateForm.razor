@@ -55,12 +55,12 @@
 					</MudItem>
 
 					<MudItem md="12" Style="width:100%">
-						<MudTextField Label="Route"
+						<MudTextField T="string" MaxLines=3 Lines=3 Label="Description"
 									  Variant="Variant.Text"
 									  InputType="InputType.Text"
-									  For="@(() => createFunctionality.Route)"
-									  @bind-Value="createFunctionality.Route"
-									  TextChanged="() => ClearValidationMessage(nameof(createFunctionality.Route))" />
+									  For="@(() => createFunctionality.Description)"
+									  @bind-Value="createFunctionality.Description"
+									  TextChanged="() => ClearValidationMessage(nameof(createFunctionality.Description))" />
 					</MudItem>
 
 					<MudItem md="6" Style="width:100%">
@@ -81,6 +81,15 @@
 					</MudItem>
 
 					<MudItem md="12" Style="width:100%">
+						<MudTextField Label="Route"
+									  Variant="Variant.Text"
+									  InputType="InputType.Text"
+									  For="@(() => createFunctionality.Route)"
+									  @bind-Value="createFunctionality.Route"
+									  TextChanged="() => ClearValidationMessage(nameof(createFunctionality.Route))" />
+					</MudItem>
+
+					<MudItem md="12" Style="width:100%">
 						<MudTextField Label="Icon Url"
 									  Variant="Variant.Text"
 									  InputType="InputType.Url"
@@ -88,6 +97,7 @@
 									  @bind-Value="createFunctionality.IconUrl"
 									  TextChanged="() => ClearValidationMessage(nameof(createFunctionality.IconUrl))" />
 					</MudItem>
+
 				</MudGrid>
 			</MudPaper>
 		</MudItem>

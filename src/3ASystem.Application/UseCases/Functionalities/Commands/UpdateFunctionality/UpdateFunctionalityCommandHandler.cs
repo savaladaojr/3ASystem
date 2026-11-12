@@ -43,15 +43,16 @@ public sealed class UpdateFunctionalityCommandHandler : ICommandHandler<UpdateFu
 			return Result.Failure<FunctionalityDetailedResponse>(FunctionalityErrors.FriendlyIdNotUnique);
 
 		//Update the Functionality
-		functionality.Update(request.Name, request.Abbreviation, request.Route, request.IconUrl, request.FriendlyId, request.IsPartOfMenu);
+		functionality.Update(request.Name, request.Abbreviation, request.Route, request.IconUrl, request.Description, request.FriendlyId, request.IsPartOfMenu);
 
 		functionality.Raise(new FunctionalityUpdateDomainEvent(functionality.Id));
 
 		_functionalityRepository.Update(functionality);
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-		//return updated app
-		return functionality.ToFunctionalityDetailedResponse();
+        //return updated app
+        var updatedfunctionality = await _functionalityRepository.GetByIdWithDetailAsync(functionalityId);
+        return updatedfunctionality.ToFunctionalityDetailedResponse();
 	}
 
 }

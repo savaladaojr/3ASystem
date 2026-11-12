@@ -1,0 +1,66 @@
+@using MudBlazor
+
+@* Operations Management Modal *@
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<MudDialog>
+    <DialogContent>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mb-3" OnClick="() => OpenCreateOperationDialog()">
+            <MudIcon Icon="@Icons.Material.Filled.Add" Color="Color.Info" Class="mr-3"></MudIcon> New Operation
+        </MudButton>
+
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="mb-3" OnClick="() => AddBasicOperations()">
+            <MudIcon Icon="@Icons.Material.Filled.Add" Color="Color.Info" Class="mr-3"></MudIcon> Add Basic Operations
+        </MudButton>
+
+        @if (isLoading)
+        {
+            <MudProgressLinear Indeterminate="true" />
+        }
+        else if (_operations == null || _operations.Count == 0)
+        {
+            <MudText Color="Color.Secondary">No operations found for this functionality.</MudText>
+        }
+        else
+        {
+            <MudTable Items="@_operations" FixedHeader="true" Dense="true" Hover="true" Bordered="false" Striped="true" Style="width: 100%">
+                <HeaderContent>
+                    <MudTh Style="width: 25%; font-weight:bold;">Name</MudTh>
+                    <MudTh Style="width: 20%; font-weight:bold;">Code</MudTh>
+                    <MudTh Style="width: 20%; font-weight:bold;">Friendly ID</MudTh>
+                    <MudTh Style="width: 8%; font-weight:bold;text-align:center;">Is Active</MudTh>
+                    <MudTh Style="width: 27%; font-weight:bold;text-align:left;">Actions</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Name">@context.Name</MudTd>
+                    <MudTd DataLabel="Code">@context.Code</MudTd>
+                    <MudTd DataLabel="Friendly ID">@context.FriendlyId</MudTd>
+                    <MudTd DataLabel="Is Active" Style="text-align:center;">@context.IsActive</MudTd>
+                    <MudTd>
+                        @if (!context.IsActive)
+                        {
+                            <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" @onclick="() => ToggleActiveStatus(context.Id, true)" Class="mr-1">
+                                <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Tertiary" Title="Enable"></MudIcon>
+                            </MudButton>
+                        }
+                        else
+                        {
+                            <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" @onclick="() => ToggleActiveStatus(context.Id, false)" Class="mr-1">
+                                <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Warning" Title="Disable"></MudIcon>
+                            </MudButton>
+                        }
+                        <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="() => OpenEditOperationDialog(context.Id, context.Name, context.Code, context.FriendlyId)">
+                            <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Info" Title="Edit"></MudIcon>
+                        </MudButton>
+                        <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="() => ConfirmDeleteOperation(context.Id, context.Name)">
+                            <MudIcon Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Title="Delete"></MudIcon>
+                        </MudButton>
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Close</MudButton>
+    </DialogActions>
+</MudDialog>

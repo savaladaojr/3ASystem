@@ -15,11 +15,13 @@ namespace _3ASystem.Application.UseCases.Functionalities.Responses
 			return new FunctionalityDetailedResponse()
 			{
 				Id = functionality.Id.Value,
-				ModuleId = functionality.ModuleId.Value,
+				ApplicationId = functionality.Module!.ApplicationId.Value,
+                ModuleId = functionality.ModuleId.Value,
 				Name = functionality.Name,
 				Abbreviation = functionality.Abbreviation,
+                Description = functionality.Description,
 				Route = functionality.Route,
-				FriendlyId = functionality.FriendlyId,
+                FriendlyId = functionality.FriendlyId,
 				IconUrl = functionality.IconUrl,
 				IsActive = functionality.IsActive,
 				IsPartOfMenu = functionality.IsPartOfMenu,
@@ -28,27 +30,30 @@ namespace _3ASystem.Application.UseCases.Functionalities.Responses
 			};
 		}
 
-		public static FunctionalityDetailedResponse ToFunctionalityDetailedResponseWithModule(this Functionality functionality)
-		{
-			return new FunctionalityDetailedResponse()
-			{
-				Id = functionality.Id.Value,
-				ModuleId = functionality.ModuleId.Value,
-				Name = functionality.Name,
-				Abbreviation = functionality.Abbreviation,
-				Route = functionality.Route,
-				FriendlyId = functionality.FriendlyId,
-				IconUrl = functionality.IconUrl,
-				IsActive = functionality.IsActive,
-				IsPartOfMenu = functionality.IsPartOfMenu,
-				CreatedAt = functionality.CreatedAt,
-				LastUpdatedAt = functionality.LastUpdatedAt,
+        public static FunctionalityDetailedResponse ToFunctionalityDetailedResponseWithModule(this Functionality functionality)
+        {
+            return new FunctionalityDetailedResponse()
+            {
+                Id = functionality.Id.Value,
+                ApplicationId = functionality.Module!.ApplicationId.Value,
+                ModuleId = functionality.ModuleId.Value,
+                Name = functionality.Name,
+                Abbreviation = functionality.Abbreviation,
+                Description = functionality.Description,
+                Route = functionality.Route,
+                FriendlyId = functionality.FriendlyId,
+                IconUrl = functionality.IconUrl,
+                IsActive = functionality.IsActive,
+                IsPartOfMenu = functionality.IsPartOfMenu,
+                CreatedAt = functionality.CreatedAt,
+                LastUpdatedAt = functionality.LastUpdatedAt,
 
-				Module = functionality.Module!.ToModuleResponseWithApplication()
-			};
-		}
+                Module = functionality.Module!.ToModuleResponse()
+            };
+        }
 
-		public static FunctionalityResponse ToFunctionalityResponse(this Functionality functionality)
+
+        public static FunctionalityResponse ToFunctionalityResponse(this Functionality functionality)
 		{
 			return new FunctionalityResponse
 			{
@@ -56,10 +61,11 @@ namespace _3ASystem.Application.UseCases.Functionalities.Responses
 				ModuleId = functionality.ModuleId.Value,
 				Name = functionality.Name,
 				Abbreviation = functionality.Abbreviation,
-				IconUrl = functionality.IconUrl,
+                Description = functionality.Description,
+				Route = functionality.Route,
+                IconUrl = functionality.IconUrl,
 				FriendlyId = functionality.FriendlyId,
-				IsActive = functionality.IsActive
-
+				IsActive = functionality.IsActive,
 			};
 		}
 
@@ -71,9 +77,12 @@ namespace _3ASystem.Application.UseCases.Functionalities.Responses
 				ModuleId = functionality.ModuleId.Value,
 				Name = functionality.Name,
 				Abbreviation = functionality.Abbreviation,
-				IconUrl = functionality.IconUrl,
+                Description = functionality.Description,
+				Route = functionality.Route,
+                IconUrl = functionality.IconUrl,
 				FriendlyId = functionality.FriendlyId,
 				IsActive = functionality.IsActive,
+				
 				Module = functionality.Module!.ToModuleResponseWithApplication()
 			};
 		}

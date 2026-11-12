@@ -20,17 +20,17 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
 				.HasMaxLength(100);
 
 		builder.Property(a => a.Code)
-				.HasMaxLength(20);
+				.HasMaxLength(50);
 		builder.HasIndex(a => a.Code).IsUnique();
 
 		builder.Property(a => a.IsActive);
 		builder.HasIndex(a => a.IsActive);
 
-		builder.Property(f => f.FriendlyId)
-			.HasMaxLength(25);
-		builder.HasIndex(f => f.FriendlyId).IsUnique();
+		builder.Property(a => a.FriendlyId)
+			.HasMaxLength(50);
+		builder.HasIndex(a => a.FriendlyId).IsUnique();
 
-		builder.HasOne<Functionality>()
+		builder.HasOne(o => o.Functionality)
 			.WithMany(m => m.Operations)
 			.HasForeignKey(f => f.FunctionalityId)
 			.HasPrincipalKey(p => p.Id)

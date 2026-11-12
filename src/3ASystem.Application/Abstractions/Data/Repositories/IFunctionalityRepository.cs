@@ -6,4 +6,5 @@ public interface IFunctionalityRepository : IRepository<Functionality, Functiona
 {
 	public Task<Functionality?> GetByAbbreviationAsync(string abbreviation);
 	public Task<Functionality?> GetByFriendlyIdAsync(string friendlyId);
+	public Task<Functionality> GetByIdWithDetailAsync(FunctionalityId id);
 }

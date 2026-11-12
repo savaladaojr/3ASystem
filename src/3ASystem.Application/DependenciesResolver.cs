@@ -10,6 +10,8 @@ namespace _3ASystem.Application
 		{
 			//adding mediatr
 			services.AddMediatR(config => {
+				config.LicenseKey = "";
+
 				config.RegisterServicesFromAssemblies(typeof(DependenciesResolver).Assembly);
 
 

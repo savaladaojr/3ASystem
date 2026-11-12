@@ -1,10 +1,7 @@
 ﻿using _3ASystem.Application.Abstractions.Data.Repositories;
 using _3ASystem.Application.Abstractions.Messaging;
 using _3ASystem.Application.UseCases.Functionalities.Responses;
-using _3ASystem.Application.UseCases.Modules.Queries.GetModuleById;
-using _3ASystem.Application.UseCases.Modules.Responses;
 using _3ASystem.Domain.Entities.Functionalities;
-using _3ASystem.Domain.Entities.Modules;
 using _3ASystem.Domain.Shared;
 
 namespace _3ASystem.Application.UseCases.Functionalities.Queries.GetFunctionalityById;
@@ -22,7 +19,7 @@ public class GetFunctionalityByIdHandler : IQueryHandler<GetFunctionalityByIdQue
 	{
 		var functionalityId = new FunctionalityId(request.Id);
 
-		var functionality = await _functionalityRepository.GetByIdAsync(functionalityId);
+		var functionality = await _functionalityRepository.GetByIdWithDetailAsync(functionalityId);
 
 		if (functionality is null)
 		{
