@@ -275,7 +275,7 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities
 				{ nameof(OperationsModal.FunctionalityId), functionalityId }
 			};
 
-			var options = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseButton = true, CloseOnEscapeKey = true };
+			var options = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, BackdropClick=false, CloseButton = false, CloseOnEscapeKey = false };
 			await DialogService.ShowAsync<OperationsModal>("Manage Functionality Operations", parameters, options);
         }
 

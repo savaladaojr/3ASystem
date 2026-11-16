@@ -1,3 +1,7 @@
+---
+applyTo: "src/3ASystem.Domain/**/*.cs"
+---
+
 # Domain Project Instructions
 
 Estas instruções devem ser seguidas sempre que novas entidades ou arquivos compartilhados forem criados no projeto de domínio (`3ASystem.Domain`).
