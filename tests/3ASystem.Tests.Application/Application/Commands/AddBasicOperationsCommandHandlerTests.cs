@@ -16,7 +16,7 @@ public class AddBasicOperationsCommandHandlerTests
     private readonly IFunctionalityRepository _functionalityRepository = Substitute.For<IFunctionalityRepository>();
 
     [Fact]
-    public async Task Handle_ShouldCreateFourStandardOperations_WhenNoneExist()
+    public async Task Handle_ShouldCreateFiveStandardOperations_WhenNoneExist()
     {
         var functionality = CreateFunctionality();
         _functionalityRepository.GetByIdAsync(functionality.Id).Returns(functionality);
@@ -30,9 +30,9 @@ public class AddBasicOperationsCommandHandlerTests
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Select(operation => operation.Name).Should().ContainInOrder(
-            "Accounts View", "Accounts Create", "Accounts Update", "Accounts Delete");
-        result.Value.Should().HaveCount(4);
-        _operationRepository.Received(4).Create(Arg.Any<Operation>());
+            "Accounts Read", "Accounts View", "Accounts Create", "Accounts Update", "Accounts Delete");
+        result.Value.Should().HaveCount(5);
+        _operationRepository.Received(5).Create(Arg.Any<Operation>());
         await _unitOfWork.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
     }
 
@@ -42,6 +42,7 @@ public class AddBasicOperationsCommandHandlerTests
         var functionality = CreateFunctionality();
         var definitions = new[]
         {
+            ("Read", "Read"),
             ("View", "View"),
             ("Create", "Create"),
             ("Update", "Update"),
@@ -64,8 +65,8 @@ public class AddBasicOperationsCommandHandlerTests
         var firstResult = await handler.Handle(command, CancellationToken.None);
         var secondResult = await handler.Handle(command, CancellationToken.None);
 
-        firstResult.Value.Should().HaveCount(4);
-        secondResult.Value.Should().HaveCount(4);
+        firstResult.Value.Should().HaveCount(5);
+        secondResult.Value.Should().HaveCount(5);
         _operationRepository.DidNotReceive().Create(Arg.Any<Operation>());
         await _unitOfWork.DidNotReceive().SaveChangesAsync(Arg.Any<CancellationToken>());
     }
@@ -92,9 +93,9 @@ public class AddBasicOperationsCommandHandlerTests
             CancellationToken.None);
 
         result.IsSuccess.Should().BeTrue();
-        result.Value.Should().HaveCount(4);
+        result.Value.Should().HaveCount(5);
         result.Value.Select(operation => operation.Name).Should().Contain("Accounts View");
-        _operationRepository.Received(3).Create(Arg.Any<Operation>());
+        _operationRepository.Received(4).Create(Arg.Any<Operation>());
         await _unitOfWork.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
     }
 

@@ -56,7 +56,9 @@ namespace _3ASystem.WebUI.Server.Components.Pages.Functionalities.Operations
                 { nameof(OperationForm.FunctionalityId), FunctionalityId },
             };
 
-            var dialog = await DialogService.ShowAsync<OperationForm>("Create New Operation", parameters);
+
+            var options = new DialogOptions() {  BackdropClick = false, CloseButton = false, CloseOnEscapeKey = false };
+            var dialog = await DialogService.ShowAsync<OperationForm>("Create New Operation", parameters, options);
             var result = await dialog.Result;
 
             if (!result.Canceled)

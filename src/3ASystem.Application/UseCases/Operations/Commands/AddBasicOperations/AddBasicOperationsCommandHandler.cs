@@ -33,6 +33,7 @@ public class AddBasicOperationsCommandHandler : ICommandHandler<AddBasicOperatio
 
         var definitions = new[]
         {
+            (Name: "Read", Suffix: "Read"),
             (Name: "View", Suffix: "View"),
             (Name: "Create", Suffix: "Create"),
             (Name: "Update", Suffix: "Update"),
